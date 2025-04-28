@@ -216,6 +216,19 @@ class QuarkDisk(DiskBase):
             except Exception as e:
                 self.logger.error(e)
 
+    async def mkdir(self,dir_path):
+        url = f"{self.BASE_URL}/1/clouddrive/file"
+        querystring = {"pr": "ucpro", "fr": "pc", "uc_param_str": ""}
+        payload = {
+            "pdir_fid": "0",
+            "file_name": "",
+            "dir_path": dir_path,
+            "dir_init_lock": False,
+        }
+        async with await self._request(method="POST", url=url, params=querystring,json=payload) as resp:
+            resp_json=resp.json()
+            return resp_json
+
     async  def ls_dir(self, pdir_fid, **kwargs):
         file_list = []
         page = 1
@@ -294,7 +307,7 @@ class QuarkDisk(DiskBase):
 
                 return resp_json["data"]["finish"]
             else:
-                self.logger.info(f'创建{dir_path}失败：{resp.text}')
+                raise Exception(f'创建{dir_path}失败：{resp.text}')
 
     async   def _save_file(self, fid_list, fid_token_list, to_pdir_fid, pwd_id, stoken):
         url = f"{self.BASE_URL}/1/clouddrive/share/sharepage/save"
@@ -361,14 +374,13 @@ class QuarkDisk(DiskBase):
             task_id = save_file_return["data"]["task_id"]
             query_task_return =await self._query_task(task_id)
             if query_task_return["code"] == 0:
-
-                self.logger.info(f'✅转存成功\n')
+                return True
             else:
                 err_msg = query_task_return["message"]
         else:
             err_msg = save_file_return["message"]
         if err_msg:
-            self.logger.error(f"❌转存失败：{err_msg}\n")
+            raise Exception(err_msg)
 
 
     @staticmethod
@@ -384,17 +396,19 @@ async def main():
     await quark_cloud.connect()
     # await quark_cloud.ls_dir(0)
     parse_share= await  QuarkDisk.parse_share_url('https://pan.quark.cn/s/8a4d9ed0c8b6')
-    d1=(await parse_share.ls_dir('0'))['list'][0]
-    d2=(await parse_share.ls_dir(d1['fid']))['list'][0]
-    fid_list=[d2['fid']]
-    fid_token_list=[d2['share_fid_token']]
-    pdir_fid_list=await  quark_cloud.get_fids([settings.STORAGE_BASE_PATH])
-    print(pdir_fid_list)
-    pdir_fid=pdir_fid_list[0]['fid']
-    save=await quark_cloud.save_file(fid_list,fid_token_list,pdir_fid,parse_share.pwd_id,parse_share.stoken)
-    print(save)
+    # d1=(await parse_share.ls_dir('0'))['list'][0]
+    # d2=(await parse_share.ls_dir(d1['fid']))['list'][0]
+    # fid_list=[d2['fid']]
+    # fid_token_list=[d2['share_fid_token']]
+    # pdir_fid_list=await  quark_cloud.get_fids([settings.STORAGE_BASE_PATH])
+    # print(pdir_fid_list)
+    # pdir_fid=pdir_fid_list[0]['fid']
+    # save=await quark_cloud.save_file(fid_list,fid_token_list,pdir_fid,parse_share.pwd_id,parse_share.stoken)
+    # print(save)
 
+    json1= await quark_cloud.mkdir('/资源分享/你好啊啊/cenime')
 
+    print(json.dumps(json1,ensure_ascii=False,indent=2))
 
     await  quark_cloud.close()
     await parse_share.close()

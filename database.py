@@ -1,3 +1,4 @@
+from sqlalchemy.testing.plugin.plugin_base import logging
 from sqlmodel import SQLModel, create_engine
 from models.resource import Resource # 确保从正确的路径导入 Resource 模型
 
@@ -8,6 +9,9 @@ DATABASE_URL = "sqlite:///./resource_database.db"
 # 创建数据库引擎
 # connect_args={"check_same_thread": False} 是 SQLite 特有的，用于允许多个线程访问数据库
 # 如果您在 FastAPI 等异步框架中使用，这是推荐的设置
+# 禁用 SQLAlchemy 的日志输出
+logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
+
 engine = create_engine(DATABASE_URL, echo=True, connect_args={"check_same_thread": False})
 
 def create_db_and_tables():

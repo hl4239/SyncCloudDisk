@@ -105,6 +105,5 @@ class AipansouProvider(BaseProvider):
                 time=latest_target['time'],
                 source="aipansou"
             )
-            print(r)
             results.append(r)
         return results

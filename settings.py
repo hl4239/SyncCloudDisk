@@ -39,8 +39,8 @@ OPEN_AI_List={
         # 'model':'hunyuan-t1-latest'
           'model':'hunyuan-turbos-latest'
         # 'model':'hunyuan-functioncall',
-        # 'model':'hunyuan-turbos-longtext-128k-20250325',
-       # 'model':'hunyuan-t1-20250403'
+        #  'model':'hunyuan-turbos-longtext-128k-20250325',
+         # 'model':'hunyuan-t1-20250403'
     },
     'oneai':{
         'url':'http://fnos:3000/v1',
