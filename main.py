@@ -1,6 +1,7 @@
 import asyncio
 import json
 from logging import Logger
+from pathlib import Path
 
 from agents import Runner, function_tool, Agent
 from agents.extensions.models.litellm_model import LitellmModel
@@ -22,28 +23,7 @@ import os
 
 from pansearch.providers import AipansouProvider
 
-def setup_logger(log_file: str = "app.log"):
-    logger = logging.getLogger("my_logger")
-    logger.setLevel(logging.DEBUG)
 
-    formatter = logging.Formatter(
-        fmt="%(asctime)s [%(levelname)s] %(filename)s:%(lineno)d - %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S"
-    )
-
-    console_handler = logging.StreamHandler()
-    console_handler.setFormatter(formatter)
-    logger.addHandler(console_handler)
-
-    log_dir = os.path.dirname(log_file)
-    if log_dir:  # 只有log_dir不是空字符串才创建目录
-        os.makedirs(log_dir, exist_ok=True)
-
-    file_handler = logging.FileHandler(log_file, encoding="utf-8")
-    file_handler.setFormatter(formatter)
-    logger.addHandler(file_handler)
-
-    return logger
 
 
 share_context:ParseQuarkShareLInk|None=None
@@ -283,14 +263,14 @@ async def print_result(updated_file:EpisodeStruct,match_updated_file:EpisodeStru
 
 
 @function_tool()
-async def print_result_1(latest_file_name:str):
+async def print_result_1(latest_file_absolute_name:str):
     """
     打印处理的结果
-    :param latest_file_name: 剧集为最新的文件名
+    :param latest_file_absolute_name: 剧集为最新的文件的绝对路径名
     :return:
     """
     global latest_file_name_struct_response
-    latest_file_name_struct_response=latest_file_name
+    latest_file_name_struct_response=latest_file_absolute_name
     return True
 
 def get_ai_agent(ins:str,tools:[]):
@@ -328,7 +308,15 @@ async def test1():
     print(result.final_output)
     print(result)
 async def _get_latest_file_name(share_link:str):
-    agent=  get_ai_agent('我将提供此参数：1.{share_link}代表资源链接 2.{title}代表影视资源title。收到参数后，无需与我交互，请独立确保完成以下所有步骤 ：1.解析资源链接得到目录树 2.当目录树中存在不同季度的影视时,只寻找与{title}模糊匹配相似度最高的目录,或者当不存在季度名的目录时，请自主分析哪些目录是匹配的并决定关注此目录  3.只关注后缀名为.mp4 .mkv的文件  4.文件名中必然隐含着关于剧集信息的元数据,如果没找到就自主增加max_deep回到执行步骤1  5.自主完成分析得到最新剧集的文件名  6.打印处理的结果',
+    agent=  get_ai_agent('你将根据我提供的影视资源链接分析得出最新剧集的资源文件名，同时打印该文件名的绝对路径,例如：你在“/目录/子目录/”的目录下找到最新的剧集文件名:20.mkv，你将调用"print_result_1"工具打印“/目录/子目录/20.mkv”。我将提供以下参数：'
+                         '1.{share_link}代表资源链接 '
+                         '2.{title}代表影视资源title。'
+                         '收到参数后,无需与我交互，你能根据以下不同的情况做出决策：'
+                         '1.当面临多个文件夹选择时，如果每个文件夹代表不同版本的影视资源时，你需要根据{title}参数判断选择目录。例如：{title}=“飞驰人生2”，文件夹1代表第一季，文件夹2代表第二季，你将选择文件夹2'
+                         '2.当面临多个文件夹选择时，如果每个文件夹代表影视资源的清晰度时，你需要选择清晰度最高的文件夹。例如文件夹1代表1080p，文件夹2代表4k，你需要选择文件夹2'
+                         '3.当面临多个文件夹选择时，如果文件夹代表一个合集时，你只需要关注最新剧集所在的文件夹。例如：文件夹1代表1-10集，文件夹2代表11-20集，即你应该关注文件夹2'
+                         '当面临.mkv .mp4  文件夹共存在同一个目录下时，优先分析.mkv .mp4文件名并得到最新剧集信息'
+                         '4.只关注后缀名为.mp4 .mkv的文件',
                          tools=[print_result_1,ls_dir_share],)
     result=    await  Runner.run(agent, input=share_link)
     global latest_file_name_struct_response
@@ -340,7 +328,7 @@ async def _get_latest_file_name(share_link:str):
 
 async def init_storage():
     with Session(engine) as session:
-        statement=select(Resource).where(Resource.category == ResourceCategory.HOT_CN_DRAMA)
+        statement=select(Resource).where(Resource.category == ResourceCategory.HOT_CN_DRAMA).order_by(Resource.douban_last_async.desc().nulls_last()).limit(settings.select_resource_num)
         results=session.exec(statement)
         resources=results.all()
         for r in resources:
@@ -379,6 +367,7 @@ async def init_storage():
                         try:
                             if await  default_quark_disk.save_file(fid_list=fid_list,fid_token_list=share_fid_token_list,to_pdir_fid=to_pdir_fid,stoken=stoken,pwd_id=pwd_id):
                                 logger.info(f'✅转存到{to_pdir_path}成功')
+                                file_name=Path(latest_episode_info).name
                                 r.updated_episodes = latest_episode_info
                                 session.add(r)
                                 session.commit()

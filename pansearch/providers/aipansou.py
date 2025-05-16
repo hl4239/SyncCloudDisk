@@ -58,7 +58,7 @@ class AipansouProvider(BaseProvider):
                               verify=True, allow_redirects=False)
         return response.headers['Location'] if response.status_code == 302 else None
 
-    def search(self, keyword: str) -> List[SearchResult]:
+    def search(self, keyword: str,num:int):
         results = []
         url = f"https://aipanso.com/search?k={keyword}"
 
@@ -95,15 +95,19 @@ class AipansouProvider(BaseProvider):
         # 按时间排序(最新的在前)
         sorted_results = sorted(target_list, key=lambda x: x['time'], reverse=True)
         # 只转存最新的一个结果
-        latest_target = sorted_results[0]
-        resource_url = self._get_resource(latest_target['target'])
-        if resource_url:
-            r = SearchResult(
-                title=latest_target['title'],
-                url=resource_url,
-                size="",  # 可以从页面中提取大小信息
-                time=latest_target['time'],
-                source="aipansou"
-            )
-            results.append(r)
-        return results
+
+        latest_target_results = sorted_results[:num]
+
+        for l in latest_target_results:
+
+            result=None
+            resource_url = self._get_resource(l['target'])
+            if resource_url:
+                r = SearchResult(
+                    title=l['title'],
+                    url=resource_url,
+                    size="",  # 可以从页面中提取大小信息
+                    time=l['time'],
+                    source="aipansou"
+                )
+                yield r

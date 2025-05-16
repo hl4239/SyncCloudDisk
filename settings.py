@@ -1,4 +1,6 @@
 
+select_resource_num=20
+
 # 网盘客户端配置
 STORAGE_BASE_PATH='/资源分享'
 STORAGE_CONFIG = {
@@ -31,7 +33,10 @@ STORAGE_CONFIG = {
     ]
 
 }
-
+alist={
+    'key':'alist-648b3796-2c2c-47bb-a83b-9dd09c1e9db6u6GSp5FkDhcxe8v5dxUjmipQ80skg14nS8gD2kgpl0p9hwUsqWg2eIBVZuppkptM'
+,'url':'http://192.168.31.201:5244'
+}
 OPEN_AI_List={
     'hunyuan':{
         'url':'https://api.hunyuan.cloud.tencent.com/v1',
@@ -42,11 +47,7 @@ OPEN_AI_List={
         #  'model':'hunyuan-turbos-longtext-128k-20250325',
          # 'model':'hunyuan-t1-20250403'
     },
-    'oneai':{
-        'url':'http://fnos:3000/v1',
-        'key':'sk-i1mLJCdcWYuGf2j9134d0d6fC2094eEb9d284462C20a706f',
-        'model':'hunyuan-t1-latest'
-    },
+
     'gemini':{
         'url':'https://generativelanguage.googleapis.com/v1beta/openai/',
         'key':'AIzaSyCslACvt89wnzMKwOLtck9NvEPRNMoif_0',
@@ -58,14 +59,16 @@ OPEN_AI_List={
         'url':'https://generativelanguage.googleapis.com/v1beta/openai/',
         'key':'AIzaSyBae0w0qvoOYOxYtYJ_bPmNVibH6qGhxS8',
          # 'model':'gemini-2.0-flash'
-        # 'model':'gemini-2.5-flash-preview-04-17'
-        'model':'gemini-2.5-pro-exp-03-25'
+        'model':'gemini-2.5-flash-preview-04-17',
+        # 'model':'gemini-2.5-pro-exp-03-25'
+        'type':'gemini'
     },
     'deepseek':{
         'url':'https://api.deepseek.com/v1',
         'key':'sk-1d550d3871eb404a9b713b9fbf4dd777',
-        'model':'deepseek-chat'
+        'model':'deepseek-chat',
+        'type':'deepseek'
     }
 
 }
-Current_AI=OPEN_AI_List['hunyuan']
+Current_AI=OPEN_AI_List['deepseek']

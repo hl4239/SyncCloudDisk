@@ -6,10 +6,14 @@ import re
 import urllib
 from abc import ABC, abstractmethod
 from datetime import datetime
+from http.cookies import SimpleCookie
+from typing import Optional, Dict
 
 import aiohttp
+from requests import session
 
 import settings
+import utils
 
 
 class DiskBase(ABC):
@@ -19,20 +23,7 @@ class DiskBase(ABC):
         self.config = config
         self.connected = False
         self.name=config["name"]
-        self.logger = logging.getLogger(f"DiskLogger-{self.name}")
-        self.logger.setLevel(logging.DEBUG)
-
-        # 避免重复添加 Handler（尤其是多次初始化时）
-        if not self.logger.handlers:
-            ch = logging.StreamHandler()
-            ch.setLevel(logging.DEBUG)
-
-            formatter = logging.Formatter(
-                f"[%(asctime)s] [%(levelname)s] [{self.name}] %(message)s",
-                datefmt="%Y-%m-%d %H:%M:%S"
-            )
-            ch.setFormatter(formatter)
-            self.logger.addHandler(ch)
+        self.logger = utils.logger
 
     def debug(self, msg): self.logger.debug(msg)
 
@@ -151,9 +142,8 @@ class QuarkDisk(DiskBase):
 
 
     def __init__(self,config: dict[str, any]):
-        self.cookie=config["cookie"]
         self.session=None
-
+        self.cookie=config.get("cookie")
         self.mparam=self._parse_mparam_from_cookie()
         self.fid_cache:dict[str, str]={"/":"0"}
         super().__init__(config)
@@ -165,13 +155,19 @@ class QuarkDisk(DiskBase):
         if not self.session:
             self.session= aiohttp.ClientSession(
                 headers={"User-Agent":self.USER_AGENT,
-                         'Cookie':self.cookie, "accept": "application/json, text/plain, */*",
+                          "accept": "application/json, text/plain, */*",
             "origin": "https://pan.quark.cn",
             "referer": "https://pan.quark.cn/",
             "x-request-id": str(random.randint(10**15, 10**16 - 1)),
                          },
-
             )
+            # 解析 Cookie
+            cookie = SimpleCookie()
+            cookie.load(self.config["cookie"])
+
+
+            for key, morsel in cookie.items():
+                self.session.cookie_jar.update_cookies({key: morsel.value})
     def _parse_mparam_from_cookie(self) -> dict[str, str]:
         mparam = {}
         kps_match = re.search(r"(?<!\w)kps=([a-zA-Z0-9%+/=]+)[;&]?", self.cookie)
@@ -190,16 +186,16 @@ class QuarkDisk(DiskBase):
         self.session.headers.update({ "x-request-id": str(random.randint(10**15, 10**16 - 1)),})
         # 合并默认 params 和调用时传入的 params
 
-
-
-
-        return await  self.session.request(
+        result=   await  self.session.request(
             method=method,
             url=url,
             params=params,
             data=data,
             json=json
         )
+
+
+        return result
 
     async  def connect(self) -> bool:
         url="https://pan.quark.cn/account/info"
@@ -259,6 +255,14 @@ class QuarkDisk(DiskBase):
                     break
         return file_list
 
+    async def download(self, fids):
+        url = f"{self.BASE_URL}/1/clouddrive/file/download"
+        querystring = {"pr": "ucpro", "fr": "pc", "uc_param_str": ""}
+        payload = {"fids": fids}
+        async with await self._request(method="POST", url=url, params=querystring,json=payload) as resp:
+            set_cookie_headers = resp.headers.get('Set-Cookie')
+            # cookie_str = "; ".join([f"{key}={value}" for key, value in set_cookie.items()])
+            return await resp.json(), set_cookie_headers
 
     async  def get_fids(self, file_paths:list[str]):
         """
@@ -281,8 +285,8 @@ class QuarkDisk(DiskBase):
                     fids += resp_json["data"]
                     file_paths = file_paths[50:]
                 else:
-                    self.logger.info(f"获取目录ID：失败, {resp_json['message']}")
-                    break
+                    self.logger.info()
+                    raise RuntimeError(f"获取目录ID：失败, {resp_json['message']}")
                 if len(file_paths) == 0:
                     break
 
@@ -382,12 +386,189 @@ class QuarkDisk(DiskBase):
         if err_msg:
             raise Exception(err_msg)
 
+    async def delete(self, fid_list: [], action_type: int = 2) -> bool:
+        """
+        删除指定路径的文件或文件夹。
+        根据 API 响应，此操作是异步的。
 
+        Args:
+            fid_list: 要删除的文件或文件夹 fid
+            action_type: 删除类型，默认为 2 (根据示例推测为移入回收站)。
+
+        Returns:
+            True 如果删除任务成功完成，否则 False。
+        """
+        # 2. Prepare API call
+        url = f"{self.BASE_URL}/1/clouddrive/file/delete"
+        params = {"pr": "ucpro", "fr": "pc", "uc_param_str": ""}
+        payload = {
+            "action_type": action_type,
+            "filelist": fid_list,  # API expects a list of FIDs
+            "exclude_fids": []  # Based on example
+        }
+
+        async with await self._request("POST", url, json=payload, params=params) as resp:
+            task_id = None
+            if resp.status == 200:
+                try:
+                    data =await resp.json()
+                    # Check API code and if task_id exists
+                    if data.get("data", {}).get("task_id"):
+                        task_id = data["data"]["task_id"]
+                    else:
+                        # API returned an error in the initial call
+                        print()
+                        raise RuntimeError(f"提交删除任务失败: {data.get('message', '未知 API 错误')} (Code: {data.get('code')})")
+                except json.JSONDecodeError:
+                    raise RuntimeError(f"提交删除任务失败: 响应不是有效的JSON - {resp.text[:100]}")
+            else:
+                raise RuntimeError(f"提交删除任务失败: HTTP {resp.status_code} - {resp.text[:100]}")
+
+            if not task_id:
+                raise RuntimeError("未能获取删除任务的 Task ID。")
+
+            task_result =await self._query_task(task_id)
+            if task_result is None:
+                raise RuntimeError("查询删除任务状态失败或超时。")
+            task_data = task_result.get("data", {})
+            task_status = task_data.get("status")
+            if task_status != 0:  # Status 1 typically means success for tasks
+                return True
+            else:
+                raise RuntimeError(f"删除任务失败或未成功完成,最终任务状态: {task_status}")
     @staticmethod
     async  def parse_share_url(shari_link:str)->ParseQuarkShareLInk:
         parse= ParseQuarkShareLInk(shari_link)
         await parse.parse_share_link()
         return parse
+    async def _get_share_details(self, share_id: str) -> Optional[Dict]:
+        """Internal: Retrieves share details (including URL) using the share_id."""
+        if not share_id: return None
+        # print(f"正在使用 Share ID '{share_id}' 获取分享链接详情...")
+        url = f"{self.BASE_URL}/1/clouddrive/share/password" # Endpoint from user example
+        params = {"pr": "ucpro", "fr": "pc", "uc_param_str": ""}
+        payload = {"share_id": share_id}
+
+        async with await self._request("POST", url, json=payload, params=params) as resp:
+
+            if resp.status == 200:
+                try:
+                    data =await resp.json()
+                    # Check API code for success
+                    if data.get("code") == 0 and data.get("data"):
+                        # print("获取分享链接详情成功。")
+                        return data.get("data") # Return the nested 'data' dictionary
+                    else:
+                        raise RuntimeError(f"获取分享链接详情 API 返回错误: {data.get('message', '未知错误')} (Code: {data.get('code')}) - Share ID: {share_id}")
+                except json.JSONDecodeError:
+                    raise RuntimeError('f"获取分享链接详情失败: 响应不是有效的JSON - {resp.text[:100]} - Share ID: {share_id}"')
+            else:
+                raise RuntimeError('f"获取分享链接详情失败: HTTP {resp.status_code} - {resp.text[:100]} - Share ID: {share_id}"')
+    async def create_share_link(self, fid_list: [], title: str, password: Optional[str] = None, expired_type: int = 1,
+                          url_type: int = 1) -> Optional[str]:
+        """
+        为用户网盘中的文件或文件夹创建公开分享链接，并返回最终的分享 URL。
+
+        Args:
+            fid_list: 要分享的文件或文件夹在 fid
+            title: 分享链接的标题。
+            password: (可选) 为分享设置的密码。如果为 None，则不设置密码。
+            expired_type: (可选) 链接过期类型，默认为 1 (可能 1=永久, 其他值待探索)。
+            url_type: (可选) 链接 URL 类型，默认为 1 (具体含义需探索)。
+
+        Returns:
+            成功时返回最终的分享 URL (e.g., "https://pan.quark.cn/s/...") 字符串，
+            失败时返回 None。
+        """
+        init_url = f"{self.BASE_URL}/1/clouddrive/share"
+        params = {"pr": "ucpro", "fr": "pc", "uc_param_str": ""}
+        payload = {
+            "fid_list": fid_list, "title": title,
+            "url_type": url_type, "expired_type": expired_type,
+        }
+        if password:
+            # Confirmed key based on get_stoken and common patterns
+            payload["passcode"] = password
+        # 3. Send Request to initiate share
+        async with await self._request("POST", init_url, json=payload, params=params) as resp:
+            # 4. Process Initiation Response
+            task_id = None
+            text=await resp.text()
+            if resp.status == 200:
+                try:
+                    init_data =await resp.json()
+                    if init_data.get("code") == 0 and init_data.get("data", {}).get("task_id"):
+                        task_id = init_data["data"]["task_id"]
+                        # print(f"创建分享链接请求已提交。 Task ID: {task_id}")
+                    else:
+
+                        raise RuntimeError(f"创建分享链接 API (步骤 1) 返回错误: {init_data.get('message', '未知错误')} (Code: {init_data.get('code')})")
+                except json.JSONDecodeError:
+                    print()
+                    raise RuntimeError(f"创建分享链接失败 (步骤 1): 响应不是有效的JSON - {text[:100]}")
+            else:
+                raise RuntimeError(f"创建分享链接失败 (步骤 1): HTTP {resp.status} - {text[:100]}")
+
+            if not task_id: return None  # Should not happen if code above is correct
+
+            # 5. Poll the task status to get share_id
+            task_result =await self._query_task(task_id)
+
+            if task_result is None:
+                raise RuntimeError("查询分享任务状态失败或超时。")
+
+            message=task_result["message"]
+            code=task_result["code"]
+            if code == 0:
+                task_data = task_result.get("data", {})
+                # Extract share_id from the successful task data
+                share_id = task_data.get("share_id")
+                if not share_id:
+                    raise RuntimeError(f"分享任务成功完成，但响应中未找到 share_id。 Task Data: {task_data}")
+                try:
+                    share_details =await self._get_share_details(share_id)
+                except Exception as e:
+                    raise e
+                # 7. Extract and return the share URL
+                final_share_url = share_details.get("share_url")
+                if not final_share_url:
+                    raise RuntimeError(f"获取分享详情成功，但响应中未找到 share_url。 Details: {share_details}")
+                return final_share_url
+
+            else:   raise RuntimeError(json.dumps({
+                    'code':code,
+                    'message':message,
+                },ensure_ascii=False))
+    async def rename(self, fid, file_name):
+        url = f"{self.BASE_URL}/1/clouddrive/file/rename"
+        querystring = {"pr": "ucpro", "fr": "pc", "uc_param_str": ""}
+        payload = {"fid": fid, "file_name": file_name}
+        async with await self._request(
+            "POST", url, json=payload, params=querystring
+        ) as resp:
+            response =await resp.json()
+            return response
+
+    async def move(self,fid_list:[],pdir_fid:str):
+        url = f"{self.BASE_URL}/1/clouddrive/file/move"
+        querystring = {"pr": "ucpro", "fr": "pc", "uc_param_str": ""}
+        payload = {"filelist": fid_list, "to_pdir_fid": pdir_fid}
+        async with await self._request(
+                "POST", url, json=payload, params=querystring
+        ) as resp:
+
+            try:
+                response = await resp.json()
+                task_id = response["data"]["task_id"]
+                task_result = await self._query_task(task_id)
+                code=task_result["code"]
+                if code == 0:
+                    status = task_result["data"]["status"]
+                    if status==2:
+                        return True
+                raise RuntimeError(f'移动文件发生错误{task_result}')
+            except Exception as e:
+                raise f"{str(e)  }{await resp.text()}"
 
 
 
@@ -395,7 +576,7 @@ async def main():
     quark_cloud=QuarkDisk(settings.STORAGE_CONFIG['quark'][0])
     await quark_cloud.connect()
     # await quark_cloud.ls_dir(0)
-    parse_share= await  QuarkDisk.parse_share_url('https://pan.quark.cn/s/8a4d9ed0c8b6')
+    # parse_share= await  QuarkDisk.parse_share_url('https://pan.quark.cn/s/8a4d9ed0c8b6')
     # d1=(await parse_share.ls_dir('0'))['list'][0]
     # d2=(await parse_share.ls_dir(d1['fid']))['list'][0]
     # fid_list=[d2['fid']]
@@ -406,11 +587,28 @@ async def main():
     # save=await quark_cloud.save_file(fid_list,fid_token_list,pdir_fid,parse_share.pwd_id,parse_share.stoken)
     # print(save)
 
-    json1= await quark_cloud.mkdir('/资源分享/你好啊啊/cenime')
+    # json1= await quark_cloud.mkdir('/资源分享/你好啊啊/cenime')
+    # resp_json=await quark_cloud.get_fids(['/资源分享/热门-国产剧/淮水竹 亭(2025)'])
+    #
+    # fid_list=[fid['fid'] for fid in resp_json]
+    # print(resp_json)
+    # try:
+    #     result=  await quark_cloud.create_share_link(fid_list=fid_list,title='测你么')
+    #     print(result)
+    #
+    # except Exception as e:
+    #     print(json.dumps(str(e),ensure_ascii=False,indent=2))
+    resp_json=await quark_cloud.get_fids(['/资源分享/热门-国产剧/淮水竹 亭(2025)'])
 
-    print(json.dumps(json1,ensure_ascii=False,indent=2))
+    fid_list=[fid['fid'] for fid in resp_json]
+    file_list=await quark_cloud.ls_dir(fid_list[0])
+    fid_file_list=[file['fid'] for file in file_list]
+
+    resp_json=await quark_cloud.get_fids(['/资源分享/热门-国产剧/淮水 竹亭(2025)'])
+    to_pdir_fid=resp_json[0]['fid']
+    await quark_cloud.move(fid_file_list,to_pdir_fid)
 
     await  quark_cloud.close()
-    await parse_share.close()
+    # await parse_share.close()
 if __name__ == "__main__":
     asyncio.run(main())
