@@ -93,6 +93,31 @@ class AlistAPI:
             return resp_json
     async def close(self):
         await self.session.close()
+    async def mkdir(self,path):
+
+        api_endpoint = f"{self.base_url}/api/fs/mkdir"
+        data={
+            'path':path
+        }
+        async with self.session.post(url=api_endpoint,json=data) as response:
+            resp_json=await response.json()
+            print(resp_json)
+            message=resp_json['message']
+            if message!='success':
+
+                raise Exception(f'{path}:{message}')
+    async def rename(self,src_path:str,new_name:str):
+        api_endpoint = f"{self.base_url}/api/fs/rename"
+        data={
+            'path':src_path,
+            'name':new_name
+        }
+        async with self.session.post(url=api_endpoint,json=data) as response:
+            resp_json=await response.json()
+            print(resp_json)
+            message=resp_json['message']
+            if message!='success':
+                raise Exception(f'{src_path}:{message}')
 
 async def download_risk_file(alist_api:AlistAPI):
     with Session(engine) as session:
@@ -250,13 +275,11 @@ async def async_upload_status(alist_api:AlistAPI):
         except Exception as e:
             print(e)
 
+
+
 async def main():
     alist=AlistAPI()
-    await upload_risk_file(alist)
-    # await async_upload_status(alist)
-    # await download_risk_file(alist)
-    # await is_finish(alist)
-    await alist.close()
+    await alist.rename('/downloads/资源分享/asdas','xxxxx')
 if __name__ == "__main__":
 
     asyncio.run(main())

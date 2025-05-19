@@ -2,7 +2,7 @@
 select_resource_num=20
 
 # 网盘客户端配置
-STORAGE_BASE_PATH='/资源分享'
+STORAGE_BASE_PATH='/资源分享_torrent'
 STORAGE_CONFIG = {
     # 'baidu': {
     #     'app_key': 'your_baidu_app_key',
@@ -71,4 +71,4 @@ OPEN_AI_List={
     }
 
 }
-Current_AI=OPEN_AI_List['deepseek']
+Current_AI=OPEN_AI_List['hunyuan']

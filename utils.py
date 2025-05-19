@@ -71,4 +71,3 @@ def setup_logger(log_file: str = "app.log") -> logging.Logger:
 
 # 在模块加载时直接初始化
 logger = setup_logger()
-logger.info('你好')
