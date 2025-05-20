@@ -1,5 +1,6 @@
 import re
 from itertools import groupby
+from pathlib import Path
 from tokenize import group
 
 import aiohttp
@@ -27,9 +28,14 @@ class AlistAPI:
         }
         self.session = aiohttp.ClientSession(headers=self.headers)
 
-    async def copy(self, path_list:[],base_src:str,base_dst:str) :
+    async def copy(self, path_list_dict:[],base_src:str,base_dst:str) :
         """
         从一个存储转存到另一个存储
+        path_list=[
+        {
+            'src_path':xxx.
+            'dst_pdir_path':xxx
+        }]
         """
 
         api_endpoint = f"{self.base_url}/api/fs/copy"
@@ -43,7 +49,7 @@ class AlistAPI:
                 'dst_pdir_name':i['dst_pdir_path'],
 
             }
-            for i in path_list
+            for i in path_list_dict
         ]
         # 首先按照 pdir_name 排序（groupby 要求输入是已排序的）
         src_list_sorted = sorted(src_list, key=lambda x: x['src_pdir_name'])
@@ -119,6 +125,53 @@ class AlistAPI:
             if message!='success':
                 raise Exception(f'{src_path}:{message}')
 
+    async def remove(self,path:str):
+        path_=Path(path)
+        pdir_path_str=str(path_.parent)
+        item_name=path_.name
+        api_endpoint = f"{self.base_url}/api/fs/remove"
+        data = {
+            'dir': pdir_path_str,
+            'names': [item_name],
+        }
+        async with self.session.post(url=api_endpoint, json=data) as response:
+            resp_json = await response.json()
+            print(resp_json)
+            message = resp_json['message']
+            if message == 'success':
+                return True
+            raise Exception(f'删除失败{path}:{message}')
+
+    async def add_offline_download(self,urls,path,tool='aria2',delete_policy='delete_always'):
+        api_endpoint = f"{self.base_url}/api/fs/add_offline_download"
+        data = {
+            'path':path,
+            'tool':tool,
+            'delete_policy':delete_policy,
+            'urls':urls
+        }
+        async with self.session.post(url=api_endpoint, json=data) as response:
+            resp_json = await response.json()
+            print(resp_json)
+            message = resp_json['message']
+            if message == 'success':
+                return resp_json['data']
+            raise Exception(f'离线下载添加失败{path}:{message}')
+
+    async def ls_dir(self,path):
+        api_endpoint = f"{self.base_url}/api/fs/list"
+        data = {
+            'page': 1,
+            'path': path,
+            'per_page': 0,
+            'refresh':True
+        }
+        async with self.session.post(url=api_endpoint, json=data) as response:
+            resp_json = await response.json()
+            message = resp_json['message']
+            if message == 'success':
+                return resp_json['data']['content']
+            raise Exception(f'ls_dir失败{path}:{message}')
 async def download_risk_file(alist_api:AlistAPI):
     with Session(engine) as session:
         resources = session.exec(select(Resource).where((Resource.has_detect_risk != None) & (Resource.has_detect_risk == True))).all()
@@ -279,7 +332,7 @@ async def async_upload_status(alist_api:AlistAPI):
 
 async def main():
     alist=AlistAPI()
-    await alist.rename('/downloads/资源分享/asdas','xxxxx')
+
 if __name__ == "__main__":
 
     asyncio.run(main())

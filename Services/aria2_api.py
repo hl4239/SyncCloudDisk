@@ -195,6 +195,29 @@ class Aria2API:
             # print("addUri", return_json)
             return await resp.json()
 
+    async   def add_download_torrent(self, url, path, file=None):
+        """
+        添加任务
+        :param headers:
+        :param url: 文件下载地址
+        :param path: 文件保存路径
+        :param file: 文件保存名称
+        :param proxy: 代{过}{滤}理地址
+        :return:
+        """
+        data = {
+            "id": self.id,
+            "jsonrpc": "2.0",
+            "method": "aria2.addUri",
+            "params": ["token:123",[url], {"dir": path, "out": file,'allow-overwrite':'true', "follow-torrent": 'false'}]
+        }
+        async with self.session.post(self.api, json=data) as resp:
+
+            # print("addUri", return_json)
+
+            return await resp.json()
+
+
     async def magnet_to_torrent(self,magnet:str,path:str):
         resp_json = await self.download_magnet(magnet,path)
         task_id=resp_json['result']
@@ -212,9 +235,6 @@ async def main():
    #     result=await aria2.tellStopped()
    #     print(result)
    #     await asyncio.sleep(1)
-   result=await aria2.tellStatus('a9bdf606f2c23841')
-   result1= await aria2.tellStopped()
-   print(result)
-   print(result1)
+   result=await aria2.add_download_torrent(url='https://www.3bt0.com/prod/api/v1/down?app_id=83768d9ad4&identity=23734adac0301bccdcb107c4aa21f96c&lx=1&id=1747671706728375',path='/vol2/1000/downloads',file='nihao.torrent')
 if __name__ == '__main__':
    asyncio.run(main())

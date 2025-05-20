@@ -65,7 +65,10 @@ class CreateShareLink:
             }
             print(result_share_list)
             for resource in resource_map.values():
+                if resource.share_handle is None:
+                    resource.share_handle={}
                 share_handle=resource.share_handle
+
                 share_handle.update({'share_list':[]})
             for result_share in result_share_list:
                 src_path = result_share['src_path']
@@ -109,7 +112,18 @@ class CreateShareLink:
             statement = select(Resource).where(Resource.category == ResourceCategory.HOT_CN_DRAMA).order_by(
                 Resource.douban_last_async.desc()).limit(settings.select_resource_num)
             resources = session.exec(statement).all()
-            resources=[resource for resource in resources if resource.share_handle.get('is_skip_share',False)==False]
+
+
+            for resource in resources:
+                if resource.share_handle is None:
+                    resource.share_handle ={}
+                    session.add(resource)
+            resources = [
+                resource for resource in resources
+                if getattr(resource, 'share_handle', None)==None
+                   or resource.share_handle.get('is_skip_share', False) ==False
+            ]
+
         resource_map={
             resource.cloud_storage_path:resource
             for resource in resources
@@ -150,13 +164,14 @@ class CreateShareLink:
                     src_path = resource.cloud_storage_path
 
                     if code==41028:
-                        await RiskDetect.risk_file_handle_41028(src_path,self.default_quark_disk)
+                        # await RiskDetect.risk_file_handle_41028(src_path,self.default_quark_disk)
+                        pass
                     elif code==41026:
                         await RiskDetect.risk_file_handle_41026(src_path, self.default_quark_disk)
                 except Exception as e:
                     pass
                 continue
-            await RiskDetect.detect_1(file_path,default_share_link,self.default_quark_disk)
+            # await RiskDetect.detect_1(file_path,default_share_link,self.default_quark_disk)
             quark_share_dir_tree=QuarkShareDirTree.get_quark_share_tree(default_share_link)
             await quark_share_dir_tree.parse()
             tasks=[

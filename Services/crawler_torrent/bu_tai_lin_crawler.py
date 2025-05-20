@@ -64,7 +64,16 @@ class BuTaiLinCrawler:
 
         return search_data_list
 
-    async def search(self,title):
+    def select_data(self,data_list,title,year):
+        for data in data_list:
+            title_=data['title']
+            year_=data['years']
+            if year_==year:
+                return data
+        raise f'未找到匹配的资源：{title} {year}'
+
+
+    async def search(self,title,year):
         resp_json= await self._search(title)
         search_data_list = await self.parse_search(resp_json)
 
@@ -72,7 +81,7 @@ class BuTaiLinCrawler:
 
         if len(search_data_list)==0:
             return search_result
-        target_data=search_data_list[0]
+        target_data=self.select_data(search_data_list,title,year)
         resp_json=await self.get_detail(target_data['idcode'])
         detail_data=await self.parse_detail(resp_json)
         detail_1080p_list=detail_data['ecca']['WEB-1080P']
@@ -81,7 +90,8 @@ class BuTaiLinCrawler:
         resource_4k=self.to_resource(detail_4k)
 
         filter_resource_list= self.filter(resource_4k,resource_1080p_list)
-        return filter_resource_list
+        search_result=SearchResult(keyword=title,result=filter_resource_list)
+        return search_result
     def to_resource(self,detail_list):
 
         resource_list=[]
@@ -129,7 +139,8 @@ class BuTaiLinCrawler:
         ]
         fileter_resource.extend(fill_4k_by_1080p_resource)
         return fileter_resource
-
+    async def close(self):
+        await self.session.close()
 
 
 async def main():

@@ -116,6 +116,12 @@ class RiskDetect:
 
     @staticmethod
     async def risk_file_handle_41026(src_path,quark_disk:QuarkDisk):
+        """
+        处理文件夹命名导致的风险
+        :param src_path:
+        :param quark_disk:
+        :return:
+        """
         item_name=os.path.basename(src_path)
         pdir_path=os.path.dirname(src_path)
         item_rename=RiskDetect.rename(item_name)

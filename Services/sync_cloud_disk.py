@@ -1,7 +1,9 @@
 import asyncio
 import json
+import re
 from datetime import datetime
 
+from sqlalchemy.orm.attributes import flag_modified
 from sqlmodel import Session, select
 
 import Services.crawler_torrent.crawler
@@ -10,7 +12,9 @@ import utils
 from QuarkDisk import QuarkDisk
 from Services.alist_api import AlistAPI
 from Services.aria2_api import Aria2API
+from Services.crawler_torrent.bu_tai_lin_crawler import BuTaiLinCrawler
 from Services.crawler_torrent.pan_dian_ying_shi_crawler import PanDianCrawler
+from Services.download_torrent import DownloadTorrent
 from Services.push_to_cloud_disk import PushToCloudDisk
 from Services.episode_namer_dir.episode_namer import  EpisodeNamer
 from Services.magnet_to_torrent import MagnetToTorrent
@@ -19,7 +23,7 @@ from models.resource import Resource, ResourceCategory
 
 
 class SyncCloudDisk:
-    def __init__(self,quark_disk:QuarkDisk,aria2api:Aria2API,alistapi:AlistAPI,crawler:PanDianCrawler):
+    def __init__(self,quark_disk:QuarkDisk,aria2api:Aria2API,alistapi:AlistAPI,crawler:BuTaiLinCrawler):
 
         self.quark_disk = quark_disk
         self.aria2_api = aria2api
@@ -40,9 +44,23 @@ class SyncCloudDisk:
             return filename[:filename.rindex('.')]
         return filename
 
-    def remove_year(self,filename):
-        parts = filename.rsplit('(', 1)  # 从右边开始，只分割一次
-        return parts[0].rstrip() if len(parts) > 1 else filename
+    def splite_title(self,filename):
+        """
+        将title和年份分离，如你好(2025)->你好，2025
+        :param filename:
+        :return:
+        """
+        # 匹配格式：标题 + 空格 + 左括号 + 年份 + 右括号
+        match = re.match(r'^(.*)\s*\((\d{4})\)$', filename)
+
+        if match:
+            title_no_year = match.group(1).strip()
+            year = match.group(2)
+            print("title_no_year:", title_no_year)
+            print("Year:", year)
+            return title_no_year,year
+        else:
+            print("No match found.")
 
 
     async def get_cloud_pdir(self,resource):
@@ -65,15 +83,6 @@ class SyncCloudDisk:
 
 
 
-    async def format_search_result(self,search_result:Services.crawler_torrent.crawler.SearchResult):
-        crawler_format_name_result = await EpisodeNamer.generate_name([i.title for i in search_result.result])
-
-        search_result_maps = {
-            i.title: i
-            for i in search_result.result
-        }
-        for crawler_format_name in crawler_format_name_result:
-             search_result_maps[crawler_format_name.original_name].format_name=crawler_format_name.format_name
 
 
 
@@ -107,6 +116,28 @@ class SyncCloudDisk:
 
         return result_list
 
+    async def download_torrent(self,resource_list:list[Services.crawler_torrent.crawler.Resource],save_path):
+        down=DownloadTorrent(self.aria2_api)
+        for resource in resource_list:
+            await  down.download_torrent(url=resource.url,path=save_path,name=f'{resource.format_name}.torrent')
+        result_path_list= await down.get_downloaded()
+        return result_path_list
+
+    async def ensure_cloud_dir_empty(self,resource:Resource):
+        """
+        确保网盘目录存在且无torrent文件
+        :return:
+        """
+        pdir_fid,file_list= await self.get_cloud_pdir(resource)
+        remove_fid_list=[]
+        for file in file_list:
+            file_name=file['file_name']
+            if file_name.endswith('.torrent'):
+                remove_fid_list.append(file['fid'])
+        if len(remove_fid_list)>0:
+            await self.quark_disk.delete(remove_fid_list)
+
+
 
     async def start_async(self):
         with Session(engine) as session:
@@ -125,33 +156,43 @@ class SyncCloudDisk:
 
                 is_skip_update = cloud_disk_async_info.get('is_skip_update', False)
                 is_force_update = cloud_disk_async_info.get('is_force_update', False)
-                if (((cloud_disk_async_time is None) or (
-                        cloud_disk_async_time < douban_episode_update)) and is_skip_update == False) or is_force_update:
+                sync_status=cloud_disk_async_info.get('status', None)
+                if (((cloud_disk_async_time is None) or (cloud_disk_async_time < douban_episode_update)) and is_skip_update == False and sync_status!='uploading') or is_force_update:
                     title = resource.title
-                    pdir_path=resource.cloud_storage_path
+                    pdir_path = resource.cloud_storage_path
                     total_episodes = resource.total_episodes
                     try:
-                        search_result_=await self.crawler.search(self.remove_year(title),rety=2)
+                        search_result_ = await self.crawler.search(*self.splite_title(title))
                     except Exception as e:
                         utils.logger.error(f'{title}爬取资源发生错误：{str(e)}')
                         continue
-                    await self.format_search_result(search_result_)
+                    downloaded_path_list= await self.download_torrent(search_result_.result,resource.storage_path)
 
-                    need_sync_list = await self.get_need_sync_search_result_resource_list(search_result_,resource)
 
-                    magnet_to_torrent=MagnetToTorrent(self.aria2_api,self.alist_api)
+                    await self.ensure_cloud_dir_empty(resource)
 
-                    for need_sync in need_sync_list:
-                        await magnet_to_torrent.download_magnet(need_sync.url,resource.storage_path,need_sync.format_name)
+                    push_to_cloud = PushToCloudDisk(self.alist_api)
 
-                    downloaded_path_list= await magnet_to_torrent.get_downloaded()
+                    await push_to_cloud.push(downloaded_path_list,resource.cloud_storage_path )
+                    task_list = push_to_cloud.task_list
+                    utils.logger.info(json.dumps(task_list, indent=4, ensure_ascii=False))
 
-                    push_to_cloud=PushToCloudDisk(self.alist_api)
+                    cloud_disk_async_info.update({
+                        'status':'uploading',
+                        'task_list':task_list
+                    })
+                    resource.cloud_disk_async_info = cloud_disk_async_info
+                    flag_modified(resource,'cloud_disk_async_info')
+                    session.add(resource)
+                    try:
+                        session.commit()
+                    except Exception as e:
+                        print(e)
 
-                    await push_to_cloud.push(downloaded_path_list,)
-                    result= await push_to_cloud.get_complete()
-                    utils.logger.info(json.dumps(result,indent=4,ensure_ascii=False))
-                    return
+                    await asyncio.sleep(10)
+
+
+
 
 
 
@@ -161,9 +202,14 @@ async def main():
     quark_disk=QuarkDisk(settings.STORAGE_CONFIG['quark'][0])
     aria2=Aria2API()
     alistapi=AlistAPI()
-    crawler=PanDianCrawler()
+    crawler=BuTaiLinCrawler()
     sync_cloud=SyncCloudDisk(quark_disk,aria2,alistapi,crawler)
     await sync_cloud.start_async()
+    await quark_disk.close()
+    await aria2.close()
+    await alistapi.close()
+    await crawler.close()
+
 if __name__ == '__main__':
     asyncio.run(main())
 

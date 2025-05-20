@@ -1,16 +1,28 @@
 import re
+from pathlib import Path
 
+import QuarkDisk
 from Services.alist_api import AlistAPI
 
 
 class PushToCloudDisk:
-    def __init__(self,alist:AlistAPI):
+    def __init__(self,alist:AlistAPI,task_list=None):
         self.alist = alist
         self.local_base_path='downloads'
         self.cloud_base_path='夸克网盘'
         self.task_list=[]
-    async def push(self,path_list:[]):
-        resp_json= await self.alist.copy(path_list=path_list,base_src=self.local_base_path,base_dst=self.cloud_base_path)
+
+    async def push(self,path_list:[],dst_path:str):
+        path_list_dict= [
+            {
+                'src_path':i,
+                'dst_pdir_path':dst_path,
+            }
+            for i in path_list
+        ]
+        ls_path=f'/{self.cloud_base_path}{dst_path}'
+        await self.alist.ls_dir(str(Path(ls_path).parent))
+        resp_json= await self.alist.copy(path_list_dict=path_list_dict,base_src=self.local_base_path,base_dst=self.cloud_base_path)
         task_list_ = resp_json['data']['tasks']
 
         for task in task_list_:

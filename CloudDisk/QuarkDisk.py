@@ -409,6 +409,7 @@ class QuarkDisk(DiskBase):
 
         async with await self._request("POST", url, json=payload, params=params) as resp:
             task_id = None
+            text=await resp.text()
             if resp.status == 200:
                 try:
                     data =await resp.json()
@@ -420,9 +421,9 @@ class QuarkDisk(DiskBase):
                         print()
                         raise RuntimeError(f"提交删除任务失败: {data.get('message', '未知 API 错误')} (Code: {data.get('code')})")
                 except json.JSONDecodeError:
-                    raise RuntimeError(f"提交删除任务失败: 响应不是有效的JSON - {resp.text[:100]}")
+                    raise RuntimeError(f"提交删除任务失败: 响应不是有效的JSON - {text[:100]}")
             else:
-                raise RuntimeError(f"提交删除任务失败: HTTP {resp.status_code} - {resp.text[:100]}")
+                raise RuntimeError(f"提交删除任务失败: HTTP {resp.status} - {text[:100]}")
 
             if not task_id:
                 raise RuntimeError("未能获取删除任务的 Task ID。")
@@ -598,8 +599,8 @@ async def main():
     #
     # except Exception as e:
     #     print(json.dumps(str(e),ensure_ascii=False,indent=2))
-    resp_json=await quark_cloud.get_fids(['/资源分享/热门-国产剧/淮水竹 亭(2025)'])
-
+    resp_json=await quark_cloud.get_fids(['/资源分享/热门-国产剧/淮水竹亭(2025)'])
+    print(resp_json)
     fid_list=[fid['fid'] for fid in resp_json]
     file_list=await quark_cloud.ls_dir(fid_list[0])
     fid_file_list=[file['fid'] for file in file_list]
