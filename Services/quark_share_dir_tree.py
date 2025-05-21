@@ -23,8 +23,7 @@ class QuarkShareDirTree:
         # print(f"DEBUG: _traverse_dir for fid={fid}, current_deep={current_deep}, max_deep={max_deep}")
         file_detail_list_response = await self.ParseQuarkShareLInk.ls_dir(fid)
         if not file_detail_list_response or 'list' not in file_detail_list_response:
-            print(f"Warning: ls_dir for fid {fid} returned an unexpected response: {file_detail_list_response}")
-            return '目录信息获取失败'
+            raise Exception(f"Warning: ls_dir for fid {fid} returned an unexpected response,可能为链接已失效: {file_detail_list_response}")
 
         file_detail_list = file_detail_list_response['list']
         if len(file_detail_list) == 0:
@@ -233,16 +232,52 @@ class QuarkShareDirTree:
         return quark_share_tree
 
     @staticmethod
+    def get_video_node_info_from_tree(tree_node) -> list[dict]:
+        """
+        遍历给定的树节点，收集所有 mp4 或 mkv 文件的信息。
+        :param tree_node: 目录树的根节点或子节点。
+        :return: 所有视频文件节点的列表。
+        """
+        result = []
+
+        def traverse(node):
+            if not isinstance(node, dict):
+                return
+
+            # 判断当前节点是否是视频文件
+            if node.get('file_type') != 0:
+                file_name = node.get('file_name', '')
+                if file_name.endswith('.mp4') or file_name.endswith('.mkv'):
+                    result.append(node)
+            else:  # 是文件夹，则递归遍历其子节点
+                children = node.get('child')
+                if isinstance(children, list):
+                    for child in children:
+                        traverse(child)
+
+        traverse(tree_node)
+        return result
+
+    def get_video_node_info(self) -> list[dict]:
+        """
+        遍历整个目录树，获取所有 mp4/mkv 文件的节点信息。
+        :return: 包含视频文件节点的列表。
+        """
+        if not self.tree:
+            print("Tree has not been parsed yet. Call parse() first.")
+            return []
+
+        return self.get_video_node_info_from_tree(self.tree)
+    @staticmethod
     async def close():
         for i in QuarkShareDirTree.quark_share_tree_dict.values():
             await i.close_()
 async def main():
-    quark_share_tree=QuarkShareDirTree('https://pan.quark.cn/s/56be9bc04175')
+    quark_share_tree=QuarkShareDirTree('https://pan.quark.cn/s/b11805926008')
     await quark_share_tree.parse(max_deep=1)
     await quark_share_tree.parse(max_deep=2)
     # print(json.dumps(quark_share_tree.tree, indent=4,ensure_ascii=False))
-    quark_share_tree.ls_dir()
-    result_node=  quark_share_tree.get_node_info('/')
+    result_node=  quark_share_tree.get_video_node_info()
     print(json.dumps(result_node, indent=4,ensure_ascii=False))
     await quark_share_tree.close()
 if __name__ == '__main__':

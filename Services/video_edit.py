@@ -440,7 +440,15 @@ class VideoMetadataEditor:
             raise
 
 
+class ByteModifier:
+    @staticmethod
+    def append_random_byte(filepath):
+        """向文件末尾追加一个随机字节（文件不存在则抛出FileNotFoundError）"""
+        if not os.path.exists(filepath):
+            raise FileNotFoundError(f"文件不存在: {filepath}")
 
+        with open(filepath, 'ab') as f:
+            f.write(os.urandom(1))  # 写入1个随机字节
 
 
 class FFmpegProcessor:
@@ -648,7 +656,9 @@ def modify_hash(retry:bool):
 
 
 def main():
-    modify_hash(True)
+    # modify_hash(True)
+    ByteModifier.append_random_byte(r'\\FNOS\downloads\A.Better.Life.S01E28.2025.2160p.WEB-DL.H265.AAC_2.mp4')
+
 
 # 使用示例
 if __name__ == "__main__":

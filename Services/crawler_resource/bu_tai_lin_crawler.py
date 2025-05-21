@@ -4,8 +4,8 @@ from typing import Optional
 
 import aiohttp
 
-import Services.crawler_torrent.crawler
-from Services.crawler_torrent.crawler import SearchResult, ResourceType
+import Services.crawler_resource.crawler
+from Services.crawler_resource.crawler import SearchResult, ResourceType
 from Services.episode_namer_dir.bu_tai_lin_episode_namer import BuTaiLinEpisodeNamer
 
 

@@ -9,7 +9,6 @@ from sqlalchemy.orm import validates, attributes
 from sqlmodel import Field, SQLModel
 from sqlmodel.main import FieldInfo
 
-
 class ResourceCategory(str, enum.Enum):
     """
     资源分类枚举

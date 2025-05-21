@@ -164,14 +164,14 @@ class CreateShareLink:
                     src_path = resource.cloud_storage_path
 
                     if code==41028:
-                        # await RiskDetect.risk_file_handle_41028(src_path,self.default_quark_disk)
+                        await RiskDetect.risk_file_handle_41028(src_path,self.default_quark_disk)
                         pass
                     elif code==41026:
                         await RiskDetect.risk_file_handle_41026(src_path, self.default_quark_disk)
                 except Exception as e:
                     pass
                 continue
-            # await RiskDetect.detect_1(file_path,default_share_link,self.default_quark_disk)
+            await RiskDetect.detect_1(file_path,default_share_link,self.default_quark_disk)
             quark_share_dir_tree=QuarkShareDirTree.get_quark_share_tree(default_share_link)
             await quark_share_dir_tree.parse()
             tasks=[
@@ -198,7 +198,8 @@ class CreateShareLink:
 
 
 async def main():
-    quark_disk_list=[QuarkDisk(setting) for setting in settings.STORAGE_CONFIG['quark']]
+    # quark_disk_list=[QuarkDisk(setting) for setting in settings.STORAGE_CONFIG['quark']]
+    quark_disk_list=[QuarkDisk(settings.STORAGE_CONFIG['quark'][0])]
     create_share_link=CreateShareLink(quark_disk_list)
     await create_share_link.zhuancun()
     for quark_disk in quark_disk_list:

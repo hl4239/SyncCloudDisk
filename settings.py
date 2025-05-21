@@ -2,7 +2,7 @@
 select_resource_num=20
 
 # 网盘客户端配置
-STORAGE_BASE_PATH='/资源分享_torrent'
+STORAGE_BASE_PATH='/资源分享'
 STORAGE_CONFIG = {
     # 'baidu': {
     #     'app_key': 'your_baidu_app_key',
@@ -52,15 +52,15 @@ OPEN_AI_List={
         'url':'https://generativelanguage.googleapis.com/v1beta/openai/',
         'key':'AIzaSyCslACvt89wnzMKwOLtck9NvEPRNMoif_0',
         # 'model':'gemini-2.0-flash'
-        # 'model':'gemini-2.5-flash-preview-04-17'
-        'model':'gemini-2.5-pro-exp-03-25'
+        'model':'gemini-2.5-flash-preview-04-17'
+        # 'model':'gemini-2.5-pro-exp-03-25'
     },
     'gemini1':{
         'url':'https://generativelanguage.googleapis.com/v1beta/openai/',
         'key':'AIzaSyBae0w0qvoOYOxYtYJ_bPmNVibH6qGhxS8',
          # 'model':'gemini-2.0-flash'
         'model':'gemini-2.5-flash-preview-04-17',
-        # 'model':'gemini-2.5-pro-exp-03-25'
+        # 'model':'gemini-2.5-pro-preview-05-06',
         'type':'gemini'
     },
     'deepseek':{

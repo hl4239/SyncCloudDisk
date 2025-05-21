@@ -21,6 +21,8 @@ class CallAI:
 
         def output(output_model: output_type):
             cls.output_result = output_model
+            print(output_model)
+            return '已成功输出,结束对话'
 
 
         # 添加类型注解
@@ -49,4 +51,4 @@ class CallAI:
             pass
         else:
             raise Exception(f'结构化输出失败,{result.final_output}')
-        return output
+        return output,result.final_output

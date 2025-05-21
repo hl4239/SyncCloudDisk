@@ -11,7 +11,7 @@ from Services.call_ai import CallAI
 class EpisodeNamer:
     class FormatName(BaseModel):
         original_name: Optional[str] = Field(description='input_name')
-        format_name: Optional[str] = Field(description='after format name')
+        format_name: Optional[str] = Field(description='after extraction name')
 
         @field_validator('format_name')
         def validate_format_name(cls, v):
@@ -31,8 +31,8 @@ class EpisodeNamer:
 
             return v
     class OutPutFormatName(BaseModel):
-        id: int = Field(description='Matches the ID from the question input')
-        format_name: Optional[str] = Field(description='after format name')
+        id: int = Field(description='Matches the ID from the question input ID')
+        format_name: Optional[str] = Field( description="Episode number or range extracted from the filename (e.g. '05', '11-15', '01-48'). Non-numeric characters removed, 'XX集全' formatted as '01-XX'.")
 
         @field_validator('format_name')
         def validate_format_name(cls, v):
@@ -53,30 +53,27 @@ class EpisodeNamer:
             return v
     @staticmethod
     async def generate_name(original_name_list: list[str]) -> list[FormatName]:
-        instruction = """
-        Extract only the episode numbers/ranges from filenames. 
 
-        Rules:
-        1. Keep all numeric patterns matching:
-           - Single episodes (e.g. "05" from "...05...")
-           - Episode ranges (e.g. "11-15" from "...11-15...")
-           - Episode All (e.g. "36集全" → "01-36")
-           - Any digit combinations (e.g. "E01", "EP23-25" → "01", "23-25")
-
-        2. Remove ALL non-numeric characters (including "E", "EP", "集", etc.)
-        3. No suffixes or extra text
-
-        Special Cases:
-        - For "XX集全" format, convert to "01-XX"
-        - For single digits, pad with leading zero (e.g. "5" → "05")
-
-        Examples:
-        Input: "鹿鼎记11-15.mkv" → Output: "11-15"
-        Input: "S01E05" → Output: "05" 
-        Input: "EP23-25" → Output: "23-25"
-        Input: "48集全" → Output: "01-48"
-        Input: "E5" → Output: "05"
-        """
+        instruction = instruction = """
+                                    Extract only the episode numbers/ranges from filenames. 
+                                    Rules:
+                                    1. Keep all numeric patterns matching:
+                                       - Single episodes (e.g. "05" from "...05...")
+                                       - Episode ranges (e.g. "11-15" from "...11-15...")
+                                       - Episode All (e.g. "36集全" → "01-36")
+                                       - Any digit combinations (e.g. "E01", "EP23-25","01.4K.mp4","02-4K.mkv"→ "01", "23-25","01","02")
+                                    2. Remove ALL non-numeric characters (including "E", "EP", "集", etc.)
+                                    3. No suffixes or extra text
+                                    Special Cases:
+                                    - For "XX集全" format, convert to "01-XX"
+                                    - For single digits, pad with leading zero (e.g. "5" → "05")
+                                    Examples:
+                                    Input: "鹿鼎记11-15.mkv" → Output: "11-15"
+                                    Input: "S01E05" → Output: "05" 
+                                    Input: "EP23-25" → Output: "23-25"
+                                    Input: "48集全" → Output: "01-48"
+                                    Input: "E5" → Output: "05"
+                                    """
         input_name_list=[
             {
                 'id':index+1,
@@ -92,9 +89,9 @@ class EpisodeNamer:
         format_output = list[EpisodeNamer.OutPutFormatName]
 
         try:
-            resp = await CallAI.ask(
+            resp ,final_output= await CallAI.ask(
                 instruction,
-                input=json.dumps(original_name_list),
+                input=json.dumps(input_name_list),
                 tools=tools,
                 format_output=format_output
             )
@@ -117,11 +114,12 @@ class EpisodeNamer:
                     id=item.id
                     input_name= input_name_maps[id]
                     result.append(EpisodeNamer.FormatName(original_name=input_name, format_name=item.format_name))
-
+            if len(original_name_list)!=len(result):
+                raise Exception(f'ai 格式化名称时发生缺漏,input:{input_name_list}\nresult:{resp}\nfinal_output:{final_output}')
             return result
 
         except Exception as e:
-            raise ValueError(f"格式化episode发生错误: {str(e)}")
+            raise ValueError(f"格式化 episode 发生错误: {e}") from e
 
     @staticmethod
     def format_name_to_num_list( range_episode):
@@ -271,78 +269,14 @@ class EpisodeNamer:
         return selected
 async def main():
     input=[
-    "17",
-    "17",
-    "16",
-    "16",
-    "16-17",
-    "16-17",
-    "15-16",
-    "14-15",
-    "14-15",
-    "14-15",
-    "14-15",
-    "14-15",
-    "13",
-    "13",
-    "13",
-    "13",
-    "13",
-    "12",
-    "12",
-    "12",
-    "12",
-    "12",
-    "11",
-    "11",
-    "11",
-    "11",
-    "11",
-    "11-14",
-    "10",
-    "10",
-    "10",
-    "10",
-    "10",
-    "09",
-    "09-10",
-    "08",
-    "08-09",
-    "08-09",
-    "08-09",
-    "08-09",
-    "07",
-    "07",
-    "07",
-    "07",
-    "07-08",
-    "06",
-    "06",
-    "06",
-    "06",
-    "06-07",
-    "05",
-    "05",
-    "05",
-    "05",
-    "02-04",
-    "02-04",
-    "02-04",
-    "02-04",
-    "02-05",
-    "01",
-    "01",
-    "01",
-    "01",
-    "01",
-    "01-04",
-    "01-06"
+        '15.mp4'
 ]
 
-    result=  EpisodeNamer.remove_duplicates(input)
-    # result= EpisodeNamer.is_collection_episode_in_other_collection(['01','02','03'],['01-03'])
-    # print(result)
-    # result1=EpisodeNamer.find_collection_episode_by_list_num(result,['01-03'])
+    # result=  EpisodeNamer.remove_duplicates(input)
+    # # result= EpisodeNamer.is_collection_episode_in_other_collection(['01','02','03'],['01-03'])
+    # # print(result)
+    # # result1=EpisodeNamer.find_collection_episode_by_list_num(result,['01-03'])
+    result=await EpisodeNamer.generate_name(input)
     print(result)
 if __name__ == '__main__':
     asyncio.run(main())

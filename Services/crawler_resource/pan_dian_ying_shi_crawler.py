@@ -4,7 +4,7 @@ import aiohttp
 
 from lxml import html
 
-from Services.crawler_torrent.crawler import SearchResult, Resource, ResourceType
+from Services.crawler_resource.crawler import SearchResult, Resource, ResourceType
 
 
 class PanDianCrawler:

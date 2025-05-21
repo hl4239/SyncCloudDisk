@@ -26,7 +26,7 @@ class AsyncDouban:
                     subtitle = item["card_subtitle"]
                     description = item['comment']
                     pic_path = item['pic']['large']
-                    storage_path = f'{base_path}/{tv_type.value}/{title}'
+                    storage_path = f'{base_path}/{tv_type.value}/{item['year']}/{[item['title']]}'
                     total_episode = item['episodes_info']
 
                     resource = Resource(title=title, subtitle=subtitle, description=description, image_path=pic_path,
@@ -72,6 +72,7 @@ class AsyncDouban:
                     exist_resource.storage_path=resource.storage_path
                     exist_resource.cloud_storage_path=resource.storage_path
                     exist_resource.douban_last_async=resource.douban_last_async
+                    print(exist_resource.title)
                     if exist_resource.total_episodes!=resource.total_episodes and resource.total_episodes!="":
                         exist_resource.total_episodes = resource.total_episodes
                         exist_resource.douban_last_episode_update=datetime.datetime.now()
@@ -98,7 +99,10 @@ class AsyncDouban:
 
     async def update_resource(self):
         update_list = []
-        for tv_type in ResourceCategory:
+        update_type=[
+            ResourceCategory.HOT_CN_DRAMA
+        ]
+        for tv_type in update_type:
             update_resources = await self. _crawler_resource(tv_type)
             if update_resources is None:
                 print(f'抓取{tv_type}失败')

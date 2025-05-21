@@ -4,6 +4,7 @@ import os.path
 import random
 import re
 
+from sqlalchemy.orm.attributes import flag_modified
 from sqlmodel import Session, select
 
 import settings
@@ -48,51 +49,61 @@ class RiskDetect:
                     print(e)
                 await asyncio.sleep(1)
     @staticmethod
-    async def detect_1(src_path:str,share_link:str,quark_disk:QuarkDisk):
+    async def detect_1(cloud_src_path:str,share_link:str,quark_disk:QuarkDisk):
         """
         通过查看分享后的链接中缺失的文件被置为风险文件
-        :param self:
-        :param src_path:
+
+        :param cloud_src_path:
         :param share_link:
         :param quark_disk:
         :return:
         """
-        if RiskDetect.is_detected(src_path):
-            return
-        pdir_fid=(await  quark_disk.get_fids([src_path]))[0]['fid']
+        # if RiskDetect.is_detected(cloud_src_path):
+        #     return
+        pdir_fid=(await  quark_disk.get_fids([cloud_src_path]))[0]['fid']
 
         cloud_file_list=await quark_disk.ls_dir(pdir_fid)
         quark_share_dir_tree= QuarkShareDirTree.get_quark_share_tree(share_link)
         await quark_share_dir_tree.parse(max_deep=10)
-        share_file_pdir_path=f'/{ os.path.basename(src_path)}'
+        share_file_pdir_path=f'/{ os.path.basename(cloud_src_path)}'
         share_file_list= quark_share_dir_tree.get_node_info(share_file_pdir_path)
         share_file_name_list=[]
         if  isinstance(share_file_list['child'],list):
             share_file_name_list=[share_file['file_name'] for share_file in share_file_list['child']]
-        risk_file_cloud_path_list=[]
+        risk_file_cloud_list=[]
         for cloud_file in cloud_file_list:
             file_name=cloud_file['file_name']
             if file_name  not in share_file_name_list:
-                risk_file_cloud_path_list.append(file_name)
-        await RiskDetect. risk_file_handle(risk_file_cloud_path_list,src_path)
+                risk_file_cloud_list.append(cloud_file)
+        await RiskDetect. risk_file_handle(cloud_src_path,risk_file_cloud_list,quark_disk)
     @staticmethod
-    async def risk_file_handle(risk_file_path_list,src_path):
+    async def risk_file_handle(cloud_src_path,cloud_file_list:[],quark_disk:QuarkDisk):
+        fid_list=[
+            i['fid']
+            for i in cloud_file_list
+        ]
+        if len(fid_list)==0:
+            return
+        await quark_disk.delete(fid_list)
         with Session(engine) as session:
-            resource=session.exec(select(Resource).where(Resource.cloud_storage_path==src_path)).all()[0]
-            risk_file_handle_list=[
-                {
-                    'file_name':risk_file_path,
-                    'status':'wait_download',
-                }
-                for risk_file_path in risk_file_path_list
-            ]
-            resource.has_detect_risk=True
-            resource.risk_file_handle=risk_file_handle_list
+            resource = session.exec(select(Resource).where(Resource.cloud_storage_path == cloud_src_path)).all()[0]
+            if resource.cloud_disk_async_info is None:
+                resource.cloud_disk_async_info={}
+            resource.cloud_disk_async_info.update({
+                'need_update':True
+            })
+            flag_modified(resource,'cloud_disk_async_info')
             session.add(resource)
             try:
                 session.commit()
+                utils.logger.warning(f'检测这些文件风险并删除 | {cloud_src_path}: {[f['file_name'] for f in cloud_file_list]}')
             except Exception as e:
                 print(e)
+
+
+
+
+
 
     @staticmethod
     def is_detected(src_path):
@@ -102,17 +113,15 @@ class RiskDetect:
 
     @staticmethod
     async def risk_file_handle_41028(src_path,quark_disk:QuarkDisk):
-        if RiskDetect.is_detected(src_path):
-            return
+        """大部分资源都为风险，则删除所有文件"""
+        # if RiskDetect.is_detected(src_path):
+        #     return
         pdir_fid = (await  quark_disk.get_fids([src_path]))[0]['fid']
 
         cloud_file_list = await quark_disk.ls_dir(pdir_fid)
 
-        risk_file_cloud_path_list = []
-        for cloud_file in cloud_file_list:
-            file_name = cloud_file['file_name']
-            risk_file_cloud_path_list.append(file_name)
-        await RiskDetect.risk_file_handle(risk_file_cloud_path_list, src_path)
+
+        await RiskDetect.risk_file_handle(src_path,cloud_file_list, quark_disk)
 
     @staticmethod
     async def risk_file_handle_41026(src_path,quark_disk:QuarkDisk):

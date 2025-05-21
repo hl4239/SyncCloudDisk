@@ -13,7 +13,7 @@ print(current_file_abs_path.parent)
 # DATABASE_URL = f"sqlite:///{current_file_abs_path.parent}/resource_database.db"
 
 # 改为 MySQL 配置（根据实际情况填写）
-DATABASE_URL = "mysql+pymysql://root:123456@192.168.31.201:3306/resource_torrent_database"
+DATABASE_URL = "mysql+pymysql://root:123456@192.168.31.201:3306/resource_database"
 # 创建数据库引擎
 # connect_args={"check_same_thread": False} 是 SQLite 特有的，用于允许多个线程访问数据库
 # 如果您在 FastAPI 等异步框架中使用，这是推荐的设置
@@ -24,7 +24,7 @@ temp_engine = create_engine("mysql+pymysql://root:123456@192.168.31.201:3306/mys
 
 # 创建目标数据库
 with temp_engine.connect() as conn:
-    conn.execute(text("CREATE DATABASE IF NOT EXISTS resource_torrent_database CHARACTER SET utf8mb4"))
+    conn.execute(text("CREATE DATABASE IF NOT EXISTS resource_database CHARACTER SET utf8mb4"))
 engine = create_engine(DATABASE_URL, echo=False, )
 
 def create_db_and_tables():
