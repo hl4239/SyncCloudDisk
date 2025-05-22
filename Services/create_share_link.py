@@ -7,17 +7,19 @@ from sqlmodel import Session, select
 import settings
 import utils
 from QuarkDisk import QuarkDisk
-from Services.RiskDetect import RiskDetect
+from Services.alist_api import AlistAPI
 from Services.quark_share_dir_tree import QuarkShareDirTree
+from Services.risk_handle import RiskHandle
 from database import engine
 from models.resource import Resource, ResourceCategory
 
 
 class CreateShareLink:
-    def __init__(self,quark_disk_list:[QuarkDisk]):
+    def __init__(self,quark_disk_list:[QuarkDisk],risk:RiskHandle):
         self.quark_disk_list = quark_disk_list
         self.default_quark_disk = quark_disk_list[0]
         self.other_quark_disks = quark_disk_list[1:]
+        self.risk = risk
 
     @staticmethod
     async def save_from_share(quark_share_dir_tree:QuarkShareDirTree,src_path,save_pdir:str,quark_disk:QuarkDisk):
@@ -141,7 +143,25 @@ class CreateShareLink:
             share_file_name=os.path.basename(file_path)
             fid=resp['fid']
             try:
-                default_share_link = await self.default_quark_disk.create_share_link([fid],title='')
+                share_list= resource.share_handle.get('share_list',[])
+                default_share_link=None
+                for share in share_list:
+                    if share['account'] == self.default_quark_disk.name:
+                        default_share_link=share.get('share_link',None)
+
+                        break
+                if default_share_link is None:
+                    default_share_link = await self.default_quark_disk.create_share_link([fid],title='')
+                else:
+                    try:
+                        quark_share_dir_tree = QuarkShareDirTree.get_quark_share_tree(default_share_link)
+                        await quark_share_dir_tree.parse()
+                        print(f'延用可用的分享链接：{default_share_link}')
+                    except Exception as e:
+                        default_share_link = await self.default_quark_disk.create_share_link([fid], title='')
+                        print(f'链接失效，重新创建:{default_share_link}')
+
+
                 share_results.append({
                     'src_path': file_path,
                     'account': self.default_quark_disk.name,
@@ -164,14 +184,14 @@ class CreateShareLink:
                     src_path = resource.cloud_storage_path
 
                     if code==41028:
-                        await RiskDetect.risk_file_handle_41028(src_path,self.default_quark_disk)
+                        await self.risk.risk_file_handle_41028(resource.storage_path,src_path,self.default_quark_disk)
                         pass
                     elif code==41026:
-                        await RiskDetect.risk_file_handle_41026(src_path, self.default_quark_disk)
+                        await self.risk.risk_file_handle_41026(src_path, self.default_quark_disk)
                 except Exception as e:
                     pass
                 continue
-            await RiskDetect.detect_1(file_path,default_share_link,self.default_quark_disk)
+            await self.risk.detect_1(resource.storage_path,file_path,default_share_link,self.default_quark_disk)
             quark_share_dir_tree=QuarkShareDirTree.get_quark_share_tree(default_share_link)
             await quark_share_dir_tree.parse()
             tasks=[
@@ -200,7 +220,9 @@ class CreateShareLink:
 async def main():
     # quark_disk_list=[QuarkDisk(setting) for setting in settings.STORAGE_CONFIG['quark']]
     quark_disk_list=[QuarkDisk(settings.STORAGE_CONFIG['quark'][0])]
-    create_share_link=CreateShareLink(quark_disk_list)
+    alist=AlistAPI()
+    risk=RiskHandle(alist)
+    create_share_link=CreateShareLink(quark_disk_list,risk)
     await create_share_link.zhuancun()
     for quark_disk in quark_disk_list:
         await quark_disk.close()

@@ -1,6 +1,6 @@
 import re
 from itertools import groupby
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from tokenize import group
 
 import aiohttp
@@ -69,9 +69,9 @@ class AlistAPI:
         for k,v in grouped.items():
 
             payload = {
-                "src_dir": f"/{base_src}{k}",
+                "src_dir": f"{base_src}{k}",
                 # 确保目标目录路径末尾没有斜杠，AList API 可能需要这种格式
-                "dst_dir": f"/{base_dst}{v[0]['dst_pdir_name']}",
+                "dst_dir": f"{base_dst}{v[0]['dst_pdir_name']}",
                 "names": [p['src_item_name'] for p in v], # `names` 是一个列表，即使只复制一项
                 "overwrite":True
             }
@@ -83,7 +83,7 @@ class AlistAPI:
                  result_json['message'] = resp_json['message']
                  result_json['data']['tasks'].extend(resp_json['data']['tasks'])
                 except Exception as e:
-                    print(e)
+                    raise e
         return result_json
     async def get_copy_done_tasks(self):
 
@@ -97,6 +97,43 @@ class AlistAPI:
             print(await response.text())
             resp_json=await response.json()
             return resp_json
+
+    async def get_copy_undone_tasks(self):
+        """
+
+        :return:
+        """
+        api_endpoint = f"{self.base_url}/api/admin/task/copy/undone"
+
+        async with self.session.get(url=api_endpoint) as response:
+            text = await response.text()
+            resp_json = await response.json()
+            data_list=resp_json['data']
+            un_done_file_path_list=[]
+            for data in data_list:
+                name=data['name']
+                pattern = r'copy \[(.*?)\]\(/\s*(.*?)\) to \[(.*?)\]\(/\s*(.*?)\)'
+
+                match = re.search(pattern, name)
+                if match:
+                    src_dir = match.group(1)
+                    src_file = match.group(2)
+                    dst_dir = match.group(3)
+                    dst_path = match.group(4)
+
+                    source_full_path = f"{src_dir}/{src_file}"
+                    destination_full_path = f"{dst_dir}/{dst_path}"
+                else:
+                    raise Exception(f'获取未完成的copy任务匹配name失败：{data_list}')
+                un_done_file_path_list.append({
+                    'src_path':source_full_path,
+                    'dst_path':destination_full_path,
+
+                })
+
+
+            return un_done_file_path_list
+
     async def close(self):
         await self.session.close()
     async def mkdir(self,path):
@@ -158,20 +195,24 @@ class AlistAPI:
                 return resp_json['data']
             raise Exception(f'离线下载添加失败{path}:{message}')
 
-    async def ls_dir(self,path):
+    async def ls_dir(self,path,refresh:bool=True):
         api_endpoint = f"{self.base_url}/api/fs/list"
         data = {
             'page': 1,
             'path': path,
             'per_page': 0,
-            'refresh':True
+            'refresh':refresh
         }
         async with self.session.post(url=api_endpoint, json=data) as response:
             resp_json = await response.json()
+
             message = resp_json['message']
             if message == 'success':
                 return resp_json['data']['content']
             raise Exception(f'ls_dir失败{path}:{message}')
+
+
+
 async def download_risk_file(alist_api:AlistAPI):
     with Session(engine) as session:
         resources = session.exec(select(Resource).where((Resource.has_detect_risk != None) & (Resource.has_detect_risk == True))).all()
@@ -332,6 +373,8 @@ async def async_upload_status(alist_api:AlistAPI):
 
 async def main():
     alist=AlistAPI()
+    result=await alist.get_copy_undone_tasks()
+    print(result)
 
 if __name__ == "__main__":
 

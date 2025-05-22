@@ -439,6 +439,10 @@ class VideoMetadataEditor:
             print("错误: mkvpropedit 命令未找到。请确保 mkvtoolnix 已安装并在系统PATH中。")
             raise
 
+    @staticmethod
+    def modify_hash(input_path):
+        input_path = VideoMetadataEditor.download_base_path / input_path
+        ByteModifier.append_random_byte(str(input_path))
 
 class ByteModifier:
     @staticmethod
@@ -655,9 +659,10 @@ def modify_hash(retry:bool):
                             print(e)
 
 
+
 def main():
     # modify_hash(True)
-    ByteModifier.append_random_byte(r'\\FNOS\downloads\A.Better.Life.S01E28.2025.2160p.WEB-DL.H265.AAC_2.mp4')
+    VideoMetadataEditor.modify_hash(r'\\FNOS\downloads\A.Better.Life.S01E28.2025.2160p.WEB-DL.H265.AAC_2.mp4')
 
 
 # 使用示例

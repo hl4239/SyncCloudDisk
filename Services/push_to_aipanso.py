@@ -105,52 +105,54 @@ async def _submit(browser,link:str):
         raise
     await context.close()
     return result
-async def batch_submit(link_create_list:[]):
+# 批量提交，每20个为一组
+async def batch_submit(link_create_list: list):
     async with async_playwright() as p:
-
         browser = await p.chromium.launch(headless=False)
-        async def task_(browser:BrowserType,list_:[]):
-            print(f'正在分享{len(list_)}个资源')
-            if len(list_) > 20:
-                print('❌超过了20个')
-                return
 
-            result={
+        async def task_(browser: BrowserType, batch: list):
+            print(f'正在提交 {len(batch)} 个资源')
+            result = {
                 'success': False,
-                'name':list_[0]['name']
+                'name': batch[0]['name'] if batch else 'Unknown'
             }
-            link_str=','.join([i['share_link'] for i in list_])
+
+            link_str = ','.join([item['share_link'] for item in batch])
+
             for retry in range(5):
                 try:
-                    json_result=    await _submit(browser,link_str)
-                    if json_result is not None:
-                        success=json_result['success']
-                        if success:
-                          result['success']=success
-                          break
-                        print(f'提交出错：success:{success}  准备第{retry}重试:')
+                    json_result = await _submit(browser, link_str)
+                    if json_result is not None and json_result.get('success'):
+                        result['success'] = True
+                        break
+                    print(f'提交出错：success:{json_result.get("success")}，准备第{retry + 1}次重试')
                 except Exception as e:
-                    print(f'提交出错:{e}  准备第{retry}重试')
-            print(f'name:{result["name"]}      提交结果：{result["success"]}')
+                    print(f'提交出错: {e}，准备第{retry + 1}次重试')
 
-        # 先按 'name' 排序
-        link_create_list.sort(key=lambda link: link['name'])
-        tasks=[task_(browser, list(link_list)) for name,link_list in groupby(link_create_list,lambda link:link['name'])]
-        results=await asyncio.gather(*tasks)
+            print(f'name: {result['name']}，提交结果：{result['success']}')
 
+        # 按20个一组进行分批
+        batch_size = 20
+        batches = [link_create_list[i:i + batch_size] for i in range(0, len(link_create_list), batch_size)]
+
+        tasks = [task_(browser, batch) for batch in batches]
+        await asyncio.gather(*tasks)
+
+# 数据库加载并调用 batch_submit
 async def push():
     with Session(engine) as session:
-        resources = session.exec(select(Resource).where()).all()
-    share_link_list=[]
+        resources = session.exec(select(Resource)).all()
+
+    share_link_list = []
     for resource in resources:
-        if resource.share_handle.get('share_list'):
-            share_list=resource.share_handle.get('share_list')
-            for share in share_list:
-                if share.get('share_link'):
-                    share_link_list.append({
-                        'name':share['account'],
-                        'share_link':share['share_link']
-                    })
+        share_list = resource.share_handle.get('share_list', [])
+        for share in share_list:
+            if share.get('share_link'):
+                share_link_list.append({
+                    'name': share['account'],
+                    'share_link': share['share_link']
+                })
+
     await batch_submit(share_link_list)
 
 

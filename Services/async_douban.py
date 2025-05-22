@@ -1,5 +1,6 @@
 import asyncio
 import datetime
+import re
 
 from sqlalchemy import inspect
 from sqlalchemy.util import await_only
@@ -7,6 +8,7 @@ from sqlmodel import Session, select
 
 import settings
 from CrawlerResource.crawler_douban import CrawlerDouban
+from Services.metadata_crawler.them_movie_crawler import ThemMovieCrawler
 from database import engine
 from models.resource import Resource, ResourceCategory
 
@@ -26,12 +28,16 @@ class AsyncDouban:
                     subtitle = item["card_subtitle"]
                     description = item['comment']
                     pic_path = item['pic']['large']
-                    storage_path = f'{base_path}/{tv_type.value}/{item['year']}/{[item['title']]}'
+                    storage_path = f'{base_path}/{tv_type.value}/{item['year']}/{item['title']}'
+
+
+
                     total_episode = item['episodes_info']
 
                     resource = Resource(title=title, subtitle=subtitle, description=description, image_path=pic_path,
                                         category=tv_type, storage_path=storage_path, total_episodes=total_episode,douban_last_async=datetime.datetime.now(),cloud_storage_path=storage_path)
                     resources.append(resource)
+                    await asyncio.sleep(0.5)
                 return resources
             except Exception as e:
                 print(e)
@@ -72,13 +78,14 @@ class AsyncDouban:
                     exist_resource.storage_path=resource.storage_path
                     exist_resource.cloud_storage_path=resource.storage_path
                     exist_resource.douban_last_async=resource.douban_last_async
-                    print(exist_resource.title)
+                    exist_resource.them_tv=resource.them_tv
                     if exist_resource.total_episodes!=resource.total_episodes and resource.total_episodes!="":
                         exist_resource.total_episodes = resource.total_episodes
                         exist_resource.douban_last_episode_update=datetime.datetime.now()
                     session.add(exist_resource)
                     resources_to_update.append(exist_resource.title)
                 else:
+
                     resource.douban_last_episode_update=datetime.datetime.now()
                     session.add(resource)
                     resources_to_add.append(resource.title)
@@ -104,11 +111,64 @@ class AsyncDouban:
         ]
         for tv_type in update_type:
             update_resources = await self. _crawler_resource(tv_type)
+
+
+
+            tasks=[self.them_movie_crawler(update_resource) for update_resource in update_resources if update_resource.total_episodes.endswith('集全')==False]
+            await asyncio.gather(*tasks)
+
             if update_resources is None:
                 print(f'抓取{tv_type}失败')
                 continue
             update_list.extend(update_resources)
         await self._update_to_datebase(update_list)
+
+    async def them_movie_crawler(self,resource):
+        with Session(engine) as session:
+            statement = select(Resource).where(Resource.title==resource.title)
+            exist_resources = session.exec(statement).all()
+            if len(exist_resources)!=0:
+                exist_resource = exist_resources[0]
+            else :
+                exist_resource=None
+        them_tv=None
+        if exist_resource is not None:
+            them_tv=exist_resource.them_tv
+
+
+        if them_tv is None:
+            them_tv={}
+        episodes_url=them_tv.get('episodes_url',None)
+        async with ThemMovieCrawler() as crawler:
+            try:
+                if episodes_url is not None:
+                    text= await crawler.get_detail_episode(episodes_url)
+                    latest_episode=await crawler.parse_detail_episode(text)
+                    resource.total_episodes=latest_episode
+
+                else:
+
+                    # 使用正则匹配关键词和年份
+                    match = re.match(r"^(.*?)\((\d{4})\)", resource.title)
+
+
+                    keyword = match.group(1)
+                    year = match.group(2)
+
+                    metadata_result = await crawler.search(f'{keyword} y:{year}')
+
+                    resource.total_episodes=metadata_result.resource_metadata.latest_episode
+                    them_tv.update({
+                        'episodes_url':metadata_result.resource_metadata.episodes_url
+                    })
+                    resource.them_tv=them_tv
+                    print(resource.title,resource.total_episodes)
+            except Exception as e:
+                print(e)
+
+
+
+
 async def main():
     async_douban=AsyncDouban()
     await async_douban.update_resource()

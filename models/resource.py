@@ -116,6 +116,7 @@ class Resource(SQLModel, table=True):
         sa_column=Column(JSON),
         description="分享创建处理"
     )
+    them_tv:Optional[str] = Field(default=None,sa_column=Column(JSON),description="影视数据库的一些url存储")
 
 
 

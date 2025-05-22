@@ -95,7 +95,7 @@ class QuarkShareDirTree:
         if refresh:
             self.tree=None
         if self.ParseQuarkShareLInk is None:
-            print("Initializing ParseQuarkShareLInk...")
+
             self.ParseQuarkShareLInk = await QuarkDisk.parse_share_url(self.share_link)
 
         if self.tree is None:
@@ -111,14 +111,12 @@ class QuarkShareDirTree:
             }
             self.current_max_deep = max_deep
         elif max_deep > self.current_max_deep:
-            print(
-                f"Incrementally parsing. Current tree max_deep: {self.current_max_deep}, Requested new max_deep: {max_deep}")
+
             # The root node 'self.tree' is at an effective depth of -1 for its children to be at depth 0.
             await self._expand_tree_incrementally(self.tree, -1, max_deep)
             self.current_max_deep = max_deep  # Update to the new, greater max_deep
         elif max_deep <= self.current_max_deep:
-            print(
-                f"Requested max_deep ({max_deep}) is not greater than current tree's max_deep ({self.current_max_deep}). No re-parsing needed.")
+            pass
             # The tree data is already sufficient or deeper than requested.
             # We don't prune the tree if max_deep is smaller; we just don't fetch more.
             # If you need to reflect a smaller max_deep in ls_dir, that would be a display-time adjustment.
@@ -276,9 +274,7 @@ async def main():
     quark_share_tree=QuarkShareDirTree('https://pan.quark.cn/s/b11805926008')
     await quark_share_tree.parse(max_deep=1)
     await quark_share_tree.parse(max_deep=2)
-    # print(json.dumps(quark_share_tree.tree, indent=4,ensure_ascii=False))
-    result_node=  quark_share_tree.get_video_node_info()
-    print(json.dumps(result_node, indent=4,ensure_ascii=False))
+
     await quark_share_tree.close()
 if __name__ == '__main__':
     asyncio.run(main())

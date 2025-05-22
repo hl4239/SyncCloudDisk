@@ -165,13 +165,13 @@ class SyncCloudDisk:
             }
 
             # 改名
-            # for quark_file in resource_quark.file_list:
-            #     fid= file_maps_.get(quark_file.file_name)
-            #     suffix=quark_file.file_name.split('.')[-1]
-            #     new_name=f'{quark_file.format_name}.{suffix}'
-            #     if fid is not None:
-            #         resp= await self.quark_disk.rename(fid,new_name)
-            #         await asyncio.sleep(1)
+            for quark_file in resource_quark.file_list:
+                fid= file_maps_.get(quark_file.file_name)
+                suffix=quark_file.file_name.split('.')[-1]
+                new_name=f'{quark_file.format_name}.{suffix}'
+                if fid is not None:
+                    resp= await self.quark_disk.rename(fid,new_name)
+                    await asyncio.sleep(1)
 
         except Exception as e:
 
