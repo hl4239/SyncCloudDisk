@@ -16,6 +16,7 @@ from QuarkDisk import QuarkDisk
 from Services.alist_api import AlistAPI
 from Services.aria2_api import Aria2API
 from Services.crawler_resource.crawler import ResourceQuark
+from Services.crawler_resource.quark_share_crawler import QuarkShareCrawler
 from Services.crawler_resource.telegram.uc_quark_crawler import TMeUCQuarkCrawler
 from Services.download_torrent import DownloadTorrent
 from Services.episode_namer_dir.episode_namer import  EpisodeNamer
@@ -26,12 +27,13 @@ from models.resource import Resource, ResourceCategory
 
 
 class SyncCloudDisk:
-    def __init__(self,quark_disk:QuarkDisk,aria2api:Aria2API,alistapi:AlistAPI,crawler:TMeUCQuarkCrawler):
+    def __init__(self,quark_disk:QuarkDisk,aria2api:Aria2API,alistapi:AlistAPI,t_me_uc_crawler:TMeUCQuarkCrawler,quark_share_crawler:QuarkShareCrawler):
 
         self.quark_disk = quark_disk
         self.aria2_api = aria2api
         self.alist_api = alistapi
-        self.crawler = crawler
+        self.t_me_uc_crawler = t_me_uc_crawler
+        self.quark_share_crawler = quark_share_crawler
 
     def remove_extension(self,filename):
         """
@@ -221,12 +223,38 @@ class SyncCloudDisk:
                     title = resource.title
                     pdir_path = resource.cloud_storage_path
                     total_episodes = resource.total_episodes
-                    try:
-                        search_result_ = await self.crawler.search(*self.splite_title(title))
-                    except Exception as e:
-                        utils.logger.error(f'{title}爬取资源发生错误：{str(e)}')
-                        continue
+
+                    # 从之前的分享链接中尝试同步资源
+                    if cloud_disk_async_info.get('share_links',None) is None:
+                        cloud_disk_async_info['share_links']=[]
+
+
+                    need_call_other_crawler=False
+
+                    if len(cloud_disk_async_info['share_links'])>0:
+                        share_link=cloud_disk_async_info['share_links'][0]
+                        try:
+                            search_result_=await self.quark_share_crawler.search(share_link,title=title)
+                        except Exception as e:
+                            need_call_other_crawler=True
+                            utils.logger.error(f'{title}|{share_link} 从该链接同步资源发生错误 {str(e)}')
+                    else:
+                        need_call_other_crawler=True
+                    # 调用电报爬虫爬取资源
+                    if need_call_other_crawler:
+                        try:
+                            search_result_ = await self.t_me_uc_crawler.search(*self.splite_title(title))
+                        except Exception as e:
+                            utils.logger.error(f'{title}爬取资源发生错误：{str(e)}')
+                            continue
+
+                    # 将爬取的链接保存
+                    if search_result_.result[0].url not in cloud_disk_async_info['share_links']:
+                        cloud_disk_async_info['share_links'].append(search_result_.result[0].url)
+
+
                     resource_quark= await self.get_need_sync_list(search_result_,resource)
+
                     if len(resource_quark.file_list)>0:
 
                         await self.save_to_cloud(resource_quark,resource)
@@ -247,6 +275,8 @@ class SyncCloudDisk:
                     cloud_disk_async_info.update({
                         'last_async_time':datetime.now().isoformat(),
                         'need_update':need_update,
+
+
                     })
                     flag_modified(resource,'cloud_disk_async_info')
                     session.add(resource)
@@ -268,8 +298,9 @@ async def main():
     quark_disk=QuarkDisk(settings.STORAGE_CONFIG['quark'][0])
     aria2=Aria2API()
     alistapi=AlistAPI()
-    crawler=TMeUCQuarkCrawler()
-    sync_cloud=SyncCloudDisk(quark_disk,aria2,alistapi,crawler)
+    quark_share_crawler=QuarkShareCrawler()
+    crawler=TMeUCQuarkCrawler(quark_share_crawler)
+    sync_cloud=SyncCloudDisk(quark_disk,aria2,alistapi,crawler,quark_share_crawler)
     await sync_cloud.start_async()
     await quark_disk.close()
     await aria2.close()

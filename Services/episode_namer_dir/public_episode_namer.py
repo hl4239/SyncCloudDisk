@@ -17,31 +17,31 @@ class PublicEpisodeNamer(EpisodeNamer):
             name = format_name.original_name
 
             # xxxS01E01xxx
-            pattern_1= r'.*\S\d{2}E(\d{2}).*'
+            pattern_1= r'.*\s\d{2}e(\d{2}).*'
             # 02.mkv
             pattern_2=r'(\d{2})\.(mkv|mp4)'
             #
-            pattern_3=r'(\d{2}) 4K\.(mkv|mp4)'
+            pattern_3=r'(\d{2}) 4k\.(mkv|mp4)'
 
             pattern_4=r'更新至(\d{1,2})集'
 
             pattern_5=r'(\d{1,2})集全'
 
             pattern_6 = r'(\d{2})_r{\d+}\.(mkv|mp4)'
-            if match := re.search(pattern_1, name.upper()):
+            if match := re.search(pattern_1,name.lower()):
                 episode_num = match.group(1).zfill(2)  # 补零
                 format_name.format_name = f"{episode_num}"
 
-            elif match := re.search(pattern_2, name):
+            elif match := re.search(pattern_2, name.lower()):
                 episode_num = match.group(1)
                 format_name.format_name = f"{episode_num}"
-            elif match := re.search(pattern_3, name):
+            elif match := re.search(pattern_3, name.lower()):
                 episode_num = match.group(1)
                 format_name.format_name = f"{episode_num}"
-            elif match := re.search(pattern_4, name):
+            elif match := re.search(pattern_4, name.lower()):
                 full_count = match.group(1).zfill(2)
                 format_name.format_name = f"01-{full_count}"
-            elif match := re.search(pattern_5, name):
+            elif match := re.search(pattern_5, name.lower()):
                 full_count = match.group(1).zfill(2)
                 format_name.format_name = f"01-{full_count}"
             else:

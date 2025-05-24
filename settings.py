@@ -71,4 +71,4 @@ OPEN_AI_List={
     }
 
 }
-Current_AI=OPEN_AI_List['hunyuan']
+Current_AI=OPEN_AI_List['deepseek']
