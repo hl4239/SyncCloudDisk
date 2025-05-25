@@ -138,7 +138,8 @@ async def batch_submit(link_create_list: list):
         tasks = [task_(browser, batch) for batch in batches]
         await asyncio.gather(*tasks)
 
-# 数据库加载并调用 batch_submit
+# 数据库加载并调用 batch_submit++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 async def push():
     with Session(engine) as session:
         resources = session.exec(select(Resource)).all()

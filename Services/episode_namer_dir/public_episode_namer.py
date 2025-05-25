@@ -17,7 +17,7 @@ class PublicEpisodeNamer(EpisodeNamer):
             name = format_name.original_name
 
             # xxxS01E01xxx
-            pattern_1= r'.*\s\d{2}e(\d{2}).*'
+            pattern_1= r'.*s\d{2}e(\d{2}).*'
             # 02.mkv
             pattern_2=r'(\d{2})\.(mkv|mp4)'
             #
@@ -59,7 +59,7 @@ class PublicEpisodeNamer(EpisodeNamer):
 
 async def main():
     input=[
-        '15.4K.mp4','15.mp4'
+        'S01e25'
 ]
 
 
