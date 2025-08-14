@@ -1,0 +1,27 @@
+version: 1
+formatters:
+  detailed:
+    format: "%(asctime)s [%(levelname)s] %(filename)s:%(lineno)d - %(message)s"
+    datefmt: "%Y-%m-%d %H:%M:%S"
+
+handlers:
+  # 控制台日志（保持原有）
+  console:
+    class: logging.StreamHandler
+    formatter: detailed
+    stream: ext://sys.stdout
+    level: DEBUG  # 控制台只显示INFO及以上
+
+  # 新增文件日志
+  file:
+    class: logging.handlers.RotatingFileHandler  # 自动轮替
+    filename: "logs/app.log"
+    maxBytes: 10485760  # 10MB切割
+    backupCount: 5      # 保留5个备份
+    formatter: detailed
+    level: DEBUG       # 文件记录所有DEBUG+日志
+    encoding: utf-8
+
+root:
+  level: DEBUG        # 全局捕获所有级别（由Handler过滤）
+  handlers: [console, file]  # 同时输出到控制台和文件
