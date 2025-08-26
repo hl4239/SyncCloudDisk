@@ -30,7 +30,7 @@ class Account(BaseModel):
     create_share_link:Optional[str]=None
     last_sync_share_links:list[str]=Field(default=[])
     is_sync_finish:bool=Field(default=False,description='表示剧集信息已经更新到完结')
-
+    last_sync_error:Optional[str]=Field(default="",description='上次同步任务的错误')
     def set_is_sync_finish(self,is_sync_finish:bool=False):
         self.is_sync_finish=is_sync_finish
 

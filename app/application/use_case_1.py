@@ -87,6 +87,7 @@ class UseCase1:
             else:
                 logger.info(f'{name_type}-{cloud_disk_info_account.cloud_storage_path}已更新完结，无需更新')
         except Exception as e:
+            cloud_disk_info_account.last_sync_error=f'❌更新{name_type}-时出错：{e}'
             logger.error(f'❌更新{name_type}-时出错：{e}')
 
     @dispatch(list, list,str)

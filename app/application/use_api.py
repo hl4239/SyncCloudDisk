@@ -12,6 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.infrastructure.containers import container, init_singleton
 from app.interfaces.tasks_api import router
+from app.interfaces.resource_api import router as resource_router
 
 logger = logging.getLogger()
 
@@ -62,6 +63,7 @@ app.add_middleware(
 # 我们将 tasks.py 中定义的 router 对象包含进来。
 # FastAPI 会自动处理其 `prefix` 和 `tags` 设置。
 app.include_router(router)
+app.include_router(resource_router)
 
 # --- 定义根路由 (Optional) ---
 # 定义一个简单的根路径，可以用于健康检查或提供API文档链接。
