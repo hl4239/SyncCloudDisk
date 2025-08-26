@@ -31,4 +31,4 @@ def init_logging():
 if __name__ == "__main__":
     init_logging()
     logger = logging.getLogger(__name__)
-    logger.info("日志系统已初始化，文件将保存在 logs/ 目录下")
+    logger.info("日志系统已初始化，文件将保存在 logs/ 目录下1")
