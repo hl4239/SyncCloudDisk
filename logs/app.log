@@ -1,0 +1,1216 @@
+2025-09-03 18:28:40 [INFO] demo:138 - 普通消息
+2025-09-03 18:28:40 [WARNING] demo:139 - 警告消息
+2025-09-03 18:28:40 [ERROR] demo:140 - 错误消息，带异常示例
+NoneType: None
+2025-09-03 18:28:40 [CRITICAL] demo:141 - 致命错误
+2025-09-03 18:30:02 [INFO] demo:138 - 普通消息
+2025-09-03 18:30:02 [WARNING] demo:139 - 警告消息
+2025-09-03 18:30:02 [ERROR] demo:140 - 错误消息，带异常示例
+NoneType: None
+2025-09-03 18:30:02 [CRITICAL] demo:141 - 致命错误
+2025-09-03 18:30:17 [INFO] demo:138 - 普通消息
+2025-09-03 18:30:17 [WARNING] demo:139 - 警告消息
+2025-09-03 18:30:17 [ERROR] demo:140 - 错误消息，带异常示例
+2025-09-03 18:30:17 [CRITICAL] demo:141 - 致命错误
+2025-09-03 18:34:43 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8626
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 18:34:52 [INFO] httpx:1025 - HTTP Request: GET http://127.0.0.1:8626/api/health "HTTP/1.1 200 OK"
+2025-09-03 18:34:53 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8626/api/admin/version "HTTP/1.1 200 OK"
+2025-09-03 18:34:53 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8626/api/csrf-token?client=d29b443c-e1d8-4160-912b-7981461ead83 "HTTP/1.1 422 Unprocessable Entity"
+2025-09-03 18:34:53 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8626/api/flows/ "HTTP/1.1 200 OK"
+2025-09-03 18:34:53 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8626/api/flow_runs/ "HTTP/1.1 201 Created"
+2025-09-03 18:34:53 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8626/api/flow_runs/4ee2ee36-f91a-4841-8c28-45892d0f93de/set_state "HTTP/1.1 201 Created"
+2025-09-03 18:34:53 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8626/api/flow_runs/4ee2ee36-f91a-4841-8c28-45892d0f93de "HTTP/1.1 200 OK"
+2025-09-03 18:34:53 [INFO] prefect.flow_runs:1237 - Beginning flow run 'maroon-starling' for flow 'data-collection-get-hot-flow'
+2025-09-03 18:34:54 [INFO] __main__:23 - [<TVCategory.CHINA: 'China'>, <TVCategory.KOREA: 'Korea'>]
+2025-09-03 18:34:54 [INFO] __main__:26 - [<app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000002552445FD70>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x00000255244AAF30>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x00000255244A9580>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x00000255244A8650>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x00000255244ABDA0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x00000255244ABF50>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x00000255244C4140>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x00000255244C42F0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x00000255244C44A0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x00000255244C4650>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x00000255244C4800>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x00000255244C49B0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x00000255244C4B60>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x00000255244C4D10>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x00000255244C4EC0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x00000255244C5070>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x00000255244C5220>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x00000255244C53D0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x00000255244C5580>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x00000255244C5730>]
+2025-09-03 18:34:54 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 18:34:55 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8626/api/flow_runs/4ee2ee36-f91a-4841-8c28-45892d0f93de/set_state "HTTP/1.1 201 Created"
+2025-09-03 18:34:55 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-03 18:34:55 [WARNING] EventsWorker:144 - Still processing items: 3 items remaining...
+2025-09-03 18:34:55 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8626/api/flows/d98fb868-356a-49ba-9d07-22d33c62fb50 "HTTP/1.1 200 OK"
+2025-09-03 18:34:55 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8626/api/csrf-token?client=45d6bb8d-7fd7-4e0d-8d7c-9e71d47a7b2b "HTTP/1.1 422 Unprocessable Entity"
+2025-09-03 18:34:55 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8626/api/logs/ "HTTP/1.1 201 Created"
+2025-09-03 18:34:55 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8626
+2025-09-03 18:36:15 [INFO] demo:138 - 普通消息
+2025-09-03 18:36:15 [WARNING] demo:139 - 警告消息
+2025-09-03 18:36:15 [ERROR] demo:140 - 错误消息，带异常示例
+NoneType: None
+2025-09-03 18:36:15 [CRITICAL] demo:141 - 致命错误
+2025-09-03 18:38:00 [INFO] demo:138 - 普通消息
+2025-09-03 18:38:00 [WARNING] demo:139 - 警告消息
+2025-09-03 18:38:00 [ERROR] demo:140 - 错误消息，带异常示例
+NoneType: None
+2025-09-03 18:38:00 [CRITICAL] demo:141 - 致命错误
+2025-09-03 18:38:12 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8132
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 18:38:21 [INFO] httpx:1025 - HTTP Request: GET http://127.0.0.1:8132/api/health "HTTP/1.1 200 OK"
+2025-09-03 18:38:22 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8132/api/admin/version "HTTP/1.1 200 OK"
+2025-09-03 18:38:22 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8132/api/csrf-token?client=0a928fa2-d108-4d5c-bcf6-397ca79828c8 "HTTP/1.1 422 Unprocessable Entity"
+2025-09-03 18:38:22 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8132/api/flows/ "HTTP/1.1 200 OK"
+2025-09-03 18:38:22 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8132/api/flow_runs/ "HTTP/1.1 201 Created"
+2025-09-03 18:38:22 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8132/api/flow_runs/a2fab33b-0d72-4820-abd7-d4cbe38b25b9/set_state "HTTP/1.1 201 Created"
+2025-09-03 18:38:22 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8132/api/flow_runs/a2fab33b-0d72-4820-abd7-d4cbe38b25b9 "HTTP/1.1 200 OK"
+2025-09-03 18:38:22 [INFO] prefect.flow_runs:1237 - Beginning flow run 'sociable-smilodon' for flow 'data-collection-get-hot-flow'
+2025-09-03 18:38:23 [INFO] __main__:23 - [<TVCategory.CHINA: 'China'>, <TVCategory.KOREA: 'Korea'>]
+2025-09-03 18:38:23 [INFO] __main__:26 - [<app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB7EE8D0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB83E9F0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB83CC20>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB83F6B0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB83F860>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB83FA10>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB83FBC0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB83FD70>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB83FF20>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB864110>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB8642C0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB864470>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB864620>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB8647D0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB864980>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB864B30>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB864CE0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB864E90>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB865040>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x000001CCDB8651F0>]
+2025-09-03 18:38:23 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 18:38:23 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8132/api/flow_runs/a2fab33b-0d72-4820-abd7-d4cbe38b25b9/set_state "HTTP/1.1 201 Created"
+2025-09-03 18:38:23 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-03 18:38:24 [WARNING] EventsWorker:144 - Still processing items: 3 items remaining...
+2025-09-03 18:38:24 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8132/api/flows/d98fb868-356a-49ba-9d07-22d33c62fb50 "HTTP/1.1 200 OK"
+2025-09-03 18:38:24 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8132/api/csrf-token?client=da15e004-7efc-4c4a-9728-6bb5efed2e24 "HTTP/1.1 422 Unprocessable Entity"
+2025-09-03 18:38:24 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8132/api/logs/ "HTTP/1.1 201 Created"
+2025-09-03 18:38:24 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8132
+2025-09-03 18:42:13 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8643
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 18:42:22 [INFO] httpx:1025 - HTTP Request: GET http://127.0.0.1:8643/api/health "HTTP/1.1 200 OK"
+2025-09-03 18:42:23 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8643/api/admin/version "HTTP/1.1 200 OK"
+2025-09-03 18:42:23 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8643/api/csrf-token?client=dc8133f3-030f-4f45-8f36-7dd2f4064830 "HTTP/1.1 422 Unprocessable Entity"
+2025-09-03 18:42:23 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8643/api/flows/ "HTTP/1.1 200 OK"
+2025-09-03 18:42:23 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8643/api/flow_runs/ "HTTP/1.1 201 Created"
+2025-09-03 18:42:23 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8643/api/flow_runs/7f22d3f0-6143-41e3-96b4-c7194f316323/set_state "HTTP/1.1 201 Created"
+2025-09-03 18:42:23 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8643/api/flow_runs/7f22d3f0-6143-41e3-96b4-c7194f316323 "HTTP/1.1 200 OK"
+2025-09-03 18:42:23 [INFO] prefect.flow_runs:1237 - Beginning flow run 'nebulous-caracal' for flow 'data-collection-get-hot-flow'
+2025-09-03 18:42:24 [INFO] __main__:23 - categories=[<TVCategory.CHINA: 'China'>, <TVCategory.KOREA: 'Korea'>],count=10
+2025-09-03 18:42:24 [INFO] __main__:26 - [<app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE6A60860>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE805A870>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE8058350>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE805A9C0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE805B6E0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE805B890>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE805BA40>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE805BBF0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE805BDA0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE805BF50>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE8080140>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE80802F0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE80804A0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE8080650>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE8080800>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE80809B0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE8080B60>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE8080D10>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE8080EC0>, <app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult object at 0x0000013BE8081070>]
+2025-09-03 18:42:24 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 18:42:24 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8643/api/flow_runs/7f22d3f0-6143-41e3-96b4-c7194f316323/set_state "HTTP/1.1 201 Created"
+2025-09-03 18:42:24 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-03 18:42:25 [WARNING] EventsWorker:144 - Still processing items: 3 items remaining...
+2025-09-03 18:42:25 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8643/api/flows/d98fb868-356a-49ba-9d07-22d33c62fb50 "HTTP/1.1 200 OK"
+2025-09-03 18:42:25 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8643/api/csrf-token?client=381da92e-ccdf-4a98-b647-11ca117998c6 "HTTP/1.1 422 Unprocessable Entity"
+2025-09-03 18:42:25 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8643/api/logs/ "HTTP/1.1 201 Created"
+2025-09-03 18:42:25 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8643
+2025-09-03 18:43:48 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8372
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 18:43:57 [INFO] httpx:1025 - HTTP Request: GET http://127.0.0.1:8372/api/health "HTTP/1.1 200 OK"
+2025-09-03 18:43:58 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8372/api/admin/version "HTTP/1.1 200 OK"
+2025-09-03 18:43:58 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8372/api/csrf-token?client=f97d10e3-c014-4a7a-a996-16f71003c862 "HTTP/1.1 422 Unprocessable Entity"
+2025-09-03 18:43:58 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8372/api/flows/ "HTTP/1.1 200 OK"
+2025-09-03 18:43:58 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8372/api/flow_runs/ "HTTP/1.1 201 Created"
+2025-09-03 18:43:58 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8372/api/flow_runs/e6c875df-2bdb-4f53-a3c6-fd3817f5da09/set_state "HTTP/1.1 201 Created"
+2025-09-03 18:43:58 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8372/api/flow_runs/e6c875df-2bdb-4f53-a3c6-fd3817f5da09 "HTTP/1.1 200 OK"
+2025-09-03 18:43:58 [INFO] prefect.flow_runs:1237 - Beginning flow run 'fair-mussel' for flow 'data-collection-get-hot-flow'
+2025-09-03 18:43:59 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 18:43:59 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8372/api/flow_runs/e6c875df-2bdb-4f53-a3c6-fd3817f5da09/set_state "HTTP/1.1 201 Created"
+2025-09-03 18:43:59 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-03 18:44:00 [WARNING] EventsWorker:144 - Still processing items: 3 items remaining...
+2025-09-03 18:44:00 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8372/api/flows/d98fb868-356a-49ba-9d07-22d33c62fb50 "HTTP/1.1 200 OK"
+2025-09-03 18:44:00 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8372/api/csrf-token?client=0ec8cf9e-d028-48cc-8efa-83ee3e9a52b5 "HTTP/1.1 422 Unprocessable Entity"
+2025-09-03 18:44:00 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8372/api/logs/ "HTTP/1.1 201 Created"
+2025-09-03 18:44:00 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8372
+2025-09-03 18:44:46 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8727
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 18:44:55 [INFO] httpx:1025 - HTTP Request: GET http://127.0.0.1:8727/api/health "HTTP/1.1 200 OK"
+2025-09-03 18:44:56 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8727/api/admin/version "HTTP/1.1 200 OK"
+2025-09-03 18:44:56 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8727/api/csrf-token?client=0567c0e3-1c8f-4868-a03c-2a2076ad2fa1 "HTTP/1.1 422 Unprocessable Entity"
+2025-09-03 18:44:56 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8727/api/flows/ "HTTP/1.1 200 OK"
+2025-09-03 18:44:56 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8727/api/flow_runs/ "HTTP/1.1 201 Created"
+2025-09-03 18:44:56 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8727/api/flow_runs/4b856ec5-e07e-4e80-ad3b-2e5acec17a12/set_state "HTTP/1.1 201 Created"
+2025-09-03 18:44:56 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8727/api/flow_runs/4b856ec5-e07e-4e80-ad3b-2e5acec17a12 "HTTP/1.1 200 OK"
+2025-09-03 18:44:56 [INFO] prefect.flow_runs:1237 - Beginning flow run 'bronze-hawk' for flow 'data-collection-get-hot-flow'
+2025-09-03 18:44:57 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 18:44:57 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8727/api/flow_runs/4b856ec5-e07e-4e80-ad3b-2e5acec17a12/set_state "HTTP/1.1 201 Created"
+2025-09-03 18:44:57 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-03 18:44:57 [WARNING] EventsWorker:144 - Still processing items: 3 items remaining...
+2025-09-03 18:44:57 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8727/api/flows/d98fb868-356a-49ba-9d07-22d33c62fb50 "HTTP/1.1 200 OK"
+2025-09-03 18:44:57 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8727/api/csrf-token?client=84239652-3cd4-4329-898b-e47ab88eaa96 "HTTP/1.1 422 Unprocessable Entity"
+2025-09-03 18:44:57 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8727/api/logs/ "HTTP/1.1 201 Created"
+2025-09-03 18:44:57 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8727
+2025-09-03 18:47:26 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8331
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 18:47:35 [INFO] httpx:1025 - HTTP Request: GET http://127.0.0.1:8331/api/health "HTTP/1.1 200 OK"
+2025-09-03 18:47:35 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8331/api/admin/version "HTTP/1.1 200 OK"
+2025-09-03 18:47:35 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8331/api/csrf-token?client=725ba674-35c5-48ef-be8b-816c2dfc3472 "HTTP/1.1 422 Unprocessable Entity"
+2025-09-03 18:47:35 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8331/api/flows/ "HTTP/1.1 200 OK"
+2025-09-03 18:47:36 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8331/api/flow_runs/ "HTTP/1.1 201 Created"
+2025-09-03 18:47:36 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8331/api/flow_runs/5aa45813-652a-4621-82a3-65e6c512fc04/set_state "HTTP/1.1 201 Created"
+2025-09-03 18:47:36 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8331/api/flow_runs/5aa45813-652a-4621-82a3-65e6c512fc04 "HTTP/1.1 200 OK"
+2025-09-03 18:47:36 [INFO] prefect.flow_runs:1237 - Beginning flow run 'precious-seahorse' for flow 'data-collection-get-hot-flow'
+2025-09-03 18:47:37 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 18:47:37 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8331/api/flow_runs/5aa45813-652a-4621-82a3-65e6c512fc04/set_state "HTTP/1.1 201 Created"
+2025-09-03 18:47:37 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-03 18:47:37 [WARNING] EventsWorker:144 - Still processing items: 3 items remaining...
+2025-09-03 18:47:37 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8331/api/flows/d98fb868-356a-49ba-9d07-22d33c62fb50 "HTTP/1.1 200 OK"
+2025-09-03 18:47:37 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8331/api/csrf-token?client=53ea0050-dc9f-47b4-a953-39b34ef0df62 "HTTP/1.1 422 Unprocessable Entity"
+2025-09-03 18:47:37 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8331/api/logs/ "HTTP/1.1 201 Created"
+2025-09-03 18:47:37 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8331
+2025-09-03 18:49:00 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8408
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 18:49:09 [INFO] httpx:1025 - HTTP Request: GET http://127.0.0.1:8408/api/health "HTTP/1.1 200 OK"
+2025-09-03 18:49:10 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8408/api/admin/version "HTTP/1.1 200 OK"
+2025-09-03 18:49:10 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8408/api/csrf-token?client=ec6702e2-09d1-4766-834a-747026f7c164 "HTTP/1.1 422 Unprocessable Entity"
+2025-09-03 18:49:10 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8408/api/flows/ "HTTP/1.1 200 OK"
+2025-09-03 18:49:10 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8408/api/flow_runs/ "HTTP/1.1 201 Created"
+2025-09-03 18:49:10 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8408/api/flow_runs/234eb6c6-6b21-43d6-9f3a-cd8e0a137a02/set_state "HTTP/1.1 201 Created"
+2025-09-03 18:49:10 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8408/api/flow_runs/234eb6c6-6b21-43d6-9f3a-cd8e0a137a02 "HTTP/1.1 200 OK"
+2025-09-03 18:49:10 [INFO] prefect.flow_runs:1237 - Beginning flow run 'illegal-stoat' for flow 'data-collection-get-hot-flow'
+2025-09-03 18:49:11 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 18:49:11 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8408/api/flows/d98fb868-356a-49ba-9d07-22d33c62fb50 "HTTP/1.1 200 OK"
+2025-09-03 18:49:12 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 18:49:12 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8408/api/flow_runs/234eb6c6-6b21-43d6-9f3a-cd8e0a137a02/set_state "HTTP/1.1 201 Created"
+2025-09-03 18:49:12 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-03 18:49:12 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8408/api/csrf-token?client=3030f752-6955-47c7-84e6-2ea9fcbf8f72 "HTTP/1.1 422 Unprocessable Entity"
+2025-09-03 18:49:12 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8408/api/logs/ "HTTP/1.1 201 Created"
+2025-09-03 18:49:12 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8408
+2025-09-03 19:04:03 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8545
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 19:04:12 [INFO] httpx:1025 - HTTP Request: GET http://127.0.0.1:8545/api/health "HTTP/1.1 200 OK"
+2025-09-03 19:04:13 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8545/api/admin/version "HTTP/1.1 200 OK"
+2025-09-03 19:04:13 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8545/api/csrf-token?client=1327a313-112b-42de-9549-359d54a97bbd "HTTP/1.1 422 Unprocessable Entity"
+2025-09-03 19:04:13 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8545/api/flows/ "HTTP/1.1 200 OK"
+2025-09-03 19:04:13 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8545/api/flow_runs/ "HTTP/1.1 201 Created"
+2025-09-03 19:04:13 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8545/api/flow_runs/5eb95b58-6c08-486e-a77e-3adabcb5e40b/set_state "HTTP/1.1 201 Created"
+2025-09-03 19:04:13 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8545/api/flow_runs/5eb95b58-6c08-486e-a77e-3adabcb5e40b "HTTP/1.1 200 OK"
+2025-09-03 19:04:13 [INFO] prefect.flow_runs:1237 - Beginning flow run 'intrepid-quetzal' for flow 'data-collection-get-hot-flow'
+2025-09-03 19:04:14 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 19:04:14 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8545/api/flows/d98fb868-356a-49ba-9d07-22d33c62fb50 "HTTP/1.1 200 OK"
+2025-09-03 19:04:15 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 19:04:15 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8545/api/flow_runs/5eb95b58-6c08-486e-a77e-3adabcb5e40b/set_state "HTTP/1.1 201 Created"
+2025-09-03 19:04:15 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-03 19:04:15 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8545/api/csrf-token?client=2af69aba-ac3c-4619-9296-417f9fca4400 "HTTP/1.1 422 Unprocessable Entity"
+2025-09-03 19:04:15 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8545/api/logs/ "HTTP/1.1 201 Created"
+2025-09-03 19:04:15 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8545
+2025-09-03 19:26:44 [INFO] httpx:1025 - HTTP Request: GET http://127.0.0.1:8388/api/health "HTTP/1.1 200 OK"
+2025-09-03 19:26:45 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8388/api/admin/version "HTTP/1.1 200 OK"
+2025-09-03 19:26:45 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8388/api/csrf-token?client=c8f5e3d2-ad4e-4adf-b499-1b8bfb2546f9 "HTTP/1.1 422 Unprocessable Entity"
+2025-09-03 19:26:45 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8388/api/flows/ "HTTP/1.1 200 OK"
+2025-09-03 19:26:45 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8388/api/flow_runs/ "HTTP/1.1 201 Created"
+2025-09-03 19:26:45 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8388/api/flow_runs/3d654b83-276e-4408-b497-cf6afc6e63c8/set_state "HTTP/1.1 201 Created"
+2025-09-03 19:26:45 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8388/api/flow_runs/3d654b83-276e-4408-b497-cf6afc6e63c8 "HTTP/1.1 200 OK"
+2025-09-03 19:26:46 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8388/api/flows/d98fb868-356a-49ba-9d07-22d33c62fb50 "HTTP/1.1 200 OK"
+2025-09-03 19:26:47 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8388/api/flow_runs/3d654b83-276e-4408-b497-cf6afc6e63c8/set_state "HTTP/1.1 201 Created"
+2025-09-03 19:44:50 [INFO] demo:144 - 普通消息
+2025-09-03 19:44:50 [WARNING] demo:145 - 警告消息
+2025-09-03 19:44:50 [ERROR] demo:146 - 错误消息，带异常示例
+NoneType: None
+2025-09-03 19:44:50 [CRITICAL] demo:147 - 致命错误
+2025-09-03 19:45:18 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8982
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 19:45:27 [INFO] httpx:1025 - HTTP Request: GET http://127.0.0.1:8982/api/health "HTTP/1.1 200 OK"
+2025-09-03 19:45:28 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8982/api/admin/version "HTTP/1.1 200 OK"
+2025-09-03 19:45:28 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8982/api/csrf-token?client=89d237e0-6436-4792-a9d9-4c52106c7f1a "HTTP/1.1 422 Unprocessable Entity"
+2025-09-03 19:45:28 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8982/api/flows/ "HTTP/1.1 200 OK"
+2025-09-03 19:45:28 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8982/api/flow_runs/ "HTTP/1.1 201 Created"
+2025-09-03 19:45:28 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8982/api/flow_runs/69ffc1cc-48c1-4474-aace-a2b0cac6aa4c/set_state "HTTP/1.1 201 Created"
+2025-09-03 19:45:28 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8982/api/flow_runs/69ffc1cc-48c1-4474-aace-a2b0cac6aa4c "HTTP/1.1 200 OK"
+2025-09-03 19:45:28 [INFO] prefect.flow_runs:1237 - Beginning flow run 'fractal-turtle' for flow 'data-collection-get-hot-flow'
+2025-09-03 19:45:29 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 19:45:29 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8982/api/flows/d98fb868-356a-49ba-9d07-22d33c62fb50 "HTTP/1.1 200 OK"
+2025-09-03 19:45:30 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 19:45:30 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8982/api/flow_runs/69ffc1cc-48c1-4474-aace-a2b0cac6aa4c/set_state "HTTP/1.1 201 Created"
+2025-09-03 19:45:30 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-03 19:45:30 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8982/api/csrf-token?client=15d083d7-1786-426c-9d9d-24b14c1121a4 "HTTP/1.1 422 Unprocessable Entity"
+2025-09-03 19:45:30 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8982/api/logs/ "HTTP/1.1 201 Created"
+2025-09-03 19:45:30 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8982
+2025-09-03 19:45:54 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8373
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 19:46:05 [INFO] prefect.flow_runs:1237 - Beginning flow run 'screeching-vulture' for flow 'data-collection-get-hot-flow'
+2025-09-03 19:46:06 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 19:46:07 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 19:46:07 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-03 19:46:07 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8373
+2025-09-03 19:46:23 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8811
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 19:46:33 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 19:46:35 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 19:46:35 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8811
+2025-09-03 21:46:36 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8799
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 21:46:45 [INFO] prefect.flow_runs:1237 - Beginning flow run 'thistle-crocodile' for flow 'data-collection-get-hot-flow'
+2025-09-03 21:46:47 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 21:46:47 [ERROR] prefect.task_runs:1172 - Task run failed with exception: AttributeError("'Provide' object has no attribute 'match'") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 31, in match_to_database
+    result= await match_to_database_service.match(movie_data_results)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Provide' object has no attribute 'match'
+2025-09-03 21:46:47 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception AttributeError: 'Provide' object has no attribute 'match'")
+2025-09-03 21:46:47 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: AttributeError("'Provide' object has no attribute 'match'")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 38, in data_collection_get_hot_flow
+    match_resp= await match_to_database(movie_data_results=hot_resp)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 31, in match_to_database
+    result= await match_to_database_service.match(movie_data_results)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Provide' object has no attribute 'match'
+2025-09-03 21:46:47 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: AttributeError: 'Provide' object has no attribute 'match'")
+2025-09-03 21:46:47 [WARNING] EventsWorker:144 - Still processing items: 6 items remaining...
+2025-09-03 21:46:47 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8799
+2025-09-03 21:48:23 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8866
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 21:48:33 [INFO] prefect.flow_runs:1237 - Beginning flow run 'strong-ape' for flow 'data-collection-get-hot-flow'
+2025-09-03 21:48:34 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 21:48:34 [ERROR] prefect.task_runs:1172 - Task run failed with exception: AttributeError("'Provide' object has no attribute 'match'") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 31, in match_to_database
+    result= await match_to_database_service().match(movie_data_results)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Provide' object has no attribute 'match'
+2025-09-03 21:48:34 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception AttributeError: 'Provide' object has no attribute 'match'")
+2025-09-03 21:48:34 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: AttributeError("'Provide' object has no attribute 'match'")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 38, in data_collection_get_hot_flow
+    match_resp= await match_to_database(movie_data_results=hot_resp)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 31, in match_to_database
+    result= await match_to_database_service().match(movie_data_results)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Provide' object has no attribute 'match'
+2025-09-03 21:48:34 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: AttributeError: 'Provide' object has no attribute 'match'")
+2025-09-03 21:48:35 [WARNING] EventsWorker:144 - Still processing items: 6 items remaining...
+2025-09-03 21:48:35 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8866
+2025-09-03 21:49:57 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8109
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 21:50:07 [INFO] prefect.flow_runs:1237 - Beginning flow run 'whimsical-angelfish' for flow 'data-collection-get-hot-flow'
+2025-09-03 21:50:08 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 21:50:08 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 21:50:08 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-03 21:50:08 [WARNING] EventsWorker:144 - Still processing items: 6 items remaining...
+2025-09-03 21:50:08 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8109
+2025-09-03 22:50:17 [INFO] __main__:48 - get_tmdb_api的响应为：{'page': 1, 'results': [{'adult': False, 'backdrop_path': '/o6SrILT37q2q3BaWgjqPsQONDtp.jpg', 'genre_ids': [18], 'id': 78986, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好，旧时光', 'overview': '\u3000\u3000余周周与妈妈相依为命。上小学的第一天，余周周因为一次跌倒结识了一个叫林杨的男孩。在林杨的帮助下，她度过了初期对学校的不适，两人也成为了好朋友。然而因为一些流言，林杨却被父母要求远离余周周。对于林杨的疏远，余周周学会了假装不在乎。初中，余周周逃离了林杨和曾经的同学，逐渐放开手脚如鱼得水，最终如愿考上省重点振华高中。与林杨在振华的重逢，不知道是悲是喜。因为林杨巧合的一个电话，余周周的命运再次被改变。林杨的愧疚、急于弥补以及说不清的感情，都让余周周不知如何应对。而对大哥哥陈桉的关怀，重点高中内部因为保送名额的激烈竞争、好朋友米乔的去世。余周周一直用一颗阳光善良、积极进取的心，面对身边的变故，快速成长。高中毕业，曲终人散，青春不朽。', 'popularity': 1.4797, 'poster_path': '/pxTwQRcpa32fhaBALgzUxqVr2sM.jpg', 'first_air_date': '2017-11-08', 'name': '你好，旧时光', 'vote_average': 9.1, 'vote_count': 9}, {'adult': False, 'backdrop_path': '/eRpdG34Wze7N7GPsChx10cUq7BM.jpg', 'genre_ids': [18, 10751], 'id': 217047, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好，昨天', 'overview': '故事围绕五个家庭展开，以90年代的小吉街为背景，讲述两代人在平凡琐碎的生活中相互扶持、共同成长，最终收获亲情、友情、爱情的暖心故事。故事的主人公是一群生活在小吉街上的少男少女，在那个还没有被淘宝、微博、朋友圈支配的年代，他们有健力宝、大富翁、魂斗罗，有一群坦诚相待的小伙伴，嬉笑打闹奔跑追逐，有福同享有难同当，一起经历着短暂又美好的青春时光，然后各自悄悄长大。', 'popularity': 1.5023, 'poster_path': '/cLERFeQtlM5G5I4AuxAf3McU8gk.jpg', 'first_air_date': '2022-12-26', 'name': '你好，昨天', 'vote_average': 2.0, 'vote_count': 1}, {'adult': False, 'backdrop_path': '/pvOI0jUuBVigqNTXClGGhIK2dSk.jpg', 'genre_ids': [10764], 'id': 154770, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好，星期六', 'overview': '《你好，星期六》是湖南卫视重点打造的周六黄金档棚内周播趣味艺能综艺秀。节目以全新打造的好六街街区为背景，将平凡生活的烟火气搬进演播厅，展现市井生活人间百态。深度挖掘好6团和飞行嘉宾们的艺能的同时，对当下最具热点的社会话题以及正能量价值观导向进行引导和输出，重新定义了以艺服人、以能动人的综艺准入门槛。', 'popularity': 30.5832, 'poster_path': '/wsTjWy6NE2s3h0neChr0D92ddwI.jpg', 'first_air_date': '2022-01-01', 'name': '你好，星期六', 'vote_average': 7.143, 'vote_count': 7}, {'adult': False, 'backdrop_path': '/i47IId13qAzx6U3uMKHzc0vKZeY.jpg', 'genre_ids': [18], 'id': 93609, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好，对方辩友', 'overview': '\u3000\u3000南州交通大学文化产业管理系大一新生白宇，误闯文学院辩论社选拔现场，阴差阳错地与欢喜冤家易小曦、孙晴等人加入了沉寂多年的文学院辩论社。梦想夺取全国高校辩论赛冠军的大四学姐耿婷婷，在这支队伍身上看到了最后的希望。然而团委唐老师突然要收回辩论社训练教室，为保住训练室，婷婷签下生死状：队伍须杀入校内赛决赛。然而，一群刚入学的菜鸟辩手们，既严重缺乏辩论知识与技巧，又面临着性格不同亟待磨合等问题。一番磨砺后，这支队伍慢慢体会到了辩论的乐趣和团队的力量。一番激烈厮杀后，他们竟出人意料地晋级半决赛，最终以微弱优势战胜政法学院，成为校内辩论赛冠军。大一结束，队员们送别了毕业的耿婷婷。辩论伴随着他们这一年的成长，也让他们开始明白大学的真正价值和意义。', 'popularity': 2.3309, 'poster_path': '/wN22OUB9n2NqMMocjofKeeJMnvg.jpg', 'first_air_date': '2019-04-15', 'name': '你好，对方辩友', 'vote_average': 5.0, 'vote_count': 3}, {'adult': False, 'backdrop_path': '/73ibsHE4f6ynQUOh6frLGmYtTZI.jpg', 'genre_ids': [18, 35, 10765], 'id': 196193, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好呀，我的橘子恋人', 'overview': '顶尖智能科技公司总裁陆森（梁靖康饰）患有肢体接触障碍，因此只能独自生活在远离人群的庄园中，而他和父母一起种下的橘子树，是他唯一的情感寄托。而热爱发明的杨善善（孙千饰）在机缘巧合下，不得不假扮成机器人星期五，与陆森一同生活，从一开始的乌龙不断到真心陪伴，两人在朝夕相处与斗智斗勇中，逐渐打开心扉，探寻人与人之间的联系与信任，此后两人便陷入了如橘子般酸甜绚烂的爱情中，最终收获了爱与成长 。', 'popularity': 1.394, 'poster_path': '/dT0FOdUQQQ1bnFOEpSMMPOq7Xsd.jpg', 'first_air_date': '2022-05-20', 'name': '你好呀，我的橘子恋人', 'vote_average': 5.2, 'vote_count': 4}, {'adult': False, 'backdrop_path': '/4yPlznXqzMft6RjH6827SQuvohw.jpg', 'genre_ids': [10759, 18], 'id': 128699, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好，火焰蓝', 'overview': '霍言消防学院毕业，成为消防站的副站长。在一次剪拆出租车、营救孕妇事件中与急诊科医生晏蓝相识。两人的相识以误会开始，“老干部”霍言觉得“小太阳”晏蓝是自己生命中唯一的不确定因素，二人关系起起伏伏。一次地震事件的跨省增援中，霍言与晏蓝在目睹极端状况所激发出的种种生离死别后，二人的感情得到升华。消医联合让他们一起经历了营救养蜂人等一系列救援事件，有着医学理想的晏蓝为救死扶伤倾其所有，而霍言和其他所有曾经受过帮助的人都以各自的方式在背后默默支持着晏蓝。另一方面，新训消防员江桐渐渐喜欢上了看似退缩、怕事的消防员王大印。夹在家庭的极力反对和王大印的躲躲藏藏中，江桐想要探究王大印背后的故事，也在这个过程中让王大印慢慢成为了有使命感和责任心的男人。', 'popularity': 1.0861, 'poster_path': '/8UE4BoHjArDmvj4UH2xdrQpIFkH.jpg', 'first_air_date': '2021-07-08', 'name': '你好，火焰蓝', 'vote_average': 5.8, 'vote_count': 5}, {'adult': False, 'backdrop_path': '/usV6z6GoJUfNmMrZWFa3LsRqpR6.jpg', 'genre_ids': [35, 18], 'id': 113440, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '好想和你在一起', 'overview': '\u3000\u3000该剧讲述了一位少女漫画家为了突破创作瓶颈，主动接近高冷教授来获取创作素材，最终收获命定爱情的故事。', 'popularity': 1.4669, 'poster_path': '/7Qz2nWv4oni9FPH2bkw8KXxfpdy.jpg', 'first_air_date': '2020-11-19', 'name': '好想和你在一起', 'vote_average': 7.147, 'vote_count': 17}, {'adult': False, 'backdrop_path': '/adfVyxvTKVRZBzr4rRoaczcgfSD.jpg', 'genre_ids': [35], 'id': 94739, 'origin_country': ['HK'], 'original_language': 'cn', 'original_name': '老表，你好hea！', 'overview': '\u3000\u3000本剧故事发生在一个充满老香港风味的场景，以喜剧形式展现左邻右里间的嬉笑怒骂，从而体现出香港社会的冷暖唏嘘。《老表，你好hea！》由《老表，你好嘢！》原班人马带来崭新的故事，加入大量新鲜滚热辣的社会议题，剧集除了继续采用前辑的轻快节奏和可爱的人物性格，亦加入新人物、新元素，务求擦出更多火花。', 'popularity': 1.4512, 'poster_path': '/daM12tfeA1JC4a9nWVzZRYyCcDo.jpg', 'first_air_date': '2014-10-20', 'name': '老表，你好hea！', 'vote_average': 0.0, 'vote_count': 0}, {'adult': False, 'backdrop_path': '/7YQ0EP7cqDgLZ9YhbqFf2Mc3EtE.jpg', 'genre_ids': [10764], 'id': 112774, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好生活', 'overview': '《你好生活》由中央广播电视总台综艺频道、央视网联合推出的一档新青年生活分享节目。节目主持人尼格买提首次作为制作人，带领不同领域社会精英与明星嘉宾去到不同城市，深入生活，扎根人民，寻找美好生活的定义，引领观众积极探寻生活之美，表达青年群体对美好生活的向往。 嘉宾与人民群众、与青年文艺工作者和行业精英的交流过程中，吸收和传播正能量，展现中国当代青年正确的价值观，积极阳光面对生活，节目将于12月18日在综艺频道播出。', 'popularity': 3.6243, 'poster_path': '/rH96eGyuSgkkqptndYkdWsz40xr.jpg', 'first_air_date': '2019-12-17', 'name': '你好生活', 'vote_average': 8.0, 'vote_count': 1}, {'adult': False, 'backdrop_path': '/ejmUQhlvOMZOcpi8AfPewOxdLrZ.jpg', 'genre_ids': [10765, 18], 'id': 95686, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '我爱你，这是最好的安排', 'overview': '马东山、韩德昌和宋天明三兄弟创立了“豪森酒店”，成为了当时业界叱咤风云的黄金组合。一晃眼三十年过去，这三兄弟的境遇都不甚乐观。马东山病入膏肓命不久矣，韩德昌很早就撒手人寰，而宋天明心爱的儿子至今下落不明。\n\n\u3000\u3000马可爱（郑合惠子 饰）是马东山的女儿，马东山决定将整个家族产业都留给她继承。然而，正当马可爱想要回国时，却遭遇了一场匪夷所思的交通事故，与此同时，她已被告知父亲心脏病发作不幸去世。生活一下子发生了巨变的马可爱隐隐约约感觉事情不不是看上去的那么简单，于是，她假装懵懂无知随波逐流，暗中开始着手调查事件的真相。', 'popularity': 1.0646, 'poster_path': '/ygbzKhzhrjbvXn2J4syklJnf1Re.jpg', 'first_air_date': '2019-10-16', 'name': '我爱你，这是最好的安排', 'vote_average': 0.0, 'vote_count': 0}, {'adult': False, 'backdrop_path': '/8Y116uS56I9ubFl1tuFMYSICXer.jpg', 'genre_ids': [18, 35], 'id': 226831, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '正好遇见你', 'overview': '编导鱼在藻（张楠饰）加入顾时雍（郑凯饰）打造的一档大型文化类节目《传承》，与袁迦莹（孙伊涵饰）竞争总编导的位置。为组成一支高质量的节目制作团队，顾时雍还力邀资深主持汪希宁（李小冉饰）、知名导演穆宗沄（郭晓东饰）、青年文物专家陶唐（张博饰）加盟。经过大家的努力，《传承》终于成为现象级的文化节目，从小缺乏同理心的鱼在藻也在拍摄过程中逐渐敞开心扉，最终收获了圆满的友情与事业。', 'popularity': 1.7808, 'poster_path': '/7lFipRUKrJvinS7cO0LkxyV6hDE.jpg', 'first_air_date': '2023-05-20', 'name': '正好遇见你', 'vote_average': 4.0, 'vote_count': 1}, {'adult': False, 'backdrop_path': '/7mlNhKRjMi4rSc5W2fy6y2LMRGY.jpg', 'genre_ids': [35, 18], 'id': 113697, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好，神枪手', 'overview': '\u3000\u3000全运会上，电视台体育频道实习记者唐心奉命采访50米手枪慢射项目冠军，却发现对方并非大家看好的老将杜凌枫，而是四年前自己偷偷喜欢过的“射击馆辅导员”沈清源。沈清源在采访中的冷漠态度，让唐心大受打击，口吃起来，职场生涯也险被断送。唐心索性 以跟踪报道、制作节目等名义接近沈清源，试图从根源上解决问题。在省射击队，她邂逅了不甘落败的前手枪慢射冠军杜凌枫、争强好胜的女子气步枪选手石小辞、面嘻哈一面严肃的孪生兄弟陈宁陈海，制作出了备受欢迎的射击节目，破除了职场危机。亚锦赛召开在即，石小辞意外受伤，她选择将射击梦想交给杜凌风，唐心则在省队心理医生丁芳的帮助下，化解了沈清源埋藏至深的心结。昔日针锋相对的沈清源与杜凌枫最终冰释前嫌，他们怀抱着梦想与爱，并肩站在射击舞台上，向荣誉发起了更高的冲刺。', 'popularity': 2.0395, 'poster_path': '/5LKQEUiEE4POH7Yt1X1CJMTqrEk.jpg', 'first_air_date': '2022-02-03', 'name': '你好，神枪手', 'vote_average': 8.0, 'vote_count': 7}, {'adult': False, 'backdrop_path': '/1oI75FKPgdTNmUizaGRwf5oPbrb.jpg', 'genre_ids': [18, 10751], 'id': 201761, 'origin_country': ['TW'], 'original_language': 'zh', 'original_name': '你好，我是誰？', 'overview': '', 'popularity': 0.8729, 'poster_path': '/dyL6pBWDNzNe8EnCN5dpfI6T5Ad.jpg', 'first_air_date': '2022-05-12', 'name': '你好，我是谁', 'vote_average': 0.0, 'vote_count': 0}, {'adult': False, 'backdrop_path': '/hGFoiTfyDBNpBKGvEqN2weKVkZ4.jpg', 'genre_ids': [35, 18], 'id': 48152, 'origin_country': ['HK'], 'original_language': 'cn', 'original_name': '老表，你好嘢！', 'overview': '一直发梦成为旅游界导游天王的吴嘉仪（郭晋安 饰）和女友司马淑贞（汤盈盈 饰）开了一家旅行社，但遭人欺骗欠下巨债被迫破产，无奈的嘉仪只求安稳度过破产期的最后几个月，然后和淑贞结婚卷土重来，殊不知女友与死党程少山（Bob 饰）暗结情缘，令他大受打击，期间遇上新移民社工易雪飞（万绮雯 饰）、由东莞来香港发歌星梦的表弟蔡芯（王祖蓝 饰）和骗饮骗食的老歌女梦露（朱咪咪 饰），再加上瞒骗自己已完成硕士课程的妹妹吴芝晴（王菀之 饰）刚从台湾回来，一连串夹杂着来自中港差异文化的家庭闹剧爆笑上演，令一向自卑兼懦弱的嘉仪恍然大悟，明白到自己的终极梦想原来是……', 'popularity': 0.8484, 'poster_path': '/m96zily3XsPnPW3i1YLCLJsNbYC.jpg', 'first_air_date': '2013-01-14', 'name': '老表，你好嘢！', 'vote_average': 10.0, 'vote_count': 1}, {'adult': False, 'backdrop_path': '/mb5LpqrMO11CoB1C8BT60CFwACT.jpg', 'genre_ids': [35], 'id': 53300, 'origin_country': ['US'], 'original_language': 'en', 'original_name': 'Hello Ladies', 'overview': 'Stuart Pritchard is an awkward, overly-confident Englishman trying to date in Los Angeles – where he repeatedly attempts to infiltrate the world of beautiful people.', 'popularity': 2.0468, 'poster_path': '/2jUOzE8pcwn0bDGfbX7GtTqSqsT.jpg', 'first_air_date': '2013-09-29', 'name': '你好女士', 'vote_average': 6.759, 'vote_count': 114}, {'adult': False, 'backdrop_path': '/wMs2ALq84qrpkMfJXpXCqGETQH3.jpg', 'genre_ids': [18], 'id': 125953, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好乔安', 'overview': '\u3000\u3000乔安（戚薇 饰）曾是含着金汤匙出生的千金小姐，享受着衣食无忧的奢侈生活，然而某一天，她失去了所拥有的一切，流落他乡。正当所有人都渐渐将乔安淡忘之时，她突然以一种凌厉的姿态重新杀回了众人的视野，乔安加入了奥里斯广告公司，那里曾经是父亲一手经营的帝国和战场，这一次，乔安决定要凭借实力，夺回属于自己的荣耀。  \u3000\u3000陆远扬（陈亦飞 饰）是公司的现任总裁，面对初来乍到的职场新人乔安，这位霸道总裁自然是百般刁难，可聪敏过人的乔安巧妙的化解了陆远扬设置的一个又一个难题，渐渐赢得了后者的认可和信任，与此同时，随着时间的推移，两人之间亦产生了暧昧的感情。', 'popularity': 0.6227, 'poster_path': '/miZfIZiyhmuU4ihdREugGyOnAY.jpg', 'first_air_date': '2016-07-31', 'name': '你好乔安', 'vote_average': 6.5, 'vote_count': 2}, {'adult': False, 'backdrop_path': '/x7h7FXYCmmUP6buLcauAm0F9RSS.jpg', 'genre_ids': [10764], 'id': 238136, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好，种地少年', 'overview': '种地团继《种地吧》之后首次合体，兄弟十人将前往各自的家乡进行一次自驾游学之旅。出游之时，恰逢秋收时节，他们将一路游一路学,一路劳作，一路收获，在旅途中结识新农人、体验新生活、感受新乡村，以十个勤天的视角全面认识中国农业的现状。', 'popularity': 0.7201, 'poster_path': '/g1M8bYBrrCYxAPFOJ5ZO8brzjoC.jpg', 'first_air_date': '2023-10-26', 'name': '你好，种地少年', 'vote_average': 9.0, 'vote_count': 1}, {'adult': False, 'backdrop_path': '/jQMgJVVoTHJYIvZAEKk8u5Bei95.jpg', 'genre_ids': [18, 35], 'id': 104985, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '我好喜欢你', 'overview': '《CHIC》杂志主编陆星成毒舌桀骜，是时尚圈以幸运闻名的传奇人物。而籍籍无名的设计师童小悠是个事事不顺的倒霉鬼，一次意外让童小悠以为交换了各自的运气，陆星成从众星捧月到声名狼藉，而童小悠则从衰神附体到一夜成名。童小悠慢慢揭开了陆星成不为人知的过去，也渐渐发觉陆星成隐藏在高傲背后的孤独与对家人的渴望。十年前的一件“尼姬”，是二人缘分的开始，童小悠誓要让自己的偶像重回设计师的位置，而陆星成的自我却时常伤害到童小悠。在童小悠的陪伴下，陆星成终于解开了心结与过去达成和解，二人的感情也愈发坚定。', 'popularity': 1.9969, 'poster_path': '/xTQQs8s9CljXaCcUMTn2gikDCrI.jpg', 'first_air_date': '2020-08-03', 'name': '我好喜欢你', 'vote_average': 7.6, 'vote_count': 8}, {'adult': False, 'backdrop_path': '/3BC7iNkZvh9FRkBljcAre474VKP.jpg', 'genre_ids': [16, 35], 'id': 79030, 'origin_country': ['JP'], 'original_language': 'ja', 'original_name': 'はいたい七葉', 'overview': '个性开朗心底单纯的喜屋武七叶（与那岭里都 配音）、沉着冷静不失温柔但生气起来会非常恐怖的喜屋武七绪（松田瑠华 配音）和拥有着极强灵感应能力的喜屋武心七是感情十分要好的三姐妹，三人同奶奶一起过着相依为命的生活。\n\n\u3000\u3000一次偶然中，七夜发现了一个神奇的瓶子，并且在误打误撞之中将瓶子打开，外表稚嫩可爱嘴巴却超级毒舌的妮娜（松嵜丽 配音）、大大咧咧傻乎乎却惹人怜爱的拉娜（井之上奈奈 配音）和沉默寡言面无表情的卡娜（东城日沙子 配音）三个被封印已久的精灵出现了。就这样，喜屋武家多了三名家庭成员，平静的日常生活也离三姐妹越来越远。', 'popularity': 1.0253, 'poster_path': '/59BIMcRxWj8eeS8BJ2Wv7elzRV7.jpg', 'first_air_date': '2012-10-06', 'name': '你好七叶', 'vote_average': 5.5, 'vote_count': 2}, {'adult': False, 'backdrop_path': '/nh0BS0sLXozmkTpOe1Ve33MyxlK.jpg', 'genre_ids': [16, 18], 'id': 68854, 'origin_country': ['JP'], 'original_language': 'ja', 'original_name': '君に届け', 'overview': '黑沼爽子因为外表看起来很阴沉，被班上同学取了个外号叫“贞子”。甚至还传说只要跟她对看三秒以上，7天之后就会遭遇不幸。但其实爽子个性开朗又单纯，也很乐于助人，虽然想和大家打成一片，却始终没有机会。唯独只有他，笑容爽朗的阳光男孩风早翔太，始终很自然地和爽子相处。在此之后，爽子不仅渐渐改变了自己，也终于交到失野朱音、吉田千鹤、真田龙等知心朋友。爽子与风早两人，更共同经历了许多“第一次”，拉近了彼此的距离。', 'popularity': 7.2611, 'poster_path': '/tJrwwVe8dUpIgKGnDkjTNg6aIgJ.jpg', 'first_air_date': '2009-10-07', 'name': '好想告诉你', 'vote_average': 8.378, 'vote_count': 325}], 'total_pages': 7, 'total_results': 137}
+2025-09-03 22:50:17 [INFO] __main__:48 - get_tmdb_api的响应为：{'page': 1, 'results': [{'adult': False, 'backdrop_path': '/o6SrILT37q2q3BaWgjqPsQONDtp.jpg', 'genre_ids': [18], 'id': 78986, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好，旧时光', 'overview': '\u3000\u3000余周周与妈妈相依为命。上小学的第一天，余周周因为一次跌倒结识了一个叫林杨的男孩。在林杨的帮助下，她度过了初期对学校的不适，两人也成为了好朋友。然而因为一些流言，林杨却被父母要求远离余周周。对于林杨的疏远，余周周学会了假装不在乎。初中，余周周逃离了林杨和曾经的同学，逐渐放开手脚如鱼得水，最终如愿考上省重点振华高中。与林杨在振华的重逢，不知道是悲是喜。因为林杨巧合的一个电话，余周周的命运再次被改变。林杨的愧疚、急于弥补以及说不清的感情，都让余周周不知如何应对。而对大哥哥陈桉的关怀，重点高中内部因为保送名额的激烈竞争、好朋友米乔的去世。余周周一直用一颗阳光善良、积极进取的心，面对身边的变故，快速成长。高中毕业，曲终人散，青春不朽。', 'popularity': 1.4797, 'poster_path': '/pxTwQRcpa32fhaBALgzUxqVr2sM.jpg', 'first_air_date': '2017-11-08', 'name': '你好，旧时光', 'vote_average': 9.1, 'vote_count': 9}, {'adult': False, 'backdrop_path': '/eRpdG34Wze7N7GPsChx10cUq7BM.jpg', 'genre_ids': [18, 10751], 'id': 217047, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好，昨天', 'overview': '故事围绕五个家庭展开，以90年代的小吉街为背景，讲述两代人在平凡琐碎的生活中相互扶持、共同成长，最终收获亲情、友情、爱情的暖心故事。故事的主人公是一群生活在小吉街上的少男少女，在那个还没有被淘宝、微博、朋友圈支配的年代，他们有健力宝、大富翁、魂斗罗，有一群坦诚相待的小伙伴，嬉笑打闹奔跑追逐，有福同享有难同当，一起经历着短暂又美好的青春时光，然后各自悄悄长大。', 'popularity': 1.5023, 'poster_path': '/cLERFeQtlM5G5I4AuxAf3McU8gk.jpg', 'first_air_date': '2022-12-26', 'name': '你好，昨天', 'vote_average': 2.0, 'vote_count': 1}, {'adult': False, 'backdrop_path': '/pvOI0jUuBVigqNTXClGGhIK2dSk.jpg', 'genre_ids': [10764], 'id': 154770, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好，星期六', 'overview': '《你好，星期六》是湖南卫视重点打造的周六黄金档棚内周播趣味艺能综艺秀。节目以全新打造的好六街街区为背景，将平凡生活的烟火气搬进演播厅，展现市井生活人间百态。深度挖掘好6团和飞行嘉宾们的艺能的同时，对当下最具热点的社会话题以及正能量价值观导向进行引导和输出，重新定义了以艺服人、以能动人的综艺准入门槛。', 'popularity': 30.5832, 'poster_path': '/wsTjWy6NE2s3h0neChr0D92ddwI.jpg', 'first_air_date': '2022-01-01', 'name': '你好，星期六', 'vote_average': 7.143, 'vote_count': 7}, {'adult': False, 'backdrop_path': '/i47IId13qAzx6U3uMKHzc0vKZeY.jpg', 'genre_ids': [18], 'id': 93609, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好，对方辩友', 'overview': '\u3000\u3000南州交通大学文化产业管理系大一新生白宇，误闯文学院辩论社选拔现场，阴差阳错地与欢喜冤家易小曦、孙晴等人加入了沉寂多年的文学院辩论社。梦想夺取全国高校辩论赛冠军的大四学姐耿婷婷，在这支队伍身上看到了最后的希望。然而团委唐老师突然要收回辩论社训练教室，为保住训练室，婷婷签下生死状：队伍须杀入校内赛决赛。然而，一群刚入学的菜鸟辩手们，既严重缺乏辩论知识与技巧，又面临着性格不同亟待磨合等问题。一番磨砺后，这支队伍慢慢体会到了辩论的乐趣和团队的力量。一番激烈厮杀后，他们竟出人意料地晋级半决赛，最终以微弱优势战胜政法学院，成为校内辩论赛冠军。大一结束，队员们送别了毕业的耿婷婷。辩论伴随着他们这一年的成长，也让他们开始明白大学的真正价值和意义。', 'popularity': 2.3309, 'poster_path': '/wN22OUB9n2NqMMocjofKeeJMnvg.jpg', 'first_air_date': '2019-04-15', 'name': '你好，对方辩友', 'vote_average': 5.0, 'vote_count': 3}, {'adult': False, 'backdrop_path': '/73ibsHE4f6ynQUOh6frLGmYtTZI.jpg', 'genre_ids': [18, 35, 10765], 'id': 196193, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好呀，我的橘子恋人', 'overview': '顶尖智能科技公司总裁陆森（梁靖康饰）患有肢体接触障碍，因此只能独自生活在远离人群的庄园中，而他和父母一起种下的橘子树，是他唯一的情感寄托。而热爱发明的杨善善（孙千饰）在机缘巧合下，不得不假扮成机器人星期五，与陆森一同生活，从一开始的乌龙不断到真心陪伴，两人在朝夕相处与斗智斗勇中，逐渐打开心扉，探寻人与人之间的联系与信任，此后两人便陷入了如橘子般酸甜绚烂的爱情中，最终收获了爱与成长 。', 'popularity': 1.394, 'poster_path': '/dT0FOdUQQQ1bnFOEpSMMPOq7Xsd.jpg', 'first_air_date': '2022-05-20', 'name': '你好呀，我的橘子恋人', 'vote_average': 5.2, 'vote_count': 4}, {'adult': False, 'backdrop_path': '/4yPlznXqzMft6RjH6827SQuvohw.jpg', 'genre_ids': [10759, 18], 'id': 128699, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好，火焰蓝', 'overview': '霍言消防学院毕业，成为消防站的副站长。在一次剪拆出租车、营救孕妇事件中与急诊科医生晏蓝相识。两人的相识以误会开始，“老干部”霍言觉得“小太阳”晏蓝是自己生命中唯一的不确定因素，二人关系起起伏伏。一次地震事件的跨省增援中，霍言与晏蓝在目睹极端状况所激发出的种种生离死别后，二人的感情得到升华。消医联合让他们一起经历了营救养蜂人等一系列救援事件，有着医学理想的晏蓝为救死扶伤倾其所有，而霍言和其他所有曾经受过帮助的人都以各自的方式在背后默默支持着晏蓝。另一方面，新训消防员江桐渐渐喜欢上了看似退缩、怕事的消防员王大印。夹在家庭的极力反对和王大印的躲躲藏藏中，江桐想要探究王大印背后的故事，也在这个过程中让王大印慢慢成为了有使命感和责任心的男人。', 'popularity': 1.0861, 'poster_path': '/8UE4BoHjArDmvj4UH2xdrQpIFkH.jpg', 'first_air_date': '2021-07-08', 'name': '你好，火焰蓝', 'vote_average': 5.8, 'vote_count': 5}, {'adult': False, 'backdrop_path': '/usV6z6GoJUfNmMrZWFa3LsRqpR6.jpg', 'genre_ids': [35, 18], 'id': 113440, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '好想和你在一起', 'overview': '\u3000\u3000该剧讲述了一位少女漫画家为了突破创作瓶颈，主动接近高冷教授来获取创作素材，最终收获命定爱情的故事。', 'popularity': 1.4669, 'poster_path': '/7Qz2nWv4oni9FPH2bkw8KXxfpdy.jpg', 'first_air_date': '2020-11-19', 'name': '好想和你在一起', 'vote_average': 7.147, 'vote_count': 17}, {'adult': False, 'backdrop_path': '/adfVyxvTKVRZBzr4rRoaczcgfSD.jpg', 'genre_ids': [35], 'id': 94739, 'origin_country': ['HK'], 'original_language': 'cn', 'original_name': '老表，你好hea！', 'overview': '\u3000\u3000本剧故事发生在一个充满老香港风味的场景，以喜剧形式展现左邻右里间的嬉笑怒骂，从而体现出香港社会的冷暖唏嘘。《老表，你好hea！》由《老表，你好嘢！》原班人马带来崭新的故事，加入大量新鲜滚热辣的社会议题，剧集除了继续采用前辑的轻快节奏和可爱的人物性格，亦加入新人物、新元素，务求擦出更多火花。', 'popularity': 1.4512, 'poster_path': '/daM12tfeA1JC4a9nWVzZRYyCcDo.jpg', 'first_air_date': '2014-10-20', 'name': '老表，你好hea！', 'vote_average': 0.0, 'vote_count': 0}, {'adult': False, 'backdrop_path': '/7YQ0EP7cqDgLZ9YhbqFf2Mc3EtE.jpg', 'genre_ids': [10764], 'id': 112774, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好生活', 'overview': '《你好生活》由中央广播电视总台综艺频道、央视网联合推出的一档新青年生活分享节目。节目主持人尼格买提首次作为制作人，带领不同领域社会精英与明星嘉宾去到不同城市，深入生活，扎根人民，寻找美好生活的定义，引领观众积极探寻生活之美，表达青年群体对美好生活的向往。 嘉宾与人民群众、与青年文艺工作者和行业精英的交流过程中，吸收和传播正能量，展现中国当代青年正确的价值观，积极阳光面对生活，节目将于12月18日在综艺频道播出。', 'popularity': 3.6243, 'poster_path': '/rH96eGyuSgkkqptndYkdWsz40xr.jpg', 'first_air_date': '2019-12-17', 'name': '你好生活', 'vote_average': 8.0, 'vote_count': 1}, {'adult': False, 'backdrop_path': '/ejmUQhlvOMZOcpi8AfPewOxdLrZ.jpg', 'genre_ids': [10765, 18], 'id': 95686, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '我爱你，这是最好的安排', 'overview': '马东山、韩德昌和宋天明三兄弟创立了“豪森酒店”，成为了当时业界叱咤风云的黄金组合。一晃眼三十年过去，这三兄弟的境遇都不甚乐观。马东山病入膏肓命不久矣，韩德昌很早就撒手人寰，而宋天明心爱的儿子至今下落不明。\n\n\u3000\u3000马可爱（郑合惠子 饰）是马东山的女儿，马东山决定将整个家族产业都留给她继承。然而，正当马可爱想要回国时，却遭遇了一场匪夷所思的交通事故，与此同时，她已被告知父亲心脏病发作不幸去世。生活一下子发生了巨变的马可爱隐隐约约感觉事情不不是看上去的那么简单，于是，她假装懵懂无知随波逐流，暗中开始着手调查事件的真相。', 'popularity': 1.0646, 'poster_path': '/ygbzKhzhrjbvXn2J4syklJnf1Re.jpg', 'first_air_date': '2019-10-16', 'name': '我爱你，这是最好的安排', 'vote_average': 0.0, 'vote_count': 0}, {'adult': False, 'backdrop_path': '/8Y116uS56I9ubFl1tuFMYSICXer.jpg', 'genre_ids': [18, 35], 'id': 226831, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '正好遇见你', 'overview': '编导鱼在藻（张楠饰）加入顾时雍（郑凯饰）打造的一档大型文化类节目《传承》，与袁迦莹（孙伊涵饰）竞争总编导的位置。为组成一支高质量的节目制作团队，顾时雍还力邀资深主持汪希宁（李小冉饰）、知名导演穆宗沄（郭晓东饰）、青年文物专家陶唐（张博饰）加盟。经过大家的努力，《传承》终于成为现象级的文化节目，从小缺乏同理心的鱼在藻也在拍摄过程中逐渐敞开心扉，最终收获了圆满的友情与事业。', 'popularity': 1.7808, 'poster_path': '/7lFipRUKrJvinS7cO0LkxyV6hDE.jpg', 'first_air_date': '2023-05-20', 'name': '正好遇见你', 'vote_average': 4.0, 'vote_count': 1}, {'adult': False, 'backdrop_path': '/7mlNhKRjMi4rSc5W2fy6y2LMRGY.jpg', 'genre_ids': [35, 18], 'id': 113697, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好，神枪手', 'overview': '\u3000\u3000全运会上，电视台体育频道实习记者唐心奉命采访50米手枪慢射项目冠军，却发现对方并非大家看好的老将杜凌枫，而是四年前自己偷偷喜欢过的“射击馆辅导员”沈清源。沈清源在采访中的冷漠态度，让唐心大受打击，口吃起来，职场生涯也险被断送。唐心索性 以跟踪报道、制作节目等名义接近沈清源，试图从根源上解决问题。在省射击队，她邂逅了不甘落败的前手枪慢射冠军杜凌枫、争强好胜的女子气步枪选手石小辞、面嘻哈一面严肃的孪生兄弟陈宁陈海，制作出了备受欢迎的射击节目，破除了职场危机。亚锦赛召开在即，石小辞意外受伤，她选择将射击梦想交给杜凌风，唐心则在省队心理医生丁芳的帮助下，化解了沈清源埋藏至深的心结。昔日针锋相对的沈清源与杜凌枫最终冰释前嫌，他们怀抱着梦想与爱，并肩站在射击舞台上，向荣誉发起了更高的冲刺。', 'popularity': 2.0395, 'poster_path': '/5LKQEUiEE4POH7Yt1X1CJMTqrEk.jpg', 'first_air_date': '2022-02-03', 'name': '你好，神枪手', 'vote_average': 8.0, 'vote_count': 7}, {'adult': False, 'backdrop_path': '/1oI75FKPgdTNmUizaGRwf5oPbrb.jpg', 'genre_ids': [18, 10751], 'id': 201761, 'origin_country': ['TW'], 'original_language': 'zh', 'original_name': '你好，我是誰？', 'overview': '', 'popularity': 0.8729, 'poster_path': '/dyL6pBWDNzNe8EnCN5dpfI6T5Ad.jpg', 'first_air_date': '2022-05-12', 'name': '你好，我是谁', 'vote_average': 0.0, 'vote_count': 0}, {'adult': False, 'backdrop_path': '/hGFoiTfyDBNpBKGvEqN2weKVkZ4.jpg', 'genre_ids': [35, 18], 'id': 48152, 'origin_country': ['HK'], 'original_language': 'cn', 'original_name': '老表，你好嘢！', 'overview': '一直发梦成为旅游界导游天王的吴嘉仪（郭晋安 饰）和女友司马淑贞（汤盈盈 饰）开了一家旅行社，但遭人欺骗欠下巨债被迫破产，无奈的嘉仪只求安稳度过破产期的最后几个月，然后和淑贞结婚卷土重来，殊不知女友与死党程少山（Bob 饰）暗结情缘，令他大受打击，期间遇上新移民社工易雪飞（万绮雯 饰）、由东莞来香港发歌星梦的表弟蔡芯（王祖蓝 饰）和骗饮骗食的老歌女梦露（朱咪咪 饰），再加上瞒骗自己已完成硕士课程的妹妹吴芝晴（王菀之 饰）刚从台湾回来，一连串夹杂着来自中港差异文化的家庭闹剧爆笑上演，令一向自卑兼懦弱的嘉仪恍然大悟，明白到自己的终极梦想原来是……', 'popularity': 0.8484, 'poster_path': '/m96zily3XsPnPW3i1YLCLJsNbYC.jpg', 'first_air_date': '2013-01-14', 'name': '老表，你好嘢！', 'vote_average': 10.0, 'vote_count': 1}, {'adult': False, 'backdrop_path': '/mb5LpqrMO11CoB1C8BT60CFwACT.jpg', 'genre_ids': [35], 'id': 53300, 'origin_country': ['US'], 'original_language': 'en', 'original_name': 'Hello Ladies', 'overview': 'Stuart Pritchard is an awkward, overly-confident Englishman trying to date in Los Angeles – where he repeatedly attempts to infiltrate the world of beautiful people.', 'popularity': 2.0468, 'poster_path': '/2jUOzE8pcwn0bDGfbX7GtTqSqsT.jpg', 'first_air_date': '2013-09-29', 'name': '你好女士', 'vote_average': 6.759, 'vote_count': 114}, {'adult': False, 'backdrop_path': '/wMs2ALq84qrpkMfJXpXCqGETQH3.jpg', 'genre_ids': [18], 'id': 125953, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好乔安', 'overview': '\u3000\u3000乔安（戚薇 饰）曾是含着金汤匙出生的千金小姐，享受着衣食无忧的奢侈生活，然而某一天，她失去了所拥有的一切，流落他乡。正当所有人都渐渐将乔安淡忘之时，她突然以一种凌厉的姿态重新杀回了众人的视野，乔安加入了奥里斯广告公司，那里曾经是父亲一手经营的帝国和战场，这一次，乔安决定要凭借实力，夺回属于自己的荣耀。  \u3000\u3000陆远扬（陈亦飞 饰）是公司的现任总裁，面对初来乍到的职场新人乔安，这位霸道总裁自然是百般刁难，可聪敏过人的乔安巧妙的化解了陆远扬设置的一个又一个难题，渐渐赢得了后者的认可和信任，与此同时，随着时间的推移，两人之间亦产生了暧昧的感情。', 'popularity': 0.6227, 'poster_path': '/miZfIZiyhmuU4ihdREugGyOnAY.jpg', 'first_air_date': '2016-07-31', 'name': '你好乔安', 'vote_average': 6.5, 'vote_count': 2}, {'adult': False, 'backdrop_path': '/x7h7FXYCmmUP6buLcauAm0F9RSS.jpg', 'genre_ids': [10764], 'id': 238136, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '你好，种地少年', 'overview': '种地团继《种地吧》之后首次合体，兄弟十人将前往各自的家乡进行一次自驾游学之旅。出游之时，恰逢秋收时节，他们将一路游一路学,一路劳作，一路收获，在旅途中结识新农人、体验新生活、感受新乡村，以十个勤天的视角全面认识中国农业的现状。', 'popularity': 0.7201, 'poster_path': '/g1M8bYBrrCYxAPFOJ5ZO8brzjoC.jpg', 'first_air_date': '2023-10-26', 'name': '你好，种地少年', 'vote_average': 9.0, 'vote_count': 1}, {'adult': False, 'backdrop_path': '/jQMgJVVoTHJYIvZAEKk8u5Bei95.jpg', 'genre_ids': [18, 35], 'id': 104985, 'origin_country': ['CN'], 'original_language': 'zh', 'original_name': '我好喜欢你', 'overview': '《CHIC》杂志主编陆星成毒舌桀骜，是时尚圈以幸运闻名的传奇人物。而籍籍无名的设计师童小悠是个事事不顺的倒霉鬼，一次意外让童小悠以为交换了各自的运气，陆星成从众星捧月到声名狼藉，而童小悠则从衰神附体到一夜成名。童小悠慢慢揭开了陆星成不为人知的过去，也渐渐发觉陆星成隐藏在高傲背后的孤独与对家人的渴望。十年前的一件“尼姬”，是二人缘分的开始，童小悠誓要让自己的偶像重回设计师的位置，而陆星成的自我却时常伤害到童小悠。在童小悠的陪伴下，陆星成终于解开了心结与过去达成和解，二人的感情也愈发坚定。', 'popularity': 1.9969, 'poster_path': '/xTQQs8s9CljXaCcUMTn2gikDCrI.jpg', 'first_air_date': '2020-08-03', 'name': '我好喜欢你', 'vote_average': 7.6, 'vote_count': 8}, {'adult': False, 'backdrop_path': '/3BC7iNkZvh9FRkBljcAre474VKP.jpg', 'genre_ids': [16, 35], 'id': 79030, 'origin_country': ['JP'], 'original_language': 'ja', 'original_name': 'はいたい七葉', 'overview': '个性开朗心底单纯的喜屋武七叶（与那岭里都 配音）、沉着冷静不失温柔但生气起来会非常恐怖的喜屋武七绪（松田瑠华 配音）和拥有着极强灵感应能力的喜屋武心七是感情十分要好的三姐妹，三人同奶奶一起过着相依为命的生活。\n\n\u3000\u3000一次偶然中，七夜发现了一个神奇的瓶子，并且在误打误撞之中将瓶子打开，外表稚嫩可爱嘴巴却超级毒舌的妮娜（松嵜丽 配音）、大大咧咧傻乎乎却惹人怜爱的拉娜（井之上奈奈 配音）和沉默寡言面无表情的卡娜（东城日沙子 配音）三个被封印已久的精灵出现了。就这样，喜屋武家多了三名家庭成员，平静的日常生活也离三姐妹越来越远。', 'popularity': 1.0253, 'poster_path': '/59BIMcRxWj8eeS8BJ2Wv7elzRV7.jpg', 'first_air_date': '2012-10-06', 'name': '你好七叶', 'vote_average': 5.5, 'vote_count': 2}, {'adult': False, 'backdrop_path': '/nh0BS0sLXozmkTpOe1Ve33MyxlK.jpg', 'genre_ids': [16, 18], 'id': 68854, 'origin_country': ['JP'], 'original_language': 'ja', 'original_name': '君に届け', 'overview': '黑沼爽子因为外表看起来很阴沉，被班上同学取了个外号叫“贞子”。甚至还传说只要跟她对看三秒以上，7天之后就会遭遇不幸。但其实爽子个性开朗又单纯，也很乐于助人，虽然想和大家打成一片，却始终没有机会。唯独只有他，笑容爽朗的阳光男孩风早翔太，始终很自然地和爽子相处。在此之后，爽子不仅渐渐改变了自己，也终于交到失野朱音、吉田千鹤、真田龙等知心朋友。爽子与风早两人，更共同经历了许多“第一次”，拉近了彼此的距离。', 'popularity': 7.2611, 'poster_path': '/tJrwwVe8dUpIgKGnDkjTNg6aIgJ.jpg', 'first_air_date': '2009-10-07', 'name': '好想告诉你', 'vote_average': 8.378, 'vote_count': 325}], 'total_pages': 7, 'total_results': 137}
+2025-09-03 23:03:46 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8593
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 23:03:56 [INFO] prefect.flow_runs:1237 - Beginning flow run 'fierce-swift' for flow 'data-collection-get-hot-flow'
+2025-09-03 23:03:57 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 23:03:57 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 23:03:57 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 23:03:57 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-03 23:03:57 [WARNING] EventsWorker:144 - Still processing items: 9 items remaining...
+2025-09-03 23:03:57 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8593
+2025-09-03 23:05:26 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8184
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 23:05:36 [INFO] prefect.flow_runs:1237 - Beginning flow run 'hospitable-eel' for flow 'data-collection-get-hot-flow'
+2025-09-03 23:05:37 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 23:05:37 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 23:05:37 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 23:05:37 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: RuntimeError("Task cannot await on itself: <Task pending name='Task-48' coro=<Lazy._call_provider() running at D:\\HLworkspace\\temp\\SyncCloudDisk2.0\\app\\utils\\lazy_load.py:75> cb=[Task.task_wakeup()]>")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 48, in data_collection_get_hot_flow
+    logger.debug(await item.tmdb_infos)
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\lazy_load.py", line 87, in _ensure_run
+    res = await task
+          ^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\lazy_load.py", line 75, in _call_provider
+    return await maybe
+           ^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\services\tmdb_id_provider_service.py", line 70, in get_tmdb_infos
+    tmdb_infos = await movie_data_source.tmdb_infos
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\lazy_load.py", line 87, in _ensure_run
+    res = await task
+          ^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\lazy_load.py", line 75, in _call_provider
+    return await maybe
+           ^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\services\tmdb_id_provider_service.py", line 70, in get_tmdb_infos
+    tmdb_infos = await movie_data_source.tmdb_infos
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\lazy_load.py", line 82, in _ensure_run
+    return await self._running_task
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Task cannot await on itself: <Task pending name='Task-48' coro=<Lazy._call_provider() running at D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\lazy_load.py:75> cb=[Task.task_wakeup()]>
+2025-09-03 23:05:37 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: RuntimeError: Task cannot await on itself: <Task pending name='Task-48' coro=<Lazy._call_provider() running at D:\\HLworkspace\\temp\\SyncCloudDisk2.0\\app\\utils\\lazy_load.py:75> cb=[Task.task_wakeup()]>")
+2025-09-03 23:05:37 [WARNING] EventsWorker:144 - Still processing items: 9 items remaining...
+2025-09-03 23:05:37 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8184
+2025-09-03 23:28:05 [INFO] __main__:67 - 未搜索到"你好的tmdb_id"
+2025-09-03 23:28:31 [INFO] __main__:67 - 未搜索到"你好的tmdb_id"
+2025-09-03 23:30:07 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8130
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 23:30:17 [INFO] prefect.flow_runs:1237 - Beginning flow run 'loud-guillemot' for flow 'data-collection-get-hot-flow'
+2025-09-03 23:30:17 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 23:30:17 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 23:30:17 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 23:30:17 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"清潭国际高中 第二季的tmdb_id"
+2025-09-03 23:30:17 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"清潭国际高中 第二季的tmdb_id"
+2025-09-03 23:30:18 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"清潭国际高中 第二季的tmdb_id"
+2025-09-03 23:30:18 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"清潭国际高中 第二季的tmdb_id"
+2025-09-03 23:30:18 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"清潭国际高中 第二季的tmdb_id"
+2025-09-03 23:30:18 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"清潭国际高中 第二季的tmdb_id"
+2025-09-03 23:30:18 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"清潭国际高中 第二季的tmdb_id"
+2025-09-03 23:30:18 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"清潭国际高中 第二季的tmdb_id"
+2025-09-03 23:30:18 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"清潭国际高中 第二季的tmdb_id"
+2025-09-03 23:30:18 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"清潭国际高中 第二季的tmdb_id"
+2025-09-03 23:30:18 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-03 23:30:18 [WARNING] EventsWorker:144 - Still processing items: 9 items remaining...
+2025-09-03 23:30:18 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8130
+2025-09-03 23:51:54 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8583
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 23:52:03 [INFO] prefect.flow_runs:1237 - Beginning flow run 'functional-macaque' for flow 'data-collection-get-hot-flow'
+2025-09-03 23:52:04 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 23:52:04 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 23:52:04 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 23:52:04 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"生万物的tmdb_id"
+2025-09-03 23:52:04 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"十二封信的tmdb_id"
+2025-09-03 23:52:04 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"目之所及的tmdb_id"
+2025-09-03 23:52:04 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"献鱼的tmdb_id"
+2025-09-03 23:52:04 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"子夜归的tmdb_id"
+2025-09-03 23:52:04 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"暴君的厨师的tmdb_id"
+2025-09-03 23:52:04 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"鱿鱼游戏 第三季的tmdb_id"
+2025-09-03 23:52:04 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"爱麻夫人热映中的tmdb_id"
+2025-09-03 23:52:04 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"瑞草洞的tmdb_id"
+2025-09-03 23:52:04 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"清潭国际高中 第二季的tmdb_id"
+2025-09-03 23:52:04 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-03 23:52:04 [WARNING] EventsWorker:144 - Still processing items: 9 items remaining...
+2025-09-03 23:52:04 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8583
+2025-09-03 23:53:50 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8640
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 23:54:00 [INFO] prefect.flow_runs:1237 - Beginning flow run 'benign-bug' for flow 'data-collection-get-hot-flow'
+2025-09-03 23:54:02 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 23:54:02 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 23:54:02 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 23:54:02 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: APIKeyError()
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 48, in data_collection_get_hot_flow
+    logger.debug(await item.tmdb_infos)
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\lazy_load.py", line 58, in _ensure_run
+    res = await task
+          ^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\lazy_load.py", line 46, in _call_provider
+    return await maybe
+           ^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\services\tmdb_id_provider_service.py", line 78, in get_tmdb_infos
+    tmdb_infos.id = await cls.get_tmdb_id(movie_data_source)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\services\tmdb_id_provider_service.py", line 65, in get_tmdb_id
+    tmdb_id= await cls.get_id_1(title_season=await movie_data_source.title_season, year=await movie_data_source.year,movie_type=await movie_data_source.movie_type)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\cache.py", line 25, in wrapper
+    val = await maybe
+          ^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\services\tmdb_id_provider_service.py", line 35, in get_id_1
+    response = search.tv(
+               ^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\tmdbsimple\search.py", line 182, in tv
+    response = self._GET(path, kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\tmdbsimple\base.py", line 110, in _GET
+    return self._request('GET', path, params=params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\tmdbsimple\base.py", line 83, in _request
+    params = self._get_params(params)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\tmdbsimple\base.py", line 68, in _get_params
+    raise APIKeyError
+tmdbsimple.base.APIKeyError
+2025-09-03 23:54:02 [ERROR] prefect.flow_runs:1316 - Finished in state Failed('Flow run encountered an exception: APIKeyError: ')
+2025-09-03 23:54:02 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8640
+2025-09-03 23:55:15 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8940
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-03 23:55:25 [INFO] prefect.flow_runs:1237 - Beginning flow run 'electric-coua' for flow 'data-collection-get-hot-flow'
+2025-09-03 23:55:26 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 23:55:26 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 23:55:26 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-03 23:55:31 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"鱿鱼游戏 第三季的tmdb_id"
+2025-09-03 23:55:34 [INFO] app.modules.data_collection.services.tmdb_id_provider_service:67 - 未搜索到"清潭国际高中 第二季的tmdb_id"
+2025-09-03 23:55:34 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-03 23:55:34 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8940
+2025-09-04 16:06:02 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 16:06:03 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 16:06:57 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 16:07:02 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 16:07:08 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:07:08 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:07:09 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 16:15:21 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 16:15:22 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:15:22 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:15:22 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 16:16:24 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 16:16:26 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:16:26 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:16:27 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 16:17:25 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 16:17:27 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:17:27 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:17:27 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 16:17:58 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 16:18:00 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:18:00 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:18:00 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 16:18:59 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 16:19:00 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:19:00 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:19:01 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 16:19:36 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 16:19:37 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:19:37 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:19:38 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 16:32:40 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 16:32:42 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:32:42 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:32:43 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 16:40:55 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 16:41:00 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 16:41:00 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:41:00 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:41:01 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 16:49:34 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 16:49:38 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 16:49:39 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:49:39 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:49:40 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 16:50:23 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 16:50:28 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 16:50:29 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:50:29 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:50:30 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 16:51:13 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 16:51:18 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 16:51:19 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:51:19 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 16:51:19 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 17:16:56 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8568
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 17:17:05 [INFO] prefect.flow_runs:1237 - Beginning flow run 'adorable-goat' for flow 'data-collection-get-hot-flow'
+2025-09-04 17:17:06 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:17:06 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:17:06 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: TypeError("BSplitTitleSeasonService.__init__() got an unexpected keyword argument 'ai_agent_service'")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 54, in data_collection_get_hot_flow
+    split_resp= await split_title_season(movie_data_results=match_resp)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\dependency_injector\wiring.py", line 1024, in _patched
+    return _sync_inject(
+           ^^^^^^^^^^^^^
+  File "src/dependency_injector/_cwiring.pyx", line 22, in dependency_injector._cwiring._sync_inject
+  File "src/dependency_injector/providers.pyx", line 228, in dependency_injector.providers.Provider.__call__
+  File "src/dependency_injector/providers.pyx", line 3018, in dependency_injector.providers.Singleton._provide
+  File "src/dependency_injector/providers.pxd", line 646, in dependency_injector.providers.__factory_call
+  File "src/dependency_injector/providers.pxd", line 573, in dependency_injector.providers.__call
+  File "src/dependency_injector/providers.pxd", line 441, in dependency_injector.providers.__provide_keyword_args
+  File "src/dependency_injector/providers.pxd", line 361, in dependency_injector.providers.__get_value
+  File "src/dependency_injector/providers.pyx", line 228, in dependency_injector.providers.Provider.__call__
+  File "src/dependency_injector/providers.pyx", line 3018, in dependency_injector.providers.Singleton._provide
+  File "src/dependency_injector/providers.pxd", line 646, in dependency_injector.providers.__factory_call
+  File "src/dependency_injector/providers.pxd", line 604, in dependency_injector.providers.__call
+TypeError: BSplitTitleSeasonService.__init__() got an unexpected keyword argument 'ai_agent_service'
+2025-09-04 17:17:06 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: TypeError: BSplitTitleSeasonService.__init__() got an unexpected keyword argument 'ai_agent_service'")
+2025-09-04 17:17:07 [WARNING] EventsWorker:144 - Still processing items: 6 items remaining...
+2025-09-04 17:17:07 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8568
+2025-09-04 17:19:19 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8148
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 17:19:29 [INFO] prefect.flow_runs:1237 - Beginning flow run 'grumpy-bullfrog' for flow 'data-collection-get-hot-flow'
+2025-09-04 17:19:30 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:19:30 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:19:30 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:19:30 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: TypeError("'NoneType' object is not iterable")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 55, in data_collection_get_hot_flow
+    for item in split_resp:
+TypeError: 'NoneType' object is not iterable
+2025-09-04 17:19:30 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: TypeError: 'NoneType' object is not iterable")
+2025-09-04 17:19:30 [WARNING] EventsWorker:144 - Still processing items: 9 items remaining...
+2025-09-04 17:19:30 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8148
+2025-09-04 17:20:42 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8775
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 17:20:53 [INFO] prefect.flow_runs:1237 - Beginning flow run 'adaptable-numbat' for flow 'data-collection-get-hot-flow'
+2025-09-04 17:20:54 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:20:54 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:20:54 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:20:54 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:20:54 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 17:20:55 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 17:20:58 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 17:20:58 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 17:20:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:20:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:20:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:20:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:20:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:20:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:20:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:20:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:20:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:20:58 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-04 17:20:58 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8775
+2025-09-04 17:20:59 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 17:23:07 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8019
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 17:23:17 [INFO] prefect.flow_runs:1237 - Beginning flow run 'acrid-cougar' for flow 'data-collection-get-hot-flow'
+2025-09-04 17:23:18 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:23:18 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:23:18 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:23:18 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:23:18 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 17:23:20 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 17:23:22 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 17:23:22 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 17:23:22 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:23:22 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:23:22 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:23:22 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:23:22 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:23:22 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:23:22 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:23:22 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:23:22 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - 'NoneType' object has no attribute 'strip'
+2025-09-04 17:23:22 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-04 17:23:22 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8019
+2025-09-04 17:23:22 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 17:26:02 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8252
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 17:26:12 [INFO] prefect.flow_runs:1237 - Beginning flow run 'warping-dogfish' for flow 'data-collection-get-hot-flow'
+2025-09-04 17:26:13 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:26:13 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:26:13 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:26:13 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 17:26:13 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 17:26:16 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 17:26:36 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 17:26:36 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 17:26:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 17:26:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 17:26:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 17:26:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 17:26:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 17:26:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 17:26:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 17:26:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 17:26:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 17:26:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 17:26:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 17:26:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 17:26:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 17:26:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 17:26:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 17:26:36 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 17:26:36 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-04 17:26:36 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8252
+2025-09-04 17:28:41 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8192
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 17:28:51 [INFO] prefect.flow_runs:1237 - Beginning flow run 'truthful-heron' for flow 'data-collection-get-hot-flow'
+2025-09-04 17:28:52 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:28:52 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:28:52 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:28:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 17:28:52 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 17:28:54 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 17:28:55 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 17:28:55 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 17:28:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 17:28:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 17:28:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 17:28:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 17:28:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 17:28:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 17:28:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 17:28:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 17:28:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 17:28:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 17:28:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 17:28:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 17:28:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 17:28:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 17:28:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 17:28:55 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-04 17:28:55 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8192
+2025-09-04 17:28:55 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 17:47:30 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8645
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 17:47:40 [INFO] prefect.flow_runs:1237 - Beginning flow run 'ivory-weasel' for flow 'data-collection-get-hot-flow'
+2025-09-04 17:47:41 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:47:41 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:47:41 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 17:47:41 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 17:47:41 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 17:47:43 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 17:47:48 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 17:47:48 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 17:47:48 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 17:47:48 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 17:47:48 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 17:47:48 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 17:47:48 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 17:47:48 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 17:47:48 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 17:47:48 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 17:47:48 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 17:47:48 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 17:47:48 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 17:47:48 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 17:47:48 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 17:47:48 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 17:47:48 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 17:47:48 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-04 17:47:48 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8645
+2025-09-04 17:47:48 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 18:22:01 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8870
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 18:22:11 [INFO] prefect.flow_runs:1237 - Beginning flow run 'neon-guan' for flow 'data-collection-get-hot-flow'
+2025-09-04 18:22:12 [ERROR] prefect.task_runs:1172 - Task run failed with exception: TypeError("object Provide can't be used in 'await' expression") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 30, in get_hot
+    movie_base_service=await movie_base_provider_factory
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object Provide can't be used in 'await' expression
+2025-09-04 18:22:12 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception TypeError: object Provide can't be used in 'await' expression")
+2025-09-04 18:22:12 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: TypeError("object Provide can't be used in 'await' expression")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 53, in data_collection_get_hot_flow
+    hot_resp= await get_hot(categories=[TVCategory.CHINA,TVCategory.KOREA],count=5)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 30, in get_hot
+    movie_base_service=await movie_base_provider_factory
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object Provide can't be used in 'await' expression
+2025-09-04 18:22:12 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: TypeError: object Provide can't be used in 'await' expression")
+2025-09-04 18:22:12 [WARNING] EventsWorker:144 - Still processing items: 3 items remaining...
+2025-09-04 18:22:12 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8870
+2025-09-04 18:29:08 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8295
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 18:31:40 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8181
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 18:31:50 [INFO] prefect.flow_runs:1237 - Beginning flow run 'helpful-junglefowl' for flow 'data-collection-get-hot-flow'
+2025-09-04 18:31:51 [ERROR] prefect.task_runs:1172 - Task run failed with exception: TypeError("object Provide can't be used in 'await' expression") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 30, in get_hot
+    movie_base_service=await movie_base_provider_factory
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object Provide can't be used in 'await' expression
+2025-09-04 18:31:51 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception TypeError: object Provide can't be used in 'await' expression")
+2025-09-04 18:31:51 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: TypeError("object Provide can't be used in 'await' expression")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 53, in data_collection_get_hot_flow
+    hot_resp= await get_hot(categories=[TVCategory.CHINA,TVCategory.KOREA],count=5)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 30, in get_hot
+    movie_base_service=await movie_base_provider_factory
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object Provide can't be used in 'await' expression
+2025-09-04 18:31:51 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: TypeError: object Provide can't be used in 'await' expression")
+2025-09-04 18:31:52 [WARNING] EventsWorker:144 - Still processing items: 3 items remaining...
+2025-09-04 18:31:52 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8181
+2025-09-04 18:32:13 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8331
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 18:32:22 [INFO] httpx:1025 - HTTP Request: GET http://127.0.0.1:8331/api/health "HTTP/1.1 200 OK"
+2025-09-04 18:32:23 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8331/api/admin/version "HTTP/1.1 200 OK"
+2025-09-04 18:32:23 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8331/api/csrf-token?client=a5f1c897-afbc-46fa-9a36-6773dab006aa "HTTP/1.1 422 Unprocessable Entity"
+2025-09-04 18:32:23 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8331/api/flows/ "HTTP/1.1 200 OK"
+2025-09-04 18:32:23 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8331/api/flow_runs/ "HTTP/1.1 201 Created"
+2025-09-04 18:32:23 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8331/api/flow_runs/02aa2caa-3107-4660-ba58-75c378bc7e99/set_state "HTTP/1.1 201 Created"
+2025-09-04 18:32:23 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8331/api/flow_runs/02aa2caa-3107-4660-ba58-75c378bc7e99 "HTTP/1.1 200 OK"
+2025-09-04 18:32:23 [INFO] prefect.flow_runs:1237 - Beginning flow run 'garnet-marmoset' for flow 'data-collection-get-hot-flow'
+2025-09-04 18:32:23 [ERROR] prefect.task_runs:1172 - Task run failed with exception: TypeError("object Provide can't be used in 'await' expression") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 30, in get_hot
+    movie_base_service=await movie_base_provider_factory
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object Provide can't be used in 'await' expression
+2025-09-04 18:32:23 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception TypeError: object Provide can't be used in 'await' expression")
+2025-09-04 18:32:23 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: TypeError("object Provide can't be used in 'await' expression")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 53, in data_collection_get_hot_flow
+    hot_resp= await get_hot(categories=[TVCategory.CHINA,TVCategory.KOREA],count=5)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 30, in get_hot
+    movie_base_service=await movie_base_provider_factory
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object Provide can't be used in 'await' expression
+2025-09-04 18:32:23 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8331/api/flow_runs/02aa2caa-3107-4660-ba58-75c378bc7e99/set_state "HTTP/1.1 201 Created"
+2025-09-04 18:32:23 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: TypeError: object Provide can't be used in 'await' expression")
+2025-09-04 18:32:24 [WARNING] EventsWorker:144 - Still processing items: 3 items remaining...
+2025-09-04 18:32:24 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8331/api/flows/d98fb868-356a-49ba-9d07-22d33c62fb50 "HTTP/1.1 200 OK"
+2025-09-04 18:32:24 [INFO] httpx:1740 - HTTP Request: GET http://127.0.0.1:8331/api/csrf-token?client=6f0f8de4-6f45-47cb-a441-bf2938367395 "HTTP/1.1 422 Unprocessable Entity"
+2025-09-04 18:32:24 [INFO] httpx:1740 - HTTP Request: POST http://127.0.0.1:8331/api/logs/ "HTTP/1.1 201 Created"
+2025-09-04 18:32:24 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8331
+2025-09-04 18:33:40 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8701
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 18:33:51 [INFO] prefect.flow_runs:1237 - Beginning flow run 'industrious-lemming' for flow 'data-collection-get-hot-flow'
+2025-09-04 18:33:52 [ERROR] prefect.task_runs:1172 - Task run failed with exception: TypeError("object Provide can't be used in 'await' expression") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 30, in get_hot
+    movie_base_service=await movie_base_provider_factory
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object Provide can't be used in 'await' expression
+2025-09-04 18:33:52 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception TypeError: object Provide can't be used in 'await' expression")
+2025-09-04 18:33:52 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: TypeError("object Provide can't be used in 'await' expression")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 53, in data_collection_get_hot_flow
+    hot_resp= await get_hot(categories=[TVCategory.CHINA,TVCategory.KOREA],count=5)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 30, in get_hot
+    movie_base_service=await movie_base_provider_factory
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object Provide can't be used in 'await' expression
+2025-09-04 18:33:52 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: TypeError: object Provide can't be used in 'await' expression")
+2025-09-04 18:33:53 [WARNING] EventsWorker:144 - Still processing items: 3 items remaining...
+2025-09-04 18:33:53 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8701
+2025-09-04 18:41:49 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8142
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 18:41:59 [INFO] prefect.flow_runs:1237 - Beginning flow run 'functional-worm' for flow 'data-collection-get-hot-flow'
+2025-09-04 18:41:59 [ERROR] prefect.task_runs:1172 - Task run failed with exception: TypeError("object Provide can't be used in 'await' expression") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 30, in get_hot
+    movie_base_service=await movie_base_provider_factory
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object Provide can't be used in 'await' expression
+2025-09-04 18:41:59 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception TypeError: object Provide can't be used in 'await' expression")
+2025-09-04 18:41:59 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: TypeError("object Provide can't be used in 'await' expression")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 53, in data_collection_get_hot_flow
+    hot_resp= await get_hot(categories=[TVCategory.CHINA,TVCategory.KOREA],count=5)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 30, in get_hot
+    movie_base_service=await movie_base_provider_factory
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object Provide can't be used in 'await' expression
+2025-09-04 18:41:59 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: TypeError: object Provide can't be used in 'await' expression")
+2025-09-04 18:42:00 [WARNING] EventsWorker:144 - Still processing items: 3 items remaining...
+2025-09-04 18:42:00 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8142
+2025-09-04 18:43:50 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8493
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 18:44:00 [INFO] prefect.flow_runs:1237 - Beginning flow run 'fabulous-rabbit' for flow 'data-collection-get-hot-flow'
+2025-09-04 18:44:01 [ERROR] prefect.task_runs:1172 - Task run failed with exception: TypeError("object Provide can't be used in 'await' expression") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 21, in get_hot
+    movie_base_service=await movie_base_provider_factory
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object Provide can't be used in 'await' expression
+2025-09-04 18:44:01 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception TypeError: object Provide can't be used in 'await' expression")
+2025-09-04 18:44:01 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: TypeError("object Provide can't be used in 'await' expression")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 44, in data_collection_get_hot_flow
+    hot_resp= await get_hot(categories=[TVCategory.CHINA,TVCategory.KOREA],count=5)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 21, in get_hot
+    movie_base_service=await movie_base_provider_factory
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object Provide can't be used in 'await' expression
+2025-09-04 18:44:01 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: TypeError: object Provide can't be used in 'await' expression")
+2025-09-04 18:44:02 [WARNING] EventsWorker:144 - Still processing items: 3 items remaining...
+2025-09-04 18:44:02 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8493
+2025-09-04 18:44:48 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8253
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 18:44:58 [INFO] prefect.flow_runs:1237 - Beginning flow run 'heavenly-fox' for flow 'data-collection-get-hot-flow'
+2025-09-04 18:44:59 [ERROR] prefect.task_runs:1172 - Task run failed with exception: TypeError("object Provide can't be used in 'await' expression") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 21, in get_hot
+    movie_base_service=await movie_base_provider_factory
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object Provide can't be used in 'await' expression
+2025-09-04 18:44:59 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception TypeError: object Provide can't be used in 'await' expression")
+2025-09-04 18:44:59 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: TypeError("object Provide can't be used in 'await' expression")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 44, in data_collection_get_hot_flow
+    hot_resp= await get_hot(categories=[TVCategory.CHINA,TVCategory.KOREA],count=5)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 21, in get_hot
+    movie_base_service=await movie_base_provider_factory
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object Provide can't be used in 'await' expression
+2025-09-04 18:44:59 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: TypeError: object Provide can't be used in 'await' expression")
+2025-09-04 18:44:59 [WARNING] EventsWorker:144 - Still processing items: 3 items remaining...
+2025-09-04 18:45:00 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8253
+2025-09-04 18:50:14 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8432
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 18:50:23 [INFO] prefect.flow_runs:1237 - Beginning flow run 'fantastic-tiger' for flow 'data-collection-get-hot-flow'
+2025-09-04 18:50:24 [ERROR] prefect.task_runs:1172 - Task run failed with exception: TypeError("object Provide can't be used in 'await' expression") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 21, in get_hot
+    movie_base_service=await movie_base_provider_factory
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object Provide can't be used in 'await' expression
+2025-09-04 18:50:24 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception TypeError: object Provide can't be used in 'await' expression")
+2025-09-04 18:50:24 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: TypeError("object Provide can't be used in 'await' expression")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 44, in data_collection_get_hot_flow
+    hot_resp= await get_hot(categories=[TVCategory.CHINA,TVCategory.KOREA],count=5)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 21, in get_hot
+    movie_base_service=await movie_base_provider_factory
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object Provide can't be used in 'await' expression
+2025-09-04 18:50:24 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: TypeError: object Provide can't be used in 'await' expression")
+2025-09-04 18:50:25 [WARNING] EventsWorker:144 - Still processing items: 3 items remaining...
+2025-09-04 18:50:25 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8432
+2025-09-04 18:54:34 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8567
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 18:54:43 [INFO] prefect.flow_runs:1237 - Beginning flow run 'neon-tench' for flow 'data-collection-get-hot-flow'
+2025-09-04 18:54:44 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 18:54:44 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 18:54:44 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 18:54:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 18:54:44 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 18:54:47 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 18:54:51 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 18:54:51 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 18:54:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 18:54:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 18:54:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 18:54:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 18:54:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 18:54:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 18:54:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 18:54:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 18:54:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 18:54:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 18:54:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 18:54:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 18:54:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 18:54:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:19 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 18:54:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:33 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 18:54:51 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-04 18:54:51 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8567
+2025-09-04 18:54:51 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 18:55:55 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8550
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 18:56:04 [INFO] prefect.flow_runs:1237 - Beginning flow run 'amethyst-kakapo' for flow 'data-collection-get-hot-flow'
+2025-09-04 18:56:05 [ERROR] prefect.task_runs:1172 - Task run failed with exception: TypeError("object Provide can't be used in 'await' expression") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 27, in get_hot
+    movie_base_service=await movie_base_provider_factory
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object Provide can't be used in 'await' expression
+2025-09-04 18:56:05 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception TypeError: object Provide can't be used in 'await' expression")
+2025-09-04 18:56:05 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: TypeError("object Provide can't be used in 'await' expression")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 50, in data_collection_get_hot_flow
+    hot_resp= await get_hot(categories=[TVCategory.CHINA,TVCategory.KOREA],count=5)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 27, in get_hot
+    movie_base_service=await movie_base_provider_factory
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object Provide can't be used in 'await' expression
+2025-09-04 18:56:05 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: TypeError: object Provide can't be used in 'await' expression")
+2025-09-04 18:56:06 [WARNING] EventsWorker:144 - Still processing items: 3 items remaining...
+2025-09-04 18:56:06 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8550
+2025-09-04 18:59:34 [INFO] __main__:67 - __main__
