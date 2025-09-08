@@ -7,7 +7,7 @@ from app.modules.data_collection.interfaces.current_episodes_provider_interface 
 from app.modules.data_collection.interfaces.movie_base_provider_interface import IMovieBaseProvider
 from app.modules.data_collection.interfaces.total_episodes_provider_interface import ITotalEpisodesProvider
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
-from app.modules.data_collection.services.tmdb_id_provider_service import TMDBIDProviderService
+from app.modules.data_collection.services.a_tmdb_id_provider_service import TMDBIDProviderService
 from app.utils.pipeline import Pipeline, pipeline_task  # 你现有的链式 Pipeline
 
 

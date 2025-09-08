@@ -1214,3 +1214,1144 @@ TypeError: object Provide can't be used in 'await' expression
 2025-09-04 18:56:06 [WARNING] EventsWorker:144 - Still processing items: 3 items remaining...
 2025-09-04 18:56:06 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8550
 2025-09-04 18:59:34 [INFO] __main__:67 - __main__
+2025-09-04 19:39:43 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8954
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 19:39:52 [INFO] prefect.flow_runs:1237 - Beginning flow run 'beige-jellyfish' for flow 'data-collection-get-hot-flow'
+2025-09-04 19:39:52 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: ParameterBindError("Error binding parameters for function 'get_hot': missing a required argument: 'movie_base_provider_factory'.\nFunction 'get_hot' has signature 'categories: List[app.database.models.TVCategory], count: int, movie_base_provider_factory: app.modules.data_collection.interfaces.movie_base_provider_interface.IMovieBaseProvider) -> List[app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult]' but received args: () and kwargs: ['categories', 'count', 'movie_base_provider_service'].")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\utilities\callables.py", line 70, in get_call_parameters
+    bound_signature = inspect.signature(fn).bind(*call_args, **call_kwargs)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\helon\AppData\Local\Programs\Python\Python312\Lib\inspect.py", line 3259, in bind
+    return self._bind(args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\helon\AppData\Local\Programs\Python\Python312\Lib\inspect.py", line 3229, in _bind
+    raise TypeError('missing a required argument: {arg!r}'. \
+TypeError: missing a required argument: 'movie_base_provider_factory'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 53, in data_collection_get_hot_flow
+    hot_resp= await get_hot(categories=[TVCategory.CHINA,TVCategory.KOREA],count=5,movie_base_provider_service=get_douban_movie_base_provider_service())
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\dependency_injector\wiring.py", line 1024, in _patched
+    return _sync_inject(
+           ^^^^^^^^^^^^^
+  File "src/dependency_injector/_cwiring.pyx", line 24, in dependency_injector._cwiring._sync_inject
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\tasks.py", line 1127, in __call__
+    parameters = get_call_parameters(self.fn, args, kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\utilities\callables.py", line 72, in get_call_parameters
+    raise ParameterBindError.from_bind_failure(fn, exc, call_args, call_kwargs)
+prefect.exceptions.ParameterBindError: Error binding parameters for function 'get_hot': missing a required argument: 'movie_base_provider_factory'.
+Function 'get_hot' has signature 'categories: List[app.database.models.TVCategory], count: int, movie_base_provider_factory: app.modules.data_collection.interfaces.movie_base_provider_interface.IMovieBaseProvider) -> List[app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult]' but received args: () and kwargs: ['categories', 'count', 'movie_base_provider_service'].
+2025-09-04 19:39:52 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: ParameterBindError: Error binding parameters for function 'get_hot': missing a required argument: 'movie_base_provider_factory'.\nFunction 'get_hot' has signature 'categories: List[app.database.models.TVCategory], count: int, movie_base_provider_factory: app.modules.data_collection.interfaces.movie_base_provider_interface.IMovieBaseProvider) -> List[app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult]' but received args: () and kwargs: ['categories', 'count', 'movie_base_provider_service'].")
+2025-09-04 19:39:53 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8954
+2025-09-04 19:42:05 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8098
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 19:42:15 [INFO] prefect.flow_runs:1237 - Beginning flow run 'heavy-sunfish' for flow 'data-collection-get-hot-flow'
+2025-09-04 19:42:15 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: ParameterBindError("Error binding parameters for function 'get_hot': missing a required argument: 'movie_base_provider_factory'.\nFunction 'get_hot' has signature 'categories: List[app.database.models.TVCategory], count: int, movie_base_provider_factory: app.modules.data_collection.interfaces.movie_base_provider_interface.IMovieBaseProvider) -> List[app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult]' but received args: () and kwargs: ['categories', 'count', 'movie_base_provider_service'].")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\utilities\callables.py", line 70, in get_call_parameters
+    bound_signature = inspect.signature(fn).bind(*call_args, **call_kwargs)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\helon\AppData\Local\Programs\Python\Python312\Lib\inspect.py", line 3259, in bind
+    return self._bind(args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\helon\AppData\Local\Programs\Python\Python312\Lib\inspect.py", line 3229, in _bind
+    raise TypeError('missing a required argument: {arg!r}'. \
+TypeError: missing a required argument: 'movie_base_provider_factory'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 47, in data_collection_get_hot_flow
+    hot_resp= await get_hot(categories=[TVCategory.CHINA,TVCategory.KOREA],count=5,movie_base_provider_service=get_douban_movie_base_provider_service())
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\tasks.py", line 1127, in __call__
+    parameters = get_call_parameters(self.fn, args, kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\utilities\callables.py", line 72, in get_call_parameters
+    raise ParameterBindError.from_bind_failure(fn, exc, call_args, call_kwargs)
+prefect.exceptions.ParameterBindError: Error binding parameters for function 'get_hot': missing a required argument: 'movie_base_provider_factory'.
+Function 'get_hot' has signature 'categories: List[app.database.models.TVCategory], count: int, movie_base_provider_factory: app.modules.data_collection.interfaces.movie_base_provider_interface.IMovieBaseProvider) -> List[app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult]' but received args: () and kwargs: ['categories', 'count', 'movie_base_provider_service'].
+2025-09-04 19:42:15 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: ParameterBindError: Error binding parameters for function 'get_hot': missing a required argument: 'movie_base_provider_factory'.\nFunction 'get_hot' has signature 'categories: List[app.database.models.TVCategory], count: int, movie_base_provider_factory: app.modules.data_collection.interfaces.movie_base_provider_interface.IMovieBaseProvider) -> List[app.modules.data_collection.schemas.movie_data_source.MovieDataSourceResult]' but received args: () and kwargs: ['categories', 'count', 'movie_base_provider_service'].")
+2025-09-04 19:42:15 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8098
+2025-09-04 19:44:07 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8457
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-04 19:44:17 [INFO] prefect.flow_runs:1237 - Beginning flow run 'cinnamon-elk' for flow 'data-collection-get-hot-flow'
+2025-09-04 19:44:18 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 19:44:18 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 19:44:18 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-04 19:44:18 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 19:44:18 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 19:44:20 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 19:44:25 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 19:44:25 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 19:44:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 19:44:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 19:44:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 19:44:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 19:44:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 19:44:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 19:44:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 19:44:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 19:44:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 19:44:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 19:44:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 19:44:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 19:44:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 19:44:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 19:44:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 19:44:25 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-04 19:44:25 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8457
+2025-09-04 19:44:25 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 19:47:12 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 19:47:12 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 19:47:12 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 19:47:21 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 19:47:21 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 19:47:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 19:47:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 19:47:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 19:47:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 19:47:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 19:47:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 19:47:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 19:47:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 19:47:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 19:47:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 19:47:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 19:47:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 19:47:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 19:47:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 19:47:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 19:47:21 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 19:47:22 [ERROR] asyncio:1785 - Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x00000197FCBC4CB0>
+2025-09-04 19:47:22 [ERROR] asyncio:1785 - Unclosed connector
+connections: ['deque([(<aiohttp.client_proto.ResponseHandler object at 0x00000197FD97B1D0>, 23259.0), (<aiohttp.client_proto.ResponseHandler object at 0x00000197FD97B0B0>, 23259.015)])']
+connector: <aiohttp.connector.TCPConnector object at 0x00000197FCA07830>
+2025-09-04 19:51:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 19:51:55 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 19:52:00 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 19:52:05 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 19:52:05 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 19:52:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 19:52:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 19:52:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 19:52:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 19:52:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 19:52:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 19:52:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 19:52:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 19:52:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 19:52:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 19:52:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 19:52:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 19:52:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 19:52:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 19:52:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 19:52:05 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 19:52:06 [ERROR] asyncio:1785 - Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x000001F20FDB9C40>
+2025-09-04 19:52:06 [ERROR] asyncio:1785 - Unclosed connector
+connections: ['deque([(<aiohttp.client_proto.ResponseHandler object at 0x000001F21008B0B0>, 23542.234), (<aiohttp.client_proto.ResponseHandler object at 0x000001F21008B1D0>, 23542.359)])']
+connector: <aiohttp.connector.TCPConnector object at 0x000001F20FD86810>
+2025-09-04 19:53:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 19:53:44 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 19:53:44 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 19:53:53 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 19:53:53 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 19:53:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 19:53:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 19:53:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 19:53:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 19:53:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 19:53:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 19:53:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 19:53:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 19:53:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 19:53:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 19:53:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 19:53:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 19:53:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 19:53:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 19:53:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 19:53:53 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 19:53:54 [ERROR] asyncio:1785 - Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x000001DDAC248BC0>
+2025-09-04 19:53:54 [ERROR] asyncio:1785 - Unclosed connector
+connections: ['deque([(<aiohttp.client_proto.ResponseHandler object at 0x000001DDAC3BB0B0>, 23650.656), (<aiohttp.client_proto.ResponseHandler object at 0x000001DDAC3BB1D0>, 23650.687)])']
+connector: <aiohttp.connector.TCPConnector object at 0x000001DDA81D65A0>
+2025-09-04 20:00:18 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 20:00:18 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 20:00:18 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 20:00:27 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 20:00:27 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 20:00:27 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 20:00:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 20:00:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 20:00:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 20:00:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 20:00:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 20:00:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 20:00:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 20:00:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 20:00:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 20:00:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 20:00:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 20:00:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 20:00:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 20:00:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 20:00:28 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 23:06:58 [INFO] __main__:25 - 未匹配到与title_season的tmdb_id和season，title_season=凡人修仙传：重返天南,movie_type=MovieType.TV,year=2025
+2025-09-04 23:12:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 23:12:57 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-04 23:13:01 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 23:13:05 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 23:13:05 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-04 23:13:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-04 23:13:06 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-04 23:13:07 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 23:13:07 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=十二封信 为匹配到任何分割规则
+2025-09-04 23:13:09 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 23:13:09 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=目之所及 为匹配到任何分割规则
+2025-09-04 23:13:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 23:13:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=献鱼 为匹配到任何分割规则
+2025-09-04 23:13:12 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 23:13:12 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=子夜归 为匹配到任何分割规则
+2025-09-04 23:13:14 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 23:13:14 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-04 23:13:16 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=鱿鱼游戏 第三季,movie_type=MovieType.TV,year=2025
+2025-09-04 23:13:18 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 23:13:18 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-04 23:13:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 23:13:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-04 23:13:22 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-05 09:21:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-05 09:21:55 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-05 09:21:57 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.494735 seconds
+2025-09-05 09:21:59 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-05 09:22:00 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.849978 seconds
+2025-09-05 09:22:03 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:25 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-05 09:22:03 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:26 - 获取title失败，title_season=生万物失败，将返回None
+2025-09-05 09:22:03 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-05 09:22:03 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-05 09:22:04 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-05 09:22:05 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.446725 seconds
+2025-09-05 09:22:07 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.782649 seconds
+2025-09-05 09:22:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:39 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-05 09:22:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:40 - 获取season失败，title_season=生万物失败，将返回None
+2025-09-05 09:22:12 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二封信 为匹配到任何分割规则
+2025-09-05 09:22:12 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-05 09:22:14 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.484318 seconds
+2025-09-05 09:22:14 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-05 09:22:16 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.773013 seconds
+2025-09-05 09:22:19 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:25 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-05 09:22:19 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:26 - 获取title失败，title_season=十二封信失败，将返回None
+2025-09-05 09:22:19 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=十二封信 为匹配到任何分割规则
+2025-09-05 09:22:19 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-05 09:22:21 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.390826 seconds
+2025-09-05 09:22:24 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.936811 seconds
+2025-09-05 09:22:24 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-05 09:22:27 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:39 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-05 09:22:27 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:40 - 获取season失败，title_season=十二封信失败，将返回None
+2025-09-05 09:22:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=目之所及 为匹配到任何分割规则
+2025-09-05 09:22:28 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-05 09:22:29 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-05 09:22:30 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.421612 seconds
+2025-09-05 09:22:33 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.921700 seconds
+2025-09-05 09:22:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:25 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-05 09:22:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:26 - 获取title失败，title_season=目之所及失败，将返回None
+2025-09-05 09:22:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=目之所及 为匹配到任何分割规则
+2025-09-05 09:22:36 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-05 09:22:38 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.379646 seconds
+2025-09-05 09:22:39 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-05 09:22:40 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.792627 seconds
+2025-09-05 09:22:43 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:39 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-05 09:22:43 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:40 - 获取season失败，title_season=目之所及失败，将返回None
+2025-09-05 09:22:44 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-05 09:22:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=献鱼 为匹配到任何分割规则
+2025-09-05 09:22:44 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-05 09:22:46 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.403563 seconds
+2025-09-05 09:22:49 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.854498 seconds
+2025-09-05 09:22:49 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-05 09:22:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:25 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-05 09:22:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:26 - 获取title失败，title_season=献鱼失败，将返回None
+2025-09-05 09:22:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=献鱼 为匹配到任何分割规则
+2025-09-05 09:22:52 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-05 09:22:54 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.448049 seconds
+2025-09-05 09:22:54 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-05 09:22:56 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.851581 seconds
+2025-09-05 09:22:59 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:39 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-05 09:22:59 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:40 - 获取season失败，title_season=献鱼失败，将返回None
+2025-09-05 09:23:01 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=子夜归 为匹配到任何分割规则
+2025-09-05 09:23:01 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-05 09:23:03 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.472906 seconds
+2025-09-05 09:23:04 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-05 09:23:05 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.776122 seconds
+2025-09-05 09:23:08 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:25 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-05 09:23:08 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:26 - 获取title失败，title_season=子夜归失败，将返回None
+2025-09-05 09:23:08 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=子夜归 为匹配到任何分割规则
+2025-09-05 09:23:08 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-05 09:23:09 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-05 09:23:10 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.449722 seconds
+2025-09-05 09:23:13 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.909436 seconds
+2025-09-05 09:23:16 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:39 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-05 09:23:16 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:40 - 获取season失败，title_season=子夜归失败，将返回None
+2025-09-05 09:23:17 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-05 09:23:17 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-05 09:23:19 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-05 09:23:19 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.459430 seconds
+2025-09-05 09:23:22 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.756495 seconds
+2025-09-05 09:23:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:25 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-05 09:23:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:26 - 获取title失败，title_season=暴君的厨师失败，将返回None
+2025-09-05 09:23:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-05 09:23:25 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-05 09:23:27 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.398837 seconds
+2025-09-05 09:23:29 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-05 09:23:29 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.786776 seconds
+2025-09-05 09:23:32 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:39 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-05 09:23:32 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:40 - 获取season失败，title_season=暴君的厨师失败，将返回None
+2025-09-05 09:23:34 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-05 09:23:34 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=鱿鱼游戏 第三季,movie_type=MovieType.TV,year=2025
+2025-09-05 09:23:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-05 09:23:36 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-05 09:23:38 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.494650 seconds
+2025-09-05 09:23:39 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-05 09:23:40 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.996012 seconds
+2025-09-05 09:23:43 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:25 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-05 09:23:43 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:26 - 获取title失败，title_season=爱麻夫人热映中失败，将返回None
+2025-09-05 09:23:43 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-05 09:23:43 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-05 09:23:44 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-05 09:23:45 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.397481 seconds
+2025-09-05 09:23:48 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.752361 seconds
+2025-09-05 09:23:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:39 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-05 09:23:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:40 - 获取season失败，title_season=爱麻夫人热映中失败，将返回None
+2025-09-05 09:23:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-05 09:23:52 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-05 09:23:54 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-05 09:23:54 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.490907 seconds
+2025-09-05 09:23:57 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.888371 seconds
+2025-09-05 09:24:00 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:25 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-05 09:24:00 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:26 - 获取title失败，title_season=瑞草洞失败，将返回None
+2025-09-05 09:24:00 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-05 09:24:00 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-05 09:24:02 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.434755 seconds
+2025-09-05 09:24:04 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-05 09:24:04 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.977022 seconds
+2025-09-05 09:24:07 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:39 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-05 09:24:07 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:40 - 获取season失败，title_season=瑞草洞失败，将返回None
+2025-09-05 09:24:09 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-05 09:24:10 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-08 17:24:59 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:24:59 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 17:25:02 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.455348 seconds
+2025-09-08 17:25:04 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:25:04 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.825754 seconds
+2025-09-08 17:25:07 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:25 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-08 17:25:07 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:26 - 获取title失败，title_season=生万物失败，将返回None
+2025-09-08 17:25:07 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:25:07 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 17:25:09 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:25:09 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.379311 seconds
+2025-09-08 17:25:12 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.854128 seconds
+2025-09-08 17:25:15 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:39 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-08 17:25:15 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:40 - 获取season失败，title_season=生万物失败，将返回None
+2025-09-08 17:25:16 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:25:16 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 17:25:18 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.494130 seconds
+2025-09-08 17:25:19 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:25:21 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.861342 seconds
+2025-09-08 17:25:24 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:25 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-08 17:25:24 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:26 - 获取title失败，title_season=暴君的厨师失败，将返回None
+2025-09-08 17:25:24 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:25:24 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 17:25:24 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:25:26 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.451727 seconds
+2025-09-08 17:25:28 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.876164 seconds
+2025-09-08 17:25:31 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:39 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-08 17:25:31 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:40 - 获取season失败，title_season=暴君的厨师失败，将返回None
+2025-09-08 17:25:33 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:26:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:26:21 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 17:26:26 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:26:33 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:26:33 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:26:33 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:26:34 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:26:34 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:26:35 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:29:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:29:20 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 17:29:24 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:29:39 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:29:39 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:29:39 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:29:40 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:29:40 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:29:42 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:30:47 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:30:47 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 17:30:47 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:30:49 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:30:49 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:30:49 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:30:50 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:30:50 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:30:52 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:33:39 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:33:39 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 17:33:42 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:33:46 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:33:46 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:33:46 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:33:47 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:33:47 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:33:47 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:37:35 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:37:35 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 17:37:39 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:37:55 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:37:55 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:37:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:37:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:37:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:37:57 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:39:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:39:05 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 17:39:09 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:39:24 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:39:24 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:39:24 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:39:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:39:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:39:25 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:41:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:41:36 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 17:41:39 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:41:56 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:41:56 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:41:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:41:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:41:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:41:57 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:42:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:42:20 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 17:42:24 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:42:30 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:42:30 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:42:30 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:42:31 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:42:31 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:42:31 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:43:13 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:43:13 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 17:43:18 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:43:18 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:43:18 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:43:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:43:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:43:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:43:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:43:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:43:21 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:48:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:48:28 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 17:48:33 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:48:34 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:48:34 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:48:34 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:48:34 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:48:35 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:48:35 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:48:35 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:48:37 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:48:37 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:48:37 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:52:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:52:21 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 17:52:22 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:52:57 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.477352 seconds
+2025-09-08 17:53:20 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:53:20 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:53:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:53:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:53:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:53:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:53:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:53:22 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:53:22 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:53:22 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:57:31 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:57:31 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 17:57:35 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 17:57:41 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:57:41 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 17:57:41 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:57:41 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:57:41 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:57:41 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:57:41 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 17:57:42 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:57:42 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:57:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:57:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 17:57:44 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 18:02:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:02:53 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 18:02:53 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 18:03:02 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 18:03:02 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 18:03:02 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:03:02 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:03:02 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:03:02 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:03:02 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:03:03 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 18:03:03 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:03:03 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:03:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:03:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:07:26 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:07:26 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 18:07:26 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 18:07:33 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 18:07:33 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 18:07:33 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:07:33 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:07:33 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:07:33 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:07:33 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:07:34 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:07:34 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:07:36 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 18:07:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:07:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:22:09 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:22:09 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 18:22:09 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 18:22:17 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 18:22:17 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 18:22:17 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:22:17 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:22:17 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:22:17 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:22:17 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:22:18 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:22:18 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:22:19 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 18:22:19 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:22:19 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:28:00 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:28:00 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 18:28:00 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 18:28:08 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 18:28:08 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 18:28:08 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:28:08 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:28:08 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:28:08 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:28:08 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:28:09 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:28:09 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:28:10 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 18:30:09 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:30:09 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 18:30:09 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 18:30:20 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 18:30:20 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 18:30:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:30:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:30:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:30:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:30:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:30:22 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:30:22 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:30:24 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:30:24 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 18:31:11 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:31:11 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 18:31:11 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 18:31:20 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 18:31:20 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 18:31:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:31:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:31:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:31:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:31:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 18:31:21 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 18:31:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:31:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:31:23 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 18:31:23 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 20:54:31 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8962
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-08 20:54:41 [INFO] prefect.flow_runs:1237 - Beginning flow run 'cream-puffin' for flow 'flow1'
+2025-09-08 20:54:42 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 20:54:42 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 20:54:44 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 20:54:57 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 20:54:57 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 20:54:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 20:54:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 20:54:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 20:54:58 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 20:54:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 20:54:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 20:54:58 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 20:54:58 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-08 20:54:58 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8962
+2025-09-08 20:54:59 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 20:59:10 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8818
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-08 20:59:20 [INFO] prefect.flow_runs:1237 - Beginning flow run 'perky-leech' for flow 'flow1'
+2025-09-08 20:59:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 20:59:21 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 20:59:23 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 20:59:36 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 20:59:36 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 20:59:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二封信 为匹配到任何分割规则
+2025-09-08 20:59:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=目之所及 为匹配到任何分割规则
+2025-09-08 20:59:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=子夜归 为匹配到任何分割规则
+2025-09-08 20:59:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 20:59:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 20:59:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 20:59:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 20:59:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 20:59:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二封信 为匹配到任何分割规则
+2025-09-08 20:59:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=目之所及 为匹配到任何分割规则
+2025-09-08 20:59:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=子夜归 为匹配到任何分割规则
+2025-09-08 20:59:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 20:59:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 20:59:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 20:59:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 20:59:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 20:59:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 20:59:37 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二封信 为匹配到任何分割规则
+2025-09-08 20:59:37 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=十二封信 为匹配到任何分割规则
+2025-09-08 20:59:38 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 20:59:39 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=目之所及 为匹配到任何分割规则
+2025-09-08 20:59:39 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=目之所及 为匹配到任何分割规则
+2025-09-08 20:59:40 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=子夜归 为匹配到任何分割规则
+2025-09-08 20:59:40 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=子夜归 为匹配到任何分割规则
+2025-09-08 20:59:42 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 20:59:42 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 20:59:45 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:45 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:45 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 20:59:45 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 20:59:47 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:47 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:47 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=鱿鱼游戏 第三季,movie_type=MovieType.TV,year=2025
+2025-09-08 20:59:49 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:49 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:49 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 20:59:49 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 20:59:50 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:50 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:50 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 20:59:50 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二封信 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=十二封信 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=目之所及 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=目之所及 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=子夜归 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=子夜归 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=鱿鱼游戏 第三季,movie_type=MovieType.TV,year=2025
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 20:59:52 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 20:59:52 [ERROR] prefect.task_runs:1172 - Task run failed with exception: AttributeError("'list' object has no attribute 'model_dump'") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 52, in save_to_database
+    await movie_repository.upsert(movies,ignore_none=True)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\database\movie_repository.py", line 29, in upsert
+    update_data = movie.model_dump(exclude_unset=True)
+                  ^^^^^^^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'model_dump'
+2025-09-08 20:59:52 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception AttributeError: 'list' object has no attribute 'model_dump'")
+2025-09-08 20:59:52 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: AttributeError("'list' object has no attribute 'model_dump'")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 59, in flow1
+    await save_to_database(combin_results)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 52, in save_to_database
+    await movie_repository.upsert(movies,ignore_none=True)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\database\movie_repository.py", line 29, in upsert
+    update_data = movie.model_dump(exclude_unset=True)
+                  ^^^^^^^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'model_dump'
+2025-09-08 20:59:52 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: AttributeError: 'list' object has no attribute 'model_dump'")
+2025-09-08 20:59:52 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8818
+2025-09-08 21:05:56 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8076
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-08 21:06:06 [INFO] prefect.flow_runs:1237 - Beginning flow run 'impetuous-mamba' for flow 'flow1'
+2025-09-08 21:06:07 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 21:06:07 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 21:06:10 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 21:06:43 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.389916 seconds
+2025-09-08 21:07:18 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.914932 seconds
+2025-09-08 21:07:56 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 21:07:56 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 21:07:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二封信 为匹配到任何分割规则
+2025-09-08 21:07:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=目之所及 为匹配到任何分割规则
+2025-09-08 21:07:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=子夜归 为匹配到任何分割规则
+2025-09-08 21:07:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 21:07:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 21:07:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 21:07:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 21:07:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:07:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 21:07:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二封信 为匹配到任何分割规则
+2025-09-08 21:07:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=目之所及 为匹配到任何分割规则
+2025-09-08 21:07:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=子夜归 为匹配到任何分割规则
+2025-09-08 21:07:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 21:07:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 21:07:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 21:07:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 21:07:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:07:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 21:07:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 21:07:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二封信 为匹配到任何分割规则
+2025-09-08 21:07:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=十二封信 为匹配到任何分割规则
+2025-09-08 21:07:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=目之所及 为匹配到任何分割规则
+2025-09-08 21:07:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=目之所及 为匹配到任何分割规则
+2025-09-08 21:08:00 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=子夜归 为匹配到任何分割规则
+2025-09-08 21:08:00 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=子夜归 为匹配到任何分割规则
+2025-09-08 21:08:00 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 21:08:01 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 21:08:01 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 21:08:04 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:04 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:04 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 21:08:04 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 21:08:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:06 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=鱿鱼游戏 第三季,movie_type=MovieType.TV,year=2025
+2025-09-08 21:08:07 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:07 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:07 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 21:08:07 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 21:08:08 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:08 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:08 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 21:08:08 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:10 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二封信 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=十二封信 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=目之所及 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=目之所及 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=子夜归 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=子夜归 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:10 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:11 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=鱿鱼游戏 第三季,movie_type=MovieType.TV,year=2025
+2025-09-08 21:08:11 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 21:08:11 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 21:08:11 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:11 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:11 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 21:08:11 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 21:08:11 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:11 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:11 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:11 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:11 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:11 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:08:11 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 21:08:11 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 21:08:11 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-08 21:08:11 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8076
+2025-09-08 21:41:33 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8018
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-08 21:41:44 [INFO] prefect.flow_runs:1237 - Beginning flow run 'pristine-hippo' for flow 'flow1'
+2025-09-08 21:41:45 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 21:41:45 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-08 21:41:46 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 21:42:38 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 21:42:38 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-08 21:42:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二封信 为匹配到任何分割规则
+2025-09-08 21:42:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=目之所及 为匹配到任何分割规则
+2025-09-08 21:42:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=子夜归 为匹配到任何分割规则
+2025-09-08 21:42:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 21:42:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 21:42:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 21:42:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 21:42:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:42:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 21:42:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二封信 为匹配到任何分割规则
+2025-09-08 21:42:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=目之所及 为匹配到任何分割规则
+2025-09-08 21:42:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=子夜归 为匹配到任何分割规则
+2025-09-08 21:42:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 21:42:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 21:42:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 21:42:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 21:42:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:42:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 21:42:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 21:42:40 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二封信 为匹配到任何分割规则
+2025-09-08 21:42:40 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=十二封信 为匹配到任何分割规则
+2025-09-08 21:42:41 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=目之所及 为匹配到任何分割规则
+2025-09-08 21:42:41 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=目之所及 为匹配到任何分割规则
+2025-09-08 21:42:41 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-08 21:42:42 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=子夜归 为匹配到任何分割规则
+2025-09-08 21:42:42 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=子夜归 为匹配到任何分割规则
+2025-09-08 21:42:43 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 21:42:43 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 21:42:45 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 21:42:45 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 21:42:45 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 21:42:47 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 21:42:47 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 21:42:48 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=鱿鱼游戏 第三季,movie_type=MovieType.TV,year=2025
+2025-09-08 21:42:49 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=鱿鱼游戏 第三季,movie_type=MovieType.TV,year=2025
+2025-09-08 21:42:51 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=鱿鱼游戏 第三季,movie_type=MovieType.TV,year=2025
+2025-09-08 21:42:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 21:42:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 21:42:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 21:42:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 21:42:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 21:42:53 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 21:42:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 21:42:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 21:42:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:42:55 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:42:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:42:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:42:56 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 21:42:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 21:42:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=生万物 为匹配到任何分割规则
+2025-09-08 21:42:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二封信 为匹配到任何分割规则
+2025-09-08 21:42:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=十二封信 为匹配到任何分割规则
+2025-09-08 21:42:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=目之所及 为匹配到任何分割规则
+2025-09-08 21:42:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=目之所及 为匹配到任何分割规则
+2025-09-08 21:42:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=子夜归 为匹配到任何分割规则
+2025-09-08 21:42:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=子夜归 为匹配到任何分割规则
+2025-09-08 21:42:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 21:42:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 21:42:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=黑白局 为匹配到任何分割规则
+2025-09-08 21:42:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 21:42:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 21:42:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 21:42:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴君的厨师 为匹配到任何分割规则
+2025-09-08 21:42:57 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=鱿鱼游戏 第三季,movie_type=MovieType.TV,year=2025
+2025-09-08 21:42:58 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=鱿鱼游戏 第三季,movie_type=MovieType.TV,year=2025
+2025-09-08 21:42:58 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=鱿鱼游戏 第三季,movie_type=MovieType.TV,year=2025
+2025-09-08 21:42:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 21:42:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 21:42:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 21:42:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=梦想成为律师的律师们 为匹配到任何分割规则
+2025-09-08 21:42:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 21:42:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 21:42:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 21:42:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=爱麻夫人热映中 为匹配到任何分割规则
+2025-09-08 21:42:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:42:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:42:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:42:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=螳螂 为匹配到任何分割规则
+2025-09-08 21:42:58 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 21:42:58 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 21:42:58 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-08 21:42:59 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8018
+2025-09-08 21:52:03 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8463
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-08 21:52:14 [INFO] prefect.flow_runs:1237 - Beginning flow run 'indigo-skylark' for flow 'flow1'
+2025-09-08 21:52:19 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 21:52:19 [ERROR] prefect.task_runs:1172 - Task run failed with exception: AttributeError("'Movie' object has no attribute 'status'") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 48, in combin_to_movies
+    return await movie_service.combin_to_movies(movie_datas_sources)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\services\movie_service.py", line 122, in combin_to_movies
+    if movie.status is None:
+       ^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\main.py", line 991, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'Movie' object has no attribute 'status'
+2025-09-08 21:52:19 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception AttributeError: 'Movie' object has no attribute 'status'")
+2025-09-08 21:52:19 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: AttributeError("'Movie' object has no attribute 'status'")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 58, in flow1
+    combin_results=await combin_to_movies(movie_data_source_results)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 48, in combin_to_movies
+    return await movie_service.combin_to_movies(movie_datas_sources)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\services\movie_service.py", line 122, in combin_to_movies
+    if movie.status is None:
+       ^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\main.py", line 991, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'Movie' object has no attribute 'status'
+2025-09-08 21:52:19 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: AttributeError: 'Movie' object has no attribute 'status'")
+2025-09-08 21:52:19 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8463
+2025-09-08 21:52:56 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8779
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-08 21:53:07 [INFO] prefect.flow_runs:1237 - Beginning flow run 'ultra-bull' for flow 'flow1'
+2025-09-08 21:53:12 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 21:53:12 [ERROR] prefect.task_runs:1172 - Task run failed with exception: AttributeError("'MovieDataSourceResult' object has no attribute 'cloud_infos'") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 48, in combin_to_movies
+    return await movie_service.combin_to_movies(movie_datas_sources)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\services\movie_service.py", line 123, in combin_to_movies
+    movie.cloud_infos = await movie_data_source.cloud_infos
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\main.py", line 991, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'MovieDataSourceResult' object has no attribute 'cloud_infos'
+2025-09-08 21:53:12 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception AttributeError: 'MovieDataSourceResult' object has no attribute 'cloud_infos'")
+2025-09-08 21:53:12 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: AttributeError("'MovieDataSourceResult' object has no attribute 'cloud_infos'")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 58, in flow1
+    combin_results=await combin_to_movies(movie_data_source_results)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 48, in combin_to_movies
+    return await movie_service.combin_to_movies(movie_datas_sources)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\services\movie_service.py", line 123, in combin_to_movies
+    movie.cloud_infos = await movie_data_source.cloud_infos
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\main.py", line 991, in __getattr__
+    raise AttributeError(f'{type(self).__name__!r} object has no attribute {item!r}')
+AttributeError: 'MovieDataSourceResult' object has no attribute 'cloud_infos'
+2025-09-08 21:53:12 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: AttributeError: 'MovieDataSourceResult' object has no attribute 'cloud_infos'")
+2025-09-08 21:53:13 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8779
+2025-09-08 21:55:03 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8631
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-08 21:55:13 [INFO] prefect.flow_runs:1237 - Beginning flow run 'warm-petrel' for flow 'flow1'
+2025-09-08 21:55:19 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 21:55:19 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 21:55:19 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 21:55:19 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-08 21:55:19 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8631
+2025-09-08 21:58:31 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8156
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-08 21:58:41 [INFO] prefect.flow_runs:1237 - Beginning flow run 'valiant-mammoth' for flow 'flow1'
+2025-09-08 21:58:47 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 21:58:47 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 21:58:47 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 21:58:47 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-08 21:58:47 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8156
+2025-09-08 22:09:19 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8288
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-08 22:09:28 [INFO] prefect.flow_runs:1237 - Beginning flow run 'rich-seriema' for flow 'flow1'
+2025-09-08 22:09:33 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 22:09:33 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 22:09:33 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 22:09:33 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-08 22:09:33 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8288
+2025-09-08 22:12:23 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8969
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-08 22:12:33 [INFO] prefect.flow_runs:1237 - Beginning flow run 'thankful-moose' for flow 'flow1'
+2025-09-08 22:12:37 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 22:12:37 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 22:12:37 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 22:12:37 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-08 22:12:37 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8969
+2025-09-08 22:13:54 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8217
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-08 22:14:04 [INFO] prefect.flow_runs:1237 - Beginning flow run 'calm-puma' for flow 'flow1'
+2025-09-08 22:14:09 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 22:14:09 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 22:14:09 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 22:14:09 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-08 22:14:09 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8217
+2025-09-08 22:15:42 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8012
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-08 22:15:52 [INFO] prefect.flow_runs:1237 - Beginning flow run 'laughing-lynx' for flow 'flow1'
+2025-09-08 22:15:56 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 22:15:56 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 22:15:57 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-08 22:15:57 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-08 22:15:57 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8012

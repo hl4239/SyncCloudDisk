@@ -46,3 +46,4 @@ class OpenAIService(IOpenAIService):
         #  {'title': '重启之极海听雷', 'season': '2'},
         #  {'title': '凡人修仙传', 'season': '重返天南'}]
         return data
+open_ai_service=OpenAIService()

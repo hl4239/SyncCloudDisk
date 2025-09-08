@@ -1,17 +1,17 @@
 import asyncio
 
-from app.modules.data_collection.container import DataCollectionContainer
+from app.modules.data_collection import flow
 
 
 class DataCollectionContext:
-    def __init__(self,container:DataCollectionContainer):
-        self.container=container
+    def __init__(self,):
+        ...
 
     async def run_hot(self):
-        pipe=self.container.data_collection_pipelines
-        return   await pipe.run_hot()
+        flow_result=await flow.data_collection_get_hot_flow()
+        return   flow_result
 
-
+data_collection_context=DataCollectionContext()
 
 
 

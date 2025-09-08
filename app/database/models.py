@@ -1,8 +1,7 @@
-import re
+from datetime import time, datetime
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional, Any, Union
-from datetime import datetime
+from typing import List, Optional,  Union
 
 import pydantic
 from beanie import Document, Indexed
@@ -62,13 +61,18 @@ class MovieStatus(Enum):
     ONGOING = "ongoing"  # 更新中
     FINISHED = "finished"  # 已完结
 
-class TMDBInfos(pydantic.BaseModel):
-    id:Optional[str]=Field(default=None)
+class EpisodesInfo(pydantic.BaseModel):
+    episode_number:int
+    air_date:datetime
 
+class TMDBInfos(pydantic.BaseModel):
+    id:Optional[int]=Field(default=None)
+    season_number:Optional[int]=Field(default=None)
+
+    not_ensure:bool=Field(default=False,description='抓取结果不确定，需要人工抓取')
 class Movie(Document):
     # 1. 首先，定义 unique_key 字段
-    douban_id: Optional[Indexed(str, unique=True)] = Field(
-default=None,
+    douban_id: Indexed(str, unique=True) = Field(
         description="豆瓣影视id"
     )
     title: Optional[str] = Field(default=None)
@@ -81,28 +85,22 @@ default=None,
     season: Optional[str] = Field(default=None, description='描述影视第几季, e.g., "1", "第一季"')
     total_episodes:Optional[str]=Field(default=None)
     current_episodes:Optional[str]=Field(default=None)
-    status:Optional[MovieStatus]=Field(default=None)
     cloud_infos: Optional[list[MovieCloudInfo]] = Field(default=None, description='网盘信息')
     tmdb_infos:Optional[TMDBInfos]=Field(default=None)
-    @model_validator(mode="after")
-    def generate_unique_key(self) -> 'Movie':
-        """
-        在模型初始化并填充默认值后，生成 unique_key。
-        """
-        # 检查 unique_key 是否已经被赋值，如果没有，则生成它
-        if not self.unique_key:
-            # 此处可以直接访问 self 的属性，它们已经包含了用户输入或字段的默认值
-            # 例如，如果创建实例时未提供 season，self.season 的值会是 "第一季"
-            year = self.year
-            tv_type = self.movie_type.value
-            title_season = self.title_season
-            self.unique_key = f"{year}_{tv_type}_{title_season}"
+    have_newer_episodes:bool=Field(default=False)
+    episodes_info:Optional[list[EpisodesInfo]]=Field(default=None,description='剧集信息')
+    def update_current_episodes(self,episodes:str):
 
-        # 'after' 模式的验证器必须返回模型实例 self
-        return self
+        if episodes!=self.current_episodes:
+            self.have_newer_episodes = True
+            self.current_episodes=episodes
+
+
 
     def generate_path(self, ):
-        return Path(settings.CLOUD_ROOT) / self.movie_type.value /  self.category /  self.title /  self.title_season
+        return Path(settings.CLOUD_ROOT) / self.movie_type.value /  self.category /  self.year /  self.title_season
+
+
 
 class SplitTitleSeasonRegular(Document):
     regular:str

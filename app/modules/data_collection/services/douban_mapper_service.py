@@ -120,7 +120,7 @@ class DoubanMapperService(IMapper):
         movie_data_source.description = lazy(description)
         movie_data_source.movie_type = lazy(tv_type)
         movie_data_source.title_season = lazy(title_season)
-        movie_data_source.tv_category = lazy(tv_category)
+        movie_data_source.category = lazy(tv_category)
         movie_data_source.current_episodes = lazy(current_episodes)
         movie_data_source.total_episodes = lazy(total_episodes)
         return movie_data_source
@@ -131,3 +131,4 @@ class DoubanMapperService(IMapper):
         for douban_item in douban_items:
             movies.append(self.map_to_movie_data_source(douban_item))
         return movies
+douban_mapper_service=DoubanMapperService()

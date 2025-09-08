@@ -1,4 +1,5 @@
 import asyncio
+import atexit
 import logging
 from typing import Optional, Dict, Union
 
@@ -166,32 +167,42 @@ class DoubanClient:
 # ==================== 单例实现部分 ====================
 
 # 模块级单例实例
-_douban_crawler_instance:Optional[DoubanClient] = None
 
-async def get_douban_crawler() -> DoubanClient:
+
+
+_douban_client_instance:Optional[DoubanClient] = None
+
+async def get_douban_client() -> DoubanClient:
     """获取豆瓣爬虫单例实例"""
-    global _douban_crawler_instance
-    if _douban_crawler_instance is None:
-        _douban_crawler_instance = DoubanClient()
-        await _douban_crawler_instance.init()
-    return _douban_crawler_instance
+    global _douban_client_instance
+    if _douban_client_instance is None:
+        _douban_client_instance = DoubanClient()
+        await _douban_client_instance.init()
+    return _douban_client_instance
 
+@atexit.register
+def close_session():
+    try:
+        asyncio.run(shutdown_douban_client())
+    except RuntimeError:
+        # 如果已经在事件循环里，可以忽略
+        pass
 
-async def shutdown_douban_crawler():
+async def shutdown_douban_client():
     """关闭豆瓣爬虫实例"""
-    global _douban_crawler_instance
-    if _douban_crawler_instance is not None:
-        await _douban_crawler_instance.shutdown()
-        _douban_crawler_instance = None
+    global _douban_client_instance
+    if _douban_client_instance is not None:
+        await _douban_client_instance.shutdown()
+        _douban_client_instance = None
 # 使用示例
 async def main():
     # 获取单例实例
-    crawler = await get_douban_crawler()
+    crawler = await get_douban_client()
     # 使用爬虫
     result = await crawler.get_hot_tv(TVCategory.CHINA, 20)
     print(result)
 
     # 程序结束时清理资源
-    await shutdown_douban_crawler()
+    await shutdown_douban_client()
 if __name__ == '__main__':
     asyncio.run(main())

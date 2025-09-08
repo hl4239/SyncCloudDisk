@@ -2,10 +2,11 @@ import asyncio
 from typing import Union, List, override
 
 from app.database.models import TVCategory, MovieCategory, Movie
-from app.modules.data_collection.clients.douban_client import get_douban_crawler
+from app.modules.data_collection.clients.douban_client import get_douban_client
 from app.modules.data_collection.interfaces.mapper_interface import IMapper
 from app.modules.data_collection.interfaces.movie_base_provider_interface import IMovieBaseProvider
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
+from app.modules.data_collection.services.douban_mapper_service import douban_mapper_service
 
 
 class DoubanMovieBaseProviderService(IMovieBaseProvider):
@@ -29,3 +30,11 @@ class DoubanMovieBaseProviderService(IMovieBaseProvider):
             l= self.mapper.map_to_movies_data_source(r)
             result.extend(l)
         return result
+_douban_movie_base_provider_service = None
+async def get_douban_movie_base_provider_service():
+    global _douban_movie_base_provider_service
+    if _douban_movie_base_provider_service is None:
+        douban_client = await get_douban_client()
+        _douban_movie_base_provider_service=DoubanMovieBaseProviderService(douban_client=douban_client,mapper=douban_mapper_service)
+    return _douban_movie_base_provider_service
+

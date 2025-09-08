@@ -9,7 +9,7 @@ from app.core.logging_config import setup_logging, get_logger
 from app.database.database import init_db
 from app.modules.data_collection.interfaces.split_title_season_interface import ISplitTitleSeasonInterface
 from app.services.interfaces.open_ai_interface import IOpenAIService
-from app.services.open_ai_service import OpenAIService
+from app.services.open_ai_service import OpenAIService, open_ai_service
 from app.utils.cache import async_ttl_cache
 
 logger=get_logger(__name__)
@@ -75,5 +75,6 @@ async def main():
     title=  await b_.get_title(target_title_season='重启之极海听雷2',title_seasons=('你好','重启之极海听雷2','凡人修仙传：重返天南',))
     season= await b_.get_season(target_title_season='重启之极海听雷2',title_seasons=('你好','重启之极海听雷2','凡人修仙传：重返天南',))
     print(title,season)
+b_split_title_season_service=BSplitTitleSeasonService(open_ai_service)
 if __name__ == '__main__':
     asyncio.run(main())

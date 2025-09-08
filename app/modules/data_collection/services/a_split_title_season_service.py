@@ -51,6 +51,7 @@ class ASplitTitleSeasonService(ISplitTitleSeasonInterface):
     async def get_season(self,title_season:str,title_seasons:Tuple[str])->str:
         _,season=await self._split_title_season(title_season)
         return season
+a_split_title_season_service=ASplitTitleSeasonService()
 async def main():
     setup_logging()
     await init_db()

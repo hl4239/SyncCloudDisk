@@ -3,7 +3,7 @@ from typing import List
 from charset_normalizer.md import getLogger
 
 from app.database.models import Movie
-from app.database.movie_repository import MovieRepository
+from app.database.movie_repository import MovieRepository, movie_repository
 from app.modules.data_collection.interfaces.match_to_database_interface import IMatchToDatabase
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
 from app.utils.lazy_load import lazy
@@ -21,12 +21,12 @@ class MatchToDatabaseService(IMatchToDatabase):
             if movie.tmdb_infos:
                 movie_data_source.tmdb_infos=lazy(movie.tmdb_infos)
 
-            if movie.current_episodes:
+            if movie.current_episodes and (await movie_data_source.current_episodes is None):
                 movie_data_source.current_episodes=lazy(movie.current_episodes)
-            if movie_data_source.total_episodes:
+            if movie_data_source.total_episodes and (await movie_data_source.total_episodes is None):
                 movie_data_source.total_episodes=lazy(movie_data_source.total_episodes)
-            if movie.seasons:
-                movie_data_source.seasons=lazy(movie.seasons)
+            if movie.season:
+                movie_data_source.season=lazy(movie.season)
         else:
             logger.debug(f'未在数据库匹配到:{await movie_data_source.title_season } |  {await movie_data_source.douban_id}')
 
@@ -38,3 +38,4 @@ class MatchToDatabaseService(IMatchToDatabase):
             await MatchToDatabaseService.combin(movie_data,movie)
 
         return movie_data_results
+match_to_database_service=MatchToDatabaseService(movie_repo=movie_repository)

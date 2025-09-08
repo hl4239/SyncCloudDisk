@@ -2,7 +2,6 @@ import copy
 from abc import ABC, abstractmethod
 from typing import List, Tuple
 
-from tensorflow.python.ops.gen_array_ops import deep_copy
 
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
 from app.utils.lazy_load import lazy

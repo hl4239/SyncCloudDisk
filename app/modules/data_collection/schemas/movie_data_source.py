@@ -1,11 +1,10 @@
-from typing import Optional, Union
-
+from pydantic import BaseModel
 
 from app.database.models import TVCategory, MovieCategory, MovieType, MovieStatus, TMDBInfos, Movie, MovieCloudInfo
 from app.utils.lazy_load import Lazy, lazy
 
 
-class MovieDataSourceResult:
+class MovieDataSourceResult(BaseModel):
     douban_id:Lazy[str]=lazy(None)
     title: Lazy[str]=lazy(None)
     title_season: Lazy[str]=lazy(None)

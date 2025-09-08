@@ -10,3 +10,4 @@ class LinkScrapeContext:
 
     async def scrape(self,movies:List[Movie])->List[LinkScrapeResult]:
         ...
+link_scrape_context=LinkScrapeContext()
