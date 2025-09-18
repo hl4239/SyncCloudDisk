@@ -19,7 +19,6 @@ logger=logging.getLogger(__name__)
 class BTMDBIDProviderService(ITMDBIDProvider):
 
     @staticmethod
-    @async_ttl_cache
     async def _fetch_tmdb_id(title:str,season:str,movie_type:MovieType)->Tuple[int,int]:
         """
         根据标题、season查找电视剧

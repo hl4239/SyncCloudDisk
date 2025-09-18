@@ -7,6 +7,7 @@ from app.database.models import Movie, MovieType, MovieCategory, TVCategory
 from app.modules.data_collection.interfaces.mapper_interface import IMapper
 from app.modules.data_collection.schemas.douban_schemas import DoubanTVResponse, DoubanTVItem
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
+from app.services.movie_service import movie_service
 from app.utils.lazy_load import lazy
 
 
@@ -21,18 +22,26 @@ class DoubanMapperService(IMapper):
             return MovieType.MOVIE
         else:return MovieType.OTHER
 
+    def extract_countries(selof,card_subtitle: str) -> list[str]:
+        parts = [p.strip() for p in card_subtitle.split("/")]
+        if len(parts) < 2:
+            return []
+        countries = parts[1].split()
+        return countries
+
     def _get_movie_category(self,douban_item:DoubanTVItem)->Union[MovieCategory, TVCategory]:
         movie_type=self._get_movie_type(douban_item)
         card_subtitle = douban_item.card_subtitle
+        countries = self.extract_countries(card_subtitle)
+        first_country = countries[0]
         if movie_type==MovieType.TV:
-
-            if any(kw in card_subtitle for kw in ['中国']):
+            if any(kw ==first_country for kw in ['中国']):
                 return TVCategory.CHINA
-            elif any(kw in card_subtitle for kw in ['英国','美国']):
+            elif any(kw ==first_country for kw in ['英国','美国']):
                 return TVCategory.EUROPE
-            elif any(kw in card_subtitle for kw in ['韩国']):
+            elif any(kw ==first_country for kw in ['韩国']):
                 return TVCategory.KOREA
-            elif any(kw in card_subtitle for kw in ['日本']):
+            elif any(kw ==first_country for kw in ['日本']):
                 return TVCategory.JAPAN
             else:return TVCategory.OTHER
         elif movie_type==MovieType.MOVIE:
@@ -98,7 +107,8 @@ class DoubanMapperService(IMapper):
         title_season = original.title
         tv_category = self._get_movie_category(original)
         current_episodes, total_episodes = self._get_movie_episodes(original)
-        return Movie(title_season=title_season, year=year, description=description, movie_type=tv_type,category=tv_category, current_episodes=current_episodes, total_episodes=total_episodes)
+        douban_id=original.id
+        return Movie(title_season=title_season, year=year, description=description, movie_type=tv_type,category=tv_category,  total_episodes=total_episodes,douban_id=douban_id)
     @override
     def map_to_movies(self,original:DoubanTVResponse)->list[Movie]:
         douban_items=original.subject_collection_items
@@ -123,6 +133,7 @@ class DoubanMapperService(IMapper):
         movie_data_source.category = lazy(tv_category)
         movie_data_source.current_episodes = lazy(current_episodes)
         movie_data_source.total_episodes = lazy(total_episodes)
+
         return movie_data_source
 
     def map_to_movies_data_source(self, original: DoubanTVResponse) -> list[MovieDataSourceResult]:

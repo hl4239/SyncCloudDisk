@@ -1,41 +1,41 @@
-from pydantic import BaseModel, Field, HttpUrl, validator, field_validator
-from typing import Optional, List, Union, AsyncIterator
-from datetime import datetime, timedelta
-from enum import Enum
+import asyncio
 
-from pygments.lexer import default
+from pydantic import BaseModel, Field, HttpUrl, field_validator, computed_field
+from typing import Optional, List
 
-from app.database.models import Movie, CloudType
-from app.utils.lazy_load import Lazy
+from tensorflow.python.data.experimental.ops.testing import sleep
+
+from app.database.models import Movie, CloudType, CloudShareLink
+from app.utils.async_iterator import AsyncCachedIterator
+from app.utils.cache import async_ttl_cache
+from app.utils.lazy_load import Lazy, lazy
 
 
 
-class ResourceLink(BaseModel):
-    """
-    用于在链接爬虫模块内部表示一个被抓取到的网盘资源链接。
-    这是一个非持久化模型 (DTO - Data Transfer Object)。
-    """
 
-    # 核心信息
-    url: HttpUrl = Field(..., description="资源的分享链接")
-    title: str = Field(..., description="从分享页面或帖子中提取的原始标题")
-
-    # 元数据
-    link_type: CloudType = Field(default=None, description="网盘类型")
-    share_password: Optional[str] = Field(None, description="分享密码（如果有）")
-
-    # 状态与时间戳
-    # 【核心变化】: 从 @validator 迁移到 @field_validator
-    @field_validator('link_type', mode='before')
-    @classmethod
-    def determine_link_type(cls, v, values):
-        """在验证前，根据 URL 自动判断链接类型"""
-        url_str = str(values.get('url', ''))
-        if "pan.baidu.com" in url_str:
-            return CloudType.BAIDU
-        if "pan.quark.cn" in url_str:
-            return CloudType.QUARK
-        return None
 class LinkScrapeResult(BaseModel):
-    quark_links: Optional[List[Lazy[ResourceLink]]] = Field(default=None,description='')
-    movie_info:Movie
+    quark_links: Optional[Lazy[AsyncCachedIterator[CloudShareLink]]] = Field(default=lazy(None),description='')
+    movie:Optional[Movie]=Field(None,description='')
+
+async def main():
+    async def links_provider_example(params)->AsyncCachedIterator[CloudShareLink]:
+        print(params)
+        await asyncio.sleep(1)
+        yield CloudShareLink(url='link1',title='asd',share_password='<PASSWORD>')
+        await asyncio.sleep(1)
+        yield CloudShareLink(url='link2', title='asd2', share_password='<PASSWORD>')
+    async def links_provider_example2(params)->List[CloudShareLink]:
+        return [CloudShareLink(url='link1', title='asd', share_password='<PASSWORD>'),]
+
+    link_results=[]
+    for i in range(5):
+        link_result=LinkScrapeResult(quark_links=lazy(AsyncCachedIterator(links_provider_example2(i))),movie=None)
+        link_results.append(link_result)
+    for link_result in link_results:
+
+        async for l in await link_result.quark_links:
+            print(l.title)
+        async for l in await link_result.quark_links:
+            print(l.title)
+if __name__ == '__main__':
+    asyncio.run(main())

@@ -18,6 +18,7 @@ class ITMDBIDProvider(ABC):
     async def get_tmdb_infos(self,movie_data_source:MovieDataSourceResult)->TMDBInfos:
         print(f'title_season={await movie_data_source.title_season}' )
         tmdb_infos = await movie_data_source.tmdb_infos
+        print(f'tmdb_infos={tmdb_infos}')
         if tmdb_infos:
             if tmdb_infos.id:
                 return tmdb_infos

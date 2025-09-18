@@ -1,9 +1,10 @@
 import re
+from datetime import date
 from typing import List, Optional
 
 import cn2an
 
-from app.database.models import Movie
+from app.database.models import Movie, EpisodesInfo
 from app.database.movie_repository import movie_repository, MovieRepository
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
 from app.services.interfaces.movie_services_interface import IMovieService
@@ -41,12 +42,70 @@ class MovieService(IMovieService):
     @staticmethod
     def number_to_total_episodes(number:int):
         return MovieService.number_to_current_episodes(number,is_finale=True)
-    @staticmethod
-    def is_finale(current_episodes:str)->bool:
-        if current_episodes:
-            if '集全' in current_episodes:
-                return True
+    @classmethod
+    def is_finale(cls,episodes_info:List[EpisodesInfo])->bool:
+        """
+        返回true的情况：
+            1.为none
+            2.is_air_date_full and 所有air_date<today
+
+        :param episodes_info:
+        :return:
+        """
+        if episodes_info:
+            if cls.is_air_date_full(episodes_info):
+                last_episode = episodes_info[-1]
+                if last_episode.air_date < date.today():
+                    return True
+        else:
+            return True
         return False
+    @staticmethod
+    def is_air_date_full(episodes_info:List[EpisodesInfo]):
+        """
+
+        如果存在一个剧集的air_date为none则返回false
+        :param episodes_info:
+        :return:
+        """
+        if episodes_info:
+            for episode in episodes_info:
+                if not episode.air_date:
+                    return False
+        return True
+    @staticmethod
+    def is_air_time_full(episodes_info:List[EpisodesInfo]):
+        """
+        所有存在的air_date对应的air_time也存在返回true
+        :param episodes_info:
+        :return:
+        """
+        if episodes_info:
+            for episode in episodes_info:
+                if episode.air_date:
+                    if not episode.air_time:
+                        return False
+        return True
+
+
+    @classmethod
+    def create_episodes_info(cls,total_episodes)->List[EpisodesInfo]:
+        """
+        支持total为str或者int
+        :param total_episodes:
+        :return:
+        """
+        if not total_episodes:
+            return []
+        if isinstance(total_episodes,str):
+            total_episodes =cls.extract_episode_number(total_episodes)
+        episodes_infos=[]
+        for i in range(1,total_episodes+1):
+            episodes_info=EpisodesInfo(episode_number=i,)
+            episodes_infos.append(episodes_info)
+        return episodes_infos
+
+
     @staticmethod
     def extract_episode_number(ep: str) -> Optional[int]:
         """
@@ -56,8 +115,10 @@ class MovieService(IMovieService):
             - "xx集全"
         如果匹配成功，返回整数；否则返回 None。
         """
+        if isinstance(ep,int):
+            return ep
         if not ep:
-            return None
+            return 0
 
         # 匹配 "更新至xx集"
         match_update = re.match(r"更新至(\d+)集", ep)
@@ -106,9 +167,9 @@ class MovieService(IMovieService):
                     movie_type=await movie_data_source.movie_type,
                     season=await movie_data_source.season,
                     total_episodes=await movie_data_source.total_episodes,
-                    current_episodes=await movie_data_source.current_episodes,
                     tmdb_infos=await movie_data_source.tmdb_infos,
-                    have_newer_episodes=False
+                    have_newer_episodes=False,
+                   episodes_info=await movie_data_source.episodes_info
                 )
             else:
                 if not movie.title:
@@ -117,9 +178,8 @@ class MovieService(IMovieService):
                     movie.season = await movie_data_source.season
                 if not movie.total_episodes :
                     movie.total_episodes = await movie_data_source.total_episodes
-                if not movie.current_episodes or not self.is_finale(movie.current_episodes):
-                    print(f'开始执行更新——：{movie.current_episodes}  {await movie_data_source.current_episodes}')
-                    movie.update_current_episodes(self.get_episodes_later(movie.current_episodes,await movie_data_source.current_episodes))
+
+                movie.episodes_info=await movie_data_source.episodes_info
                 if movie.tmdb_infos is None:
                     movie.tmdb_infos = await movie_data_source.tmdb_infos
             movies.append(movie)

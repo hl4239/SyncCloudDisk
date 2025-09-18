@@ -21,13 +21,14 @@ class MatchToDatabaseService(IMatchToDatabase):
             if movie.tmdb_infos:
                 movie_data_source.tmdb_infos=lazy(movie.tmdb_infos)
 
-            if movie.current_episodes and (await movie_data_source.current_episodes is None):
-                movie_data_source.current_episodes=lazy(movie.current_episodes)
-            if movie_data_source.total_episodes and (await movie_data_source.total_episodes is None):
-                movie_data_source.total_episodes=lazy(movie_data_source.total_episodes)
+            if not await movie_data_source.total_episodes :
+                movie_data_source.total_episodes=lazy(movie.total_episodes)
             if movie.season:
                 movie_data_source.season=lazy(movie.season)
+
+            movie_data_source.episodes_info=lazy(movie.episodes_info)
         else:
+
             logger.debug(f'未在数据库匹配到:{await movie_data_source.title_season } |  {await movie_data_source.douban_id}')
 
 

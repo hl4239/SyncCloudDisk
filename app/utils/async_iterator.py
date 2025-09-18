@@ -1,190 +1,59 @@
-import json
-
-from typing import Type, Optional, List, Any, Dict, AsyncIterable, AsyncIterator, Union, Callable
-from pydantic import BaseModel, Field
-from sqlalchemy import TypeDecorator, JSON
-from sqlalchemy.ext.mutable import MutableDict
-
-
-
-
-
+from typing import TypeVar, Generic, Union, List, AsyncIterable, AsyncIterator, Sequence, Optional
 import asyncio
-from typing import Union, List, AsyncIterator
+import inspect
 
-class SimpleMutablePydanticDict(MutableDict):
-    """简化的可变Pydantic字典，支持直接访问模型属性"""
+T = TypeVar("T")
 
-    def __init__(self, model_class: Type[BaseModel], data=None):
-        self._model_class = model_class
-        if data is None:
-            data = {}
+def _is_sequence(obj) -> bool:
+    return isinstance(obj, Sequence) and not isinstance(obj, (str, bytes))
 
-        # 创建模型实例
-        try:
-            if isinstance(data, BaseModel):
-                self._model_instance = data
-                data = data.dict()
-            else:
-                self._model_instance = model_class(**data)
-                data = self._model_instance.dict()
-        except Exception as e:
-            print(f"模型创建失败: {e}")
-            self._model_instance = model_class()
-            data = self._model_instance.dict()
-
-        super().__init__(data)
-
-    def sync_from_model(self):
-        """从模型实例同步数据到字典"""
-        try:
-            new_data = self._model_instance.dict()
-            self.clear()
-            self.update(new_data)
-            self.changed()  # 标记SQLAlchemy变更
-        except Exception as e:
-            print(f"同步数据失败: {e}")
-
-    def sync_to_model(self):
-        """从字典同步数据到模型实例"""
-        try:
-            self._model_instance = self._model_class(**dict(self))
-        except Exception as e:
-            print(f"重建模型失败: {e}")
-
-    def __getattr__(self, name):
-        """代理属性访问到模型"""
-        if name.startswith('_'):
-            return super().__getattribute__(name)
-
-        # 首先检查模型实例是否有该属性
-        if hasattr(self._model_instance, name):
-            return getattr(self._model_instance, name)
-
-        # 然后检查字典中是否有该键
-        if name in self:
-            return self[name]
-
-        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
-
-    def __setattr__(self, name, value):
-        """代理属性设置到模型"""
-        if name.startswith('_') or name in ('data',):
-            super().__setattr__(name, value)
-            return
-
-        # 检查是否是模型字段
-        if hasattr(self, '_model_class') and hasattr(self._model_class, '__fields__'):
-            if name in self._model_class.__fields__:
-                # 设置模型属性
-                if hasattr(self, '_model_instance'):
-                    setattr(self._model_instance, name, value)
-                    # 同步到字典
-                    self[name] = value
-                    self.changed()
-                return
-
-        super().__setattr__(name, value)
-
-    def __setitem__(self, key, value):
-        """重写字典项设置"""
-        super().__setitem__(key, value)
-        self.changed()
-        # 同步到模型
-        self.sync_to_model()
-
-    def update(self, *args, **kwargs):
-        """重写更新方法"""
-        super().update(*args, **kwargs)
-        self.changed()
-        # 同步到模型
-        self.sync_to_model()
-
-    def get_model_instance(self):
-        """获取当前模型实例"""
-        return self._model_instance
-
-    @classmethod
-    def coerce(cls, key, value):
-        """SQLAlchemy调用的类型转换方法"""
-        if isinstance(value, cls):
-            return value
-        if isinstance(value, dict):
-            return value
-        return super().coerce(key, value)
-
-
-class SimplePydanticMutableJSON(TypeDecorator):
-    """简化的Pydantic JSON字段"""
-    impl = JSON
-    cache_ok = True
-
-    def __init__(self, model_class: Type[BaseModel], *args, **kwargs):
-        self.model_class = model_class
-        super().__init__(*args, **kwargs)
-
-    def process_bind_param(self, value, dialect):
-        """存储到数据库前的处理"""
-        if value is None:
-            return None
-
-        if isinstance(value, SimpleMutablePydanticDict):
-            model_instance = value.get_model_instance()
-            if model_instance:
-                return json.loads(model_instance.json())
-            else:
-                return dict(value)
-        elif isinstance(value, BaseModel):
-            return json.loads(value.json())
-        elif isinstance(value, dict):
-            return value
-        return value
-
-    def process_result_value(self, value, dialect):
-        """从数据库加载后的处理"""
-        if value is None:
-            return SimpleMutablePydanticDict(self.model_class, {})
-        return SimpleMutablePydanticDict(self.model_class, value)
-
-
-def create_simple_mutable_pydantic_field(model_class: Type[BaseModel]):
-    """创建简化的可变Pydantic字段"""
-
-    class SpecificSimpleMutablePydanticDict(SimpleMutablePydanticDict):
-        def __init__(self, data=None):
-            super().__init__(model_class, data)
-
-        @classmethod
-        def coerce(cls, key, value):
-            if isinstance(value, cls):
-                return value
-            if isinstance(value, dict):
-                return cls(value)
-            if isinstance(value, model_class):
-                return cls(value.dict())
-            return super().coerce(key, value)
-
-    return SpecificSimpleMutablePydanticDict.as_mutable(SimplePydanticMutableJSON(model_class))
-
-class AsyncCachedIterator:
+#
+# AsyncCachedIterator: 单独保留并做了健壮处理
+#
+class AsyncCachedIterator(Generic[T]):
     """
-    一个异步迭代器包装器：
-    - 第一次异步遍历会从源（列表或 async generator）读取并缓存
-    - 后续所有异步遍历都会只从缓存中读取
+    Accepts Sequence[T] (list/tuple) or AsyncIterable[T] (including async generators).
+    First full traversal caches items; subsequent traversals read from cache.
     """
-    def __init__(self, source: Union[List[str], AsyncIterator[str]]):
+    def __init__(self, source: Union[Sequence[T], AsyncIterable[T]]):
         self._source = source
-        self._cache: List[str] = []
+        self._cache: List[T] = []
         self._is_consumed = False
         self._lock = asyncio.Lock()
+        self._aiter: Optional[AsyncIterator[T]] = None
+
+        # lazy detection: do not construct aiters until needed
+
+        # basic validation
+        if not (_is_sequence(source) or hasattr(source, "__aiter__")):
+            if inspect.isawaitable(source):
+                raise TypeError("如果传入 coroutine，请先 await 它以获得 Sequence 或 AsyncIterable")
+            raise TypeError("source 必须是 Sequence（list/tuple）或 AsyncIterable")
 
     def __aiter__(self):
         return _CachedIteratorView(self)
 
+    async def _make_aiter_if_needed(self):
+        if self._aiter is None:
+            src = self._source
+            if _is_sequence(src):
+                async def _seq_gen(seq):
+                    for x in seq:
+                        yield x
+                self._aiter = _seq_gen(src)  # type: ignore[assignment]
+            else:
+                self._aiter = src.__aiter__()  # type: ignore[assignment]
 
-class _CachedIteratorView:
-    """每次 async for 返回独立视图，共享缓存，但有独立 index"""
-    def __init__(self, parent: AsyncCachedIterator):
+    async def _close_underlying(self):
+        if self._aiter is not None and getattr(self._aiter, "aclose", None):
+            try:
+                await self._aiter.aclose()
+            except Exception:
+                pass
+
+
+class _CachedIteratorView(Generic[T]):
+    def __init__(self, parent: AsyncCachedIterator[T]):
         self._parent = parent
         self._index = 0
 
@@ -192,6 +61,155 @@ class _CachedIteratorView:
         return self
 
     async def __anext__(self):
+        # 先尝试从缓存读取（无锁）
+        if self._index < len(self._parent._cache):
+            item = self._parent._cache[self._index]
+            self._index += 1
+            return item
+
+        # 进入锁，只有一个协程可以去拉取底层元素并追加缓存
+        async with self._parent._lock:
+            # 再检查缓存
+            if self._index < len(self._parent._cache):
+                item = self._parent._cache[self._index]
+                self._index += 1
+                return item
+
+            if self._parent._is_consumed:
+                raise StopAsyncIteration
+
+            # 确保 aiters 已准备好
+            await self._parent._make_aiter_if_needed()
+
+            try:
+                # 从异步迭代器取下一个元素
+                try:
+                    _anext = anext  # type: ignore[name-defined]
+                except Exception:
+                    item = await self._parent._aiter.__anext__()  # type: ignore[attr-defined]
+                else:
+                    item = await _anext(self._parent._aiter)  # type: ignore[call-arg]
+
+                # 缓存并返回
+                self._parent._cache.append(item)
+                self._index += 1
+                return item
+            except StopAsyncIteration:
+                self._parent._is_consumed = True
+                await self._parent._close_underlying()
+                raise
+            except Exception:
+                # 出现其它异常也把源视为耗尽并尝试关闭
+                self._parent._is_consumed = True
+                await self._parent._close_underlying()
+                raise
+
+#
+# AsyncMergedCachedIterator: 保留并支持接收 AsyncCachedIterator
+#
+class AsyncMergedCachedIterator(Generic[T]):
+    """
+    合并多个 sources：Sequence[T]、AsyncIterable[T] 或 AsyncCachedIterator[T]。
+    mode: "concat" 或 "interleave"（轮询）
+    """
+    def __init__(self, sources: List[Union[Sequence[T], AsyncIterable[T], AsyncCachedIterator[T]]], mode: str = "concat"):
+        if mode not in ("concat", "interleave"):
+            raise ValueError("mode must be 'concat' or 'interleave'")
+        if not sources:
+            raise ValueError("至少需要一个 source")
+        self._sources = sources
+        self._mode = mode
+
+        self._aiters: List[Optional[AsyncIterator[T]]] = [None] * len(sources)
+        self._done: List[bool] = [False] * len(sources)
+        self._cache: List[T] = []
+        self._is_consumed = False
+        self._lock = asyncio.Lock()
+        self._concat_idx = 0
+        self._next_idx = 0
+
+    def __aiter__(self):
+        return _MergedView(self)
+
+    def _make_aiter_from_source(self, src) -> AsyncIterator[T]:
+        # 如果是 AsyncCachedIterator，直接调用它的 __aiter__() 保持其缓存语义
+        if isinstance(src, AsyncCachedIterator):
+            return src.__aiter__()  # type: ignore[return-value]
+        if _is_sequence(src):
+            async def _seq_gen(seq):
+                for x in seq:
+                    yield x
+            return _seq_gen(src)
+        if hasattr(src, "__aiter__"):
+            return src.__aiter__()  # type: ignore[return-value]
+        if inspect.isawaitable(src):
+            raise TypeError("传入了 awaitable，请先 await 获取实际的 Sequence 或 AsyncIterable")
+        raise TypeError("source 必须是 Sequence、AsyncIterable、或 AsyncCachedIterator")
+
+    async def _get_aiter(self, idx: int) -> AsyncIterator[T]:
+        if self._aiters[idx] is None:
+            self._aiters[idx] = self._make_aiter_from_source(self._sources[idx])
+        return self._aiters[idx]
+
+    async def _fetch_next_from_source(self, idx: int):
+        ait = await self._get_aiter(idx)
+        try:
+            try:
+                _anext = anext  # type: ignore[name-defined]
+            except Exception:
+                item = await ait.__anext__()  # type: ignore[attr-defined]
+            else:
+                item = await _anext(ait)  # type: ignore[call-arg]
+            return item
+        except StopAsyncIteration:
+            self._done[idx] = True
+            # 尝试关闭
+            aclose = getattr(ait, "aclose", None)
+            if aclose:
+                try:
+                    await aclose()
+                except Exception:
+                    pass
+            raise
+
+    async def _fetch_next(self):
+        n = len(self._sources)
+        if self._mode == "concat":
+            while self._concat_idx < n and self._done[self._concat_idx]:
+                self._concat_idx += 1
+            if self._concat_idx >= n:
+                self._is_consumed = True
+                raise StopAsyncIteration
+            try:
+                item = await self._fetch_next_from_source(self._concat_idx)
+                return item
+            except StopAsyncIteration:
+                return await self._fetch_next()
+        else:  # interleave
+            for _ in range(n):
+                idx = self._next_idx
+                self._next_idx = (self._next_idx + 1) % n
+                if self._done[idx]:
+                    continue
+                try:
+                    item = await self._fetch_next_from_source(idx)
+                    return item
+                except StopAsyncIteration:
+                    continue
+            self._is_consumed = True
+            raise StopAsyncIteration
+
+
+class _MergedView(Generic[T]):
+    def __init__(self, parent: AsyncMergedCachedIterator[T]):
+        self._parent = parent
+        self._index = 0
+
+    def __aiter__(self):
+        return self
+
+    async def __anext__(self):
+        # 尝试从 cache
         if self._index < len(self._parent._cache):
             item = self._parent._cache[self._index]
             self._index += 1
@@ -206,32 +224,57 @@ class _CachedIteratorView:
             if self._parent._is_consumed:
                 raise StopAsyncIteration
 
-            try:
-                if isinstance(self._parent._source, AsyncIterator):
-                    item = await anext(self._parent._source)
-                else:
-                    item = self._parent._source[len(self._parent._cache)]
+            item = await self._parent._fetch_next()
+            self._parent._cache.append(item)
+            self._index += 1
+            return item
 
-                self._parent._cache.append(item)
-                self._index += 1
-                return item
-            except (StopAsyncIteration, IndexError):
-                self._parent._is_consumed = True
-                raise StopAsyncIteration
+#
+# 演示：两个 AsyncCachedIterator，然后合并一次遍历（interleave 与 concat）并展示缓存效果
+#
+async def slow_gen(name, delay, count):
+    for i in range(1, count + 1):
+        await asyncio.sleep(delay)
+        print(f"[{name}] produced {i}")
+        yield f"{name}{i}"
+async def quick_gen():
+    return [1,2,3]
+
+async def demo():
+    # 一个异步生成器作为底层源（会在打印中看到只在第一次被拉取时输出 produced）
+    a_src = slow_gen("A", 0.15, 4)
+    # 一个同步 list 作为源
+    b_list = [100, 200, 300]
+
+    # 把它们分别装成 AsyncCachedIterator（可选，但展示怎样同时保留两个类）
+    cached_a = AsyncCachedIterator(a_src)
+    cached_b = AsyncCachedIterator(b_list)
+    cached_c=AsyncCachedIterator(await quick_gen())
+    # 合并：interleave（轮询）
+    merged = AsyncMergedCachedIterator([cached_a, cached_b,cached_c], mode="interleave")
+    print("=== first traversal (merged interleave) ===")
+    async for item in merged:
+        print("merged ->", item)
+
+    print("\n=== second traversal of merged (should read from cache, no more 'produced' prints) ===")
+    async for item in merged:
+        print("merged cached ->", item)
+
+    print("\n=== direct traversal of cached_a (should read from cache too) ===")
+    async for item in cached_a:
+        print("cached_a ->", item)
+
+    # 演示 concat
+    cached_c = AsyncCachedIterator(slow_gen("C", 0.08, 3))
+    merged2 = AsyncMergedCachedIterator([b_list, cached_c], mode="concat")
+    print("\n=== merged concat first traversal ===")
+    async for item in merged2:
+        print("merged2 ->", item)
+
+    print("\n=== merged2 second traversal (cached) ===")
+    async for item in merged2:
+        print("merged2 cached ->", item)
 
 
-async def iterator_example():
-    await asyncio.sleep(1)
-    print('1')
-    yield 1
-    print('2')
-    yield 2
-async def main():
-    t=iterator_example()
-    print('开始')
-    async for i in t:
-        await asyncio.sleep(10)
-        print(i)
-
-if __name__ == '__main__':
-    asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(demo())

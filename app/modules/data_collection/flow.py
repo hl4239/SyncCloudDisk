@@ -9,22 +9,27 @@ from app.core.config import settings
 from app.core.logging_config import setup_logging
 from app.database.database import init_db
 from app.database.models import TVCategory
-from app.modules.data_collection.interfaces.current_episodes_provider_interface import ICurrentEpisodesProvider
+from app.modules.data_collection.interfaces.episodes_air_date_provider_interface import IEpisodesAirDateProvider
+from app.modules.data_collection.interfaces.episodes_air_time_provider_interface import IEpisodesAirTimeProvider
+from app.modules.data_collection.interfaces.episodes_infos_provider_interface import IEpisodesInfosProvider
 from app.modules.data_collection.interfaces.match_to_database_interface import IMatchToDatabase
 from app.modules.data_collection.interfaces.movie_base_provider_interface import IMovieBaseProvider
 from app.modules.data_collection.interfaces.split_title_season_interface import ISplitTitleSeasonInterface
 from app.modules.data_collection.interfaces.tmdb_id_provider_interface import ITMDBIDProvider
 from app.modules.data_collection.interfaces.total_episodes_provider_interface import ITotalEpisodesProvider
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
+from app.modules.data_collection.services.ai_copilot_episodes_info_provider_service import \
+    ai_copilot_episodes_air_time_provider
 from app.modules.data_collection.services.douban_movie_data_provider_service import \
     get_douban_movie_base_provider_service
+from app.modules.data_collection.services.episodes_info_provider_service import episodes_info_provider_service
 from app.modules.data_collection.services.fallback_split_title_season_service import \
      fallback_split_title_season_service
 from app.modules.data_collection.services.fallback_tmdb_id_provider_service import fallback_tmdb_id_provider_service
 
 from app.modules.data_collection.services.match_to_database_service import match_to_database_service
-from app.modules.data_collection.services.tmdb_episodes_provider_service import total_episodes_provider_service, \
-    current_episodes_provider_service
+from app.modules.data_collection.services.tmdb_air_date_provider_service import tmdb_air_date_provider
+from app.modules.data_collection.services.tmdb_episodes_provider_service import tmdb_episodes_provider_service
 
 logger=getLogger(__name__)
 # @task(cache_policy=NO_CACHE)# @task(cache_policy=NO_CACHE)  # 或者 @task(cache_key_fn=task_input_hash)
@@ -46,14 +51,21 @@ async def set_tmdb_id(movie_data_results:List[MovieDataSourceResult],tmdb_id_pro
     result=await tmdb_id_provider_service.set_id(movie_data_sources=movie_data_results)
     return result
 
-async def set_current_episodes(movie_data_results:List[MovieDataSourceResult],current_episodes_provider_service_:ICurrentEpisodesProvider)->List[MovieDataSourceResult]:
-    result=await current_episodes_provider_service_.set_current_episodes(movie_data_results)
+
+
+async def set_total_episodes(movie_data_results:List[MovieDataSourceResult],tmdb_episodes_provider_service:ITotalEpisodesProvider)->List[MovieDataSourceResult]:
+    result=await tmdb_episodes_provider_service.set_total_episodes(movie_data_results)
     return result
 
-async def set_total_episodes(movie_data_results:List[MovieDataSourceResult],total_episodes_provider_service_:ITotalEpisodesProvider)->List[MovieDataSourceResult]:
-    result=await total_episodes_provider_service_.set_total_episodes(movie_data_results)
+async def set_air_date(movie_date_results:List[MovieDataSourceResult],episodes_air_date_provider:IEpisodesAirDateProvider)->List[MovieDataSourceResult]:
+    result=await episodes_air_date_provider.set_air_date(movie_date_results)
     return result
-
+async def set_air_time(movie_date_results:List[MovieDataSourceResult],episodes_air_time_provider:IEpisodesAirTimeProvider)->List[MovieDataSourceResult]:
+    result=await episodes_air_time_provider.set_air_time(movie_date_results)
+    return result
+async def set_episodes_infos(movie_date_results:List[MovieDataSourceResult],episodes_info_provider:IEpisodesInfosProvider)->List[MovieDataSourceResult]:
+    result=await episodes_info_provider.set_episodes_infos(movie_date_results)
+    return result
 # @flow
 async def data_collection_get_hot_flow(categories:List[TVCategory],count:int):
         hot_resp= await get_hot(categories=categories,count=count,movie_base_provider_service=await get_douban_movie_base_provider_service())
@@ -62,16 +74,18 @@ async def data_collection_get_hot_flow(categories:List[TVCategory],count:int):
 
         split_resp= await split_title_season(movie_data_results=match_resp,split_title_season_service=fallback_split_title_season_service)
 
+
         get_tmdb_id_resp=await set_tmdb_id(split_resp,tmdb_id_provider_service=fallback_tmdb_id_provider_service)
 
-        set_total_episodes_resp=await set_total_episodes(get_tmdb_id_resp,total_episodes_provider_service_=total_episodes_provider_service)
+        set_total_episodes_resp=await set_total_episodes(get_tmdb_id_resp,tmdb_episodes_provider_service=tmdb_episodes_provider_service)
 
-        set_current_episodes_resp=await set_current_episodes(set_total_episodes_resp,current_episodes_provider_service_=current_episodes_provider_service)
+        set_episodes_infos_resp=await set_episodes_infos(set_total_episodes_resp,episodes_info_provider=episodes_info_provider_service)
 
+        set_air_date_resp=await set_air_date(set_episodes_infos_resp,episodes_air_date_provider=tmdb_air_date_provider)
 
-        for item in set_current_episodes_resp:
-            logger.debug(f'title={await item.title} season={await item.season} tmdb_infos={await item.tmdb_infos} current_episodes={await item.current_episodes} total_episodes={await item.total_episodes}')
-        return hot_resp
+        set_air_time_resp=await set_air_time(set_air_date_resp,episodes_air_time_provider=ai_copilot_episodes_air_time_provider)
+
+        return set_air_time_resp
 
 
 

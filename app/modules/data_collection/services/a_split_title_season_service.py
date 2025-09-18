@@ -12,7 +12,6 @@ from app.utils.cache import async_ttl_cache
 logger=getLogger(__name__)
 class ASplitTitleSeasonService(ISplitTitleSeasonInterface):
     @staticmethod
-    @async_ttl_cache(ttl=3600)
     def _split_title_season_1(title_season: str, patterns: List[str]) -> Tuple[str, Optional[str]]:
         """
         通用正则解析框架

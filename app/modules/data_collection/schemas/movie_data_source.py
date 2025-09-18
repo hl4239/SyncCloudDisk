@@ -1,6 +1,9 @@
-from pydantic import BaseModel
+from datetime import date
 
-from app.database.models import TVCategory, MovieCategory, MovieType, MovieStatus, TMDBInfos, Movie, MovieCloudInfo
+from pydantic import BaseModel, computed_field
+
+from app.database.models import TVCategory, MovieCategory, MovieType, MovieStatus, TMDBInfos, Movie, MovieCloudInfo, \
+    EpisodesInfo
 from app.utils.lazy_load import Lazy, lazy
 
 
@@ -18,4 +21,8 @@ class MovieDataSourceResult(BaseModel):
     current_episodes:Lazy[str]=lazy(None)
     status: Lazy[MovieStatus]=lazy(None)
     tmdb_infos:Lazy[TMDBInfos]=lazy(None)
+    episodes_info:Lazy[list[EpisodesInfo]]=lazy(None)
     movie_info:Lazy[Movie]=lazy(None)
+
+
+

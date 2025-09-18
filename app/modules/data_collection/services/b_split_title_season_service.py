@@ -16,7 +16,7 @@ logger=get_logger(__name__)
 class BSplitTitleSeasonService(ISplitTitleSeasonInterface):
     def __init__(self,open_ai_service:IOpenAIService):
         self.open_ai_service=open_ai_service
-    @async_ttl_cache(ttl=3600)
+    @async_ttl_cache()
     async def _get_ai_agent(self):
         instruction="""
         你是一位影视媒体库分类专家，你将从我提供的{title_season_list}中提取出各个title_season所对应的title,season'
@@ -32,8 +32,8 @@ class BSplitTitleSeasonService(ISplitTitleSeasonInterface):
         """
         return await self.open_ai_service.get_agent(name='copilot',model='gpt-5',instructions=instruction)
 
-
-    @async_ttl_cache(ttl=3600)
+    # 缓存60秒，因为会批量title_season一次性交给ai生成后缓存60秒
+    @async_ttl_cache(ttl=60)
     async def _split_title_season_1(self,title_seasons:Tuple[str,...]):
         agent=await self._get_ai_agent()
         result = await Runner.run(agent, input=f'{json.dumps(title_seasons,indent=2,ensure_ascii=False)}')

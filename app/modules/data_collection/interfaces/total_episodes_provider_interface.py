@@ -17,7 +17,7 @@ class ITotalEpisodesProvider(ABC):
 
     async def set_total_episodes(self, movie_data_results: List[MovieDataSourceResult]) -> List[MovieDataSourceResult]:
         """
-        获取影视的总剧集
+        如果总剧集不存在则获取
         :param movie_data_results:
         :return:
         """
@@ -26,8 +26,7 @@ class ITotalEpisodesProvider(ABC):
                 total_episodes = await movie_data_result.total_episodes
                 if not total_episodes:
                     logger.debug(f'开始注册总剧集回调：title={await movie_data_result.title} total_episodes={total_episodes}')
-                    copy_movie_data=copy.deepcopy(movie_data_result)
-                    movie_data_result.total_episodes=lazy(lambda c=copy_movie_data: self.get_total_episodes(c))
+                    movie_data_result.total_episodes=lazy(lambda c=movie_data_result: self.get_total_episodes(c))
                 else:
                     logger.debug(
                         f'无需注册总剧集回调：title={await movie_data_result.title} total_episodes={total_episodes}')

@@ -21,7 +21,6 @@ class ATMDBIDProviderService(ITMDBIDProvider):
     def __init__(self):
         ...
     @classmethod
-    @async_ttl_cache(ttl=3600)
     async def get_id_1(cls,title_season:str,movie_type:MovieType,year:Optional[str]=None)->Tuple[int,int]:
         """
         根据title_season 和year搜索 如果存在多个一样的结果，则需手动干预，如果第一个结果不一样则无效

@@ -2355,3 +2355,1915 @@ See https://docs.prefect.io/v3/concepts/server#how-to-guides for more informatio
 2025-09-08 22:15:57 [INFO] prefect.task_runs:293 - Finished in state Completed()
 2025-09-08 22:15:57 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
 2025-09-08 22:15:57 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8012
+2025-09-09 15:25:56 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 15:26:00 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 15:26:18 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 15:26:18 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 15:26:18 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 17:14:24 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 17:14:27 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 17:14:32 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 17:14:32 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 17:14:33 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 17:15:43 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 17:15:46 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 17:15:50 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 17:15:50 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 17:15:50 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 17:23:18 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 17:23:21 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 17:23:28 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 17:23:28 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 17:23:28 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 19:42:10 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8211
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-09 19:42:21 [INFO] prefect.flow_runs:1237 - Beginning flow run 'hasty-puma' for flow 'flow1'
+2025-09-09 19:42:22 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 19:42:22 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 19:42:22 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 19:42:26 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 19:42:26 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 19:42:27 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 19:42:29 [ERROR] prefect.task_runs:1172 - Task run failed with exception: AttributeError("'NoneType' object has no attribute 'weekday'") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 31, in collect_data_hot
+    return await data_collection_get_hot_flow(categories,count)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 81, in data_collection_get_hot_flow
+    set_air_time_resp=await set_air_time(set_air_date_resp,episodes_air_time_provider=ai_copilot_episodes_air_time_provider)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 66, in set_air_time
+    result=await episodes_air_time_provider.set_air_time(movie_date_results)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\interfaces\episodes_air_time_provider_interface.py", line 25, in set_air_time
+    episodes_info = await movie_data_result.episodes_info
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\lazy_load.py", line 58, in _ensure_run
+    res = await task
+          ^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\lazy_load.py", line 46, in _call_provider
+    return await maybe
+           ^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\services\tmdb_air_date_provider_service.py", line 49, in get_air_date
+    episodes_infos = await self._fetch_infos(tmdb_id=tmdb_id, season_number=season)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\cache.py", line 67, in async_wrapper
+    val = await maybe
+          ^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\services\tmdb_air_date_provider_service.py", line 36, in _fetch_infos
+    logger.debug(f'episodes_infos={episodes_info_results}')
+                                  ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\main.py", line 1202, in __repr__
+    return f'{self.__repr_name__()}({self.__repr_str__(", ")})'
+                                     ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\_internal\_repr.py", line 63, in __repr_str__
+    return join_str.join(repr(v) if a is None else f'{a}={v!r}' for a, v in self.__repr_args__())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\_internal\_repr.py", line 63, in <genexpr>
+    return join_str.join(repr(v) if a is None else f'{a}={v!r}' for a, v in self.__repr_args__())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\main.py", line 1209, in __repr_args__
+    (k, getattr(self, k)) for k, v in self.__pydantic_computed_fields__.items() if v.repr
+        ^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\main.py", line 988, in __getattr__
+    return super().__getattribute__(item)  # Raises AttributeError if appropriate
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\database\models.py", line 88, in weekday
+    return weekday_cn(self.air_date)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\date_to_weekday.py", line 6, in weekday_cn
+    return WEEKDAY_CN[d.weekday()]
+                      ^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'weekday'
+2025-09-09 19:42:29 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception AttributeError: 'NoneType' object has no attribute 'weekday'")
+2025-09-09 19:42:29 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: AttributeError("'NoneType' object has no attribute 'weekday'")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 57, in flow1
+    movie_data_source_results=  await collect_data_hot([TVCategory.CHINA,TVCategory.KOREA],count=5)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 31, in collect_data_hot
+    return await data_collection_get_hot_flow(categories,count)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 81, in data_collection_get_hot_flow
+    set_air_time_resp=await set_air_time(set_air_date_resp,episodes_air_time_provider=ai_copilot_episodes_air_time_provider)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 66, in set_air_time
+    result=await episodes_air_time_provider.set_air_time(movie_date_results)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\interfaces\episodes_air_time_provider_interface.py", line 25, in set_air_time
+    episodes_info = await movie_data_result.episodes_info
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\lazy_load.py", line 58, in _ensure_run
+    res = await task
+          ^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\lazy_load.py", line 46, in _call_provider
+    return await maybe
+           ^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\services\tmdb_air_date_provider_service.py", line 49, in get_air_date
+    episodes_infos = await self._fetch_infos(tmdb_id=tmdb_id, season_number=season)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\cache.py", line 67, in async_wrapper
+    val = await maybe
+          ^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\services\tmdb_air_date_provider_service.py", line 36, in _fetch_infos
+    logger.debug(f'episodes_infos={episodes_info_results}')
+                                  ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\main.py", line 1202, in __repr__
+    return f'{self.__repr_name__()}({self.__repr_str__(", ")})'
+                                     ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\_internal\_repr.py", line 63, in __repr_str__
+    return join_str.join(repr(v) if a is None else f'{a}={v!r}' for a, v in self.__repr_args__())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\_internal\_repr.py", line 63, in <genexpr>
+    return join_str.join(repr(v) if a is None else f'{a}={v!r}' for a, v in self.__repr_args__())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\main.py", line 1209, in __repr_args__
+    (k, getattr(self, k)) for k, v in self.__pydantic_computed_fields__.items() if v.repr
+        ^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\main.py", line 988, in __getattr__
+    return super().__getattribute__(item)  # Raises AttributeError if appropriate
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\database\models.py", line 88, in weekday
+    return weekday_cn(self.air_date)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\date_to_weekday.py", line 6, in weekday_cn
+    return WEEKDAY_CN[d.weekday()]
+                      ^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'weekday'
+2025-09-09 19:42:29 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: AttributeError: 'NoneType' object has no attribute 'weekday'")
+2025-09-09 19:42:29 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8211
+2025-09-09 19:46:08 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8127
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-09 19:46:18 [INFO] prefect.flow_runs:1237 - Beginning flow run 'fragrant-rhino' for flow 'flow1'
+2025-09-09 19:46:19 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 19:46:19 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 19:46:22 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 19:46:24 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 19:46:24 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 19:46:27 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 19:46:27 [ERROR] prefect.task_runs:1172 - Task run failed with exception: TypeError("'<' not supported between instances of 'NoneType' and 'datetime.date'") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 31, in collect_data_hot
+    return await data_collection_get_hot_flow(categories,count)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 81, in data_collection_get_hot_flow
+    set_air_time_resp=await set_air_time(set_air_date_resp,episodes_air_time_provider=ai_copilot_episodes_air_time_provider)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 66, in set_air_time
+    result=await episodes_air_time_provider.set_air_time(movie_date_results)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\interfaces\episodes_air_time_provider_interface.py", line 26, in set_air_time
+    if  episodes_info and movie_service.is_finale(episodes_info)==False:
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\services\movie_service.py", line 49, in is_finale
+    if last_episode.air_date < date.today():
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '<' not supported between instances of 'NoneType' and 'datetime.date'
+2025-09-09 19:46:27 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception TypeError: '<' not supported between instances of 'NoneType' and 'datetime.date'")
+2025-09-09 19:46:27 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: TypeError("'<' not supported between instances of 'NoneType' and 'datetime.date'")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 57, in flow1
+    movie_data_source_results=  await collect_data_hot([TVCategory.CHINA,TVCategory.KOREA],count=5)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 31, in collect_data_hot
+    return await data_collection_get_hot_flow(categories,count)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 81, in data_collection_get_hot_flow
+    set_air_time_resp=await set_air_time(set_air_date_resp,episodes_air_time_provider=ai_copilot_episodes_air_time_provider)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 66, in set_air_time
+    result=await episodes_air_time_provider.set_air_time(movie_date_results)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\interfaces\episodes_air_time_provider_interface.py", line 26, in set_air_time
+    if  episodes_info and movie_service.is_finale(episodes_info)==False:
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\services\movie_service.py", line 49, in is_finale
+    if last_episode.air_date < date.today():
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '<' not supported between instances of 'NoneType' and 'datetime.date'
+2025-09-09 19:46:27 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: TypeError: '<' not supported between instances of 'NoneType' and 'datetime.date'")
+2025-09-09 19:46:27 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8127
+2025-09-09 19:46:47 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8593
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-09 19:46:57 [INFO] prefect.flow_runs:1237 - Beginning flow run 'crafty-mandrill' for flow 'flow1'
+2025-09-09 19:46:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 19:46:58 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 19:47:00 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 19:47:02 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 19:47:02 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 19:47:04 [ERROR] prefect.task_runs:1172 - Task run failed with exception: TypeError("'<' not supported between instances of 'NoneType' and 'datetime.date'") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 31, in collect_data_hot
+    return await data_collection_get_hot_flow(categories,count)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 81, in data_collection_get_hot_flow
+    set_air_time_resp=await set_air_time(set_air_date_resp,episodes_air_time_provider=ai_copilot_episodes_air_time_provider)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 66, in set_air_time
+    result=await episodes_air_time_provider.set_air_time(movie_date_results)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\interfaces\episodes_air_time_provider_interface.py", line 26, in set_air_time
+    if  episodes_info and movie_service.is_finale(episodes_info)==False:
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\services\movie_service.py", line 49, in is_finale
+    if last_episode.air_date < date.today():
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '<' not supported between instances of 'NoneType' and 'datetime.date'
+2025-09-09 19:47:04 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception TypeError: '<' not supported between instances of 'NoneType' and 'datetime.date'")
+2025-09-09 19:47:04 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: TypeError("'<' not supported between instances of 'NoneType' and 'datetime.date'")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 57, in flow1
+    movie_data_source_results=  await collect_data_hot([TVCategory.CHINA,TVCategory.KOREA],count=5)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 31, in collect_data_hot
+    return await data_collection_get_hot_flow(categories,count)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 81, in data_collection_get_hot_flow
+    set_air_time_resp=await set_air_time(set_air_date_resp,episodes_air_time_provider=ai_copilot_episodes_air_time_provider)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 66, in set_air_time
+    result=await episodes_air_time_provider.set_air_time(movie_date_results)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\interfaces\episodes_air_time_provider_interface.py", line 26, in set_air_time
+    if  episodes_info and movie_service.is_finale(episodes_info)==False:
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\services\movie_service.py", line 49, in is_finale
+    if last_episode.air_date < date.today():
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '<' not supported between instances of 'NoneType' and 'datetime.date'
+2025-09-09 19:47:04 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: TypeError: '<' not supported between instances of 'NoneType' and 'datetime.date'")
+2025-09-09 19:47:04 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8593
+2025-09-09 19:47:04 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 19:58:15 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8625
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-09 19:58:25 [INFO] prefect.flow_runs:1237 - Beginning flow run 'arboreal-cormorant' for flow 'flow1'
+2025-09-09 19:58:26 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 19:58:26 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 19:58:27 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 19:58:31 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 19:58:31 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 19:58:32 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 19:58:40 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 19:58:41 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 19:58:41 [ERROR] prefect.task_runs:1172 - Task run failed with exception: AttributeError("'str' object has no attribute 'air_date'") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 48, in combin_to_movies
+    return await movie_service.combin_to_movies(movie_datas_sources)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\services\movie_service.py", line 125, in combin_to_movies
+    if not movie.current_episodes or not self.is_finale(movie.current_episodes):
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\services\movie_service.py", line 47, in is_finale
+    have_date_episodes=[e for e in episodes_info if e.air_date]
+                                                    ^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'air_date'
+2025-09-09 19:58:41 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception AttributeError: 'str' object has no attribute 'air_date'")
+2025-09-09 19:58:41 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: AttributeError("'str' object has no attribute 'air_date'")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 58, in flow1
+    combin_results=await combin_to_movies(movie_data_source_results)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 48, in combin_to_movies
+    return await movie_service.combin_to_movies(movie_datas_sources)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\services\movie_service.py", line 125, in combin_to_movies
+    if not movie.current_episodes or not self.is_finale(movie.current_episodes):
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\services\movie_service.py", line 47, in is_finale
+    have_date_episodes=[e for e in episodes_info if e.air_date]
+                                                    ^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'air_date'
+2025-09-09 19:58:41 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: AttributeError: 'str' object has no attribute 'air_date'")
+2025-09-09 19:58:41 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8625
+2025-09-09 20:07:54 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8630
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-09 20:08:04 [INFO] prefect.flow_runs:1237 - Beginning flow run 'zircon-anteater' for flow 'flow1'
+2025-09-09 20:08:05 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 20:08:05 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 20:08:07 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 20:08:10 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 20:08:10 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 20:08:12 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 20:08:18 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 20:08:19 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 20:08:19 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 20:08:22 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 20:08:23 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 20:08:23 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 20:08:23 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 20:08:27 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 20:08:29 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 20:08:29 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 20:08:29 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 20:08:29 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 20:08:29 [ERROR] prefect.task_runs:1172 - Task run failed with exception: TypeError("'<' not supported between instances of 'NoneType' and 'datetime.date'") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 48, in combin_to_movies
+    return await movie_service.combin_to_movies(movie_datas_sources)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\services\movie_service.py", line 129, in combin_to_movies
+    print(movies)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\main.py", line 1202, in __repr__
+    return f'{self.__repr_name__()}({self.__repr_str__(", ")})'
+                                     ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\_internal\_repr.py", line 63, in __repr_str__
+    return join_str.join(repr(v) if a is None else f'{a}={v!r}' for a, v in self.__repr_args__())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\_internal\_repr.py", line 63, in <genexpr>
+    return join_str.join(repr(v) if a is None else f'{a}={v!r}' for a, v in self.__repr_args__())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\main.py", line 1209, in __repr_args__
+    (k, getattr(self, k)) for k, v in self.__pydantic_computed_fields__.items() if v.repr
+        ^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\lazy_model\parser\new.py", line 110, in __getattribute__
+    res = object.__getattribute__(self, item)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\database\models.py", line 126, in is_finale
+    if last_episode.air_date<date.today():
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '<' not supported between instances of 'NoneType' and 'datetime.date'
+2025-09-09 20:08:29 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception TypeError: '<' not supported between instances of 'NoneType' and 'datetime.date'")
+2025-09-09 20:08:29 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: TypeError("'<' not supported between instances of 'NoneType' and 'datetime.date'")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 58, in flow1
+    combin_results=await combin_to_movies(movie_data_source_results)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 48, in combin_to_movies
+    return await movie_service.combin_to_movies(movie_datas_sources)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\services\movie_service.py", line 129, in combin_to_movies
+    print(movies)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\main.py", line 1202, in __repr__
+    return f'{self.__repr_name__()}({self.__repr_str__(", ")})'
+                                     ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\_internal\_repr.py", line 63, in __repr_str__
+    return join_str.join(repr(v) if a is None else f'{a}={v!r}' for a, v in self.__repr_args__())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\_internal\_repr.py", line 63, in <genexpr>
+    return join_str.join(repr(v) if a is None else f'{a}={v!r}' for a, v in self.__repr_args__())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\main.py", line 1209, in __repr_args__
+    (k, getattr(self, k)) for k, v in self.__pydantic_computed_fields__.items() if v.repr
+        ^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\lazy_model\parser\new.py", line 110, in __getattribute__
+    res = object.__getattribute__(self, item)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\database\models.py", line 126, in is_finale
+    if last_episode.air_date<date.today():
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '<' not supported between instances of 'NoneType' and 'datetime.date'
+2025-09-09 20:08:29 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: TypeError: '<' not supported between instances of 'NoneType' and 'datetime.date'")
+2025-09-09 20:08:29 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8630
+2025-09-09 20:08:29 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 20:10:45 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8933
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-09 20:10:55 [INFO] prefect.flow_runs:1237 - Beginning flow run 'imperial-macaw' for flow 'flow1'
+2025-09-09 20:10:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 20:10:56 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 20:10:57 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 20:11:05 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 20:11:05 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 20:11:07 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 20:11:14 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 20:11:15 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 20:11:15 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 20:11:17 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 20:11:19 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 20:11:19 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 20:11:19 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 20:11:22 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 20:11:25 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 20:11:25 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 20:11:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 20:11:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 20:11:25 [ERROR] prefect.task_runs:1172 - Task run failed with exception: TypeError("'NoneType' object is not iterable") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 48, in combin_to_movies
+    return await movie_service.combin_to_movies(movie_datas_sources)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\services\movie_service.py", line 129, in combin_to_movies
+    print(movies)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\main.py", line 1202, in __repr__
+    return f'{self.__repr_name__()}({self.__repr_str__(", ")})'
+                                     ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\_internal\_repr.py", line 63, in __repr_str__
+    return join_str.join(repr(v) if a is None else f'{a}={v!r}' for a, v in self.__repr_args__())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\_internal\_repr.py", line 63, in <genexpr>
+    return join_str.join(repr(v) if a is None else f'{a}={v!r}' for a, v in self.__repr_args__())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\main.py", line 1209, in __repr_args__
+    (k, getattr(self, k)) for k, v in self.__pydantic_computed_fields__.items() if v.repr
+        ^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\lazy_model\parser\new.py", line 110, in __getattribute__
+    res = object.__getattribute__(self, item)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\database\models.py", line 126, in is_finale
+    return movie_service.is_finale(self.episodes_info)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\services\movie_service.py", line 47, in is_finale
+    have_date_episodes=[e for e in episodes_info if e.air_date]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+2025-09-09 20:11:25 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception TypeError: 'NoneType' object is not iterable")
+2025-09-09 20:11:25 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: TypeError("'NoneType' object is not iterable")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 58, in flow1
+    combin_results=await combin_to_movies(movie_data_source_results)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 48, in combin_to_movies
+    return await movie_service.combin_to_movies(movie_datas_sources)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\services\movie_service.py", line 129, in combin_to_movies
+    print(movies)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\main.py", line 1202, in __repr__
+    return f'{self.__repr_name__()}({self.__repr_str__(", ")})'
+                                     ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\_internal\_repr.py", line 63, in __repr_str__
+    return join_str.join(repr(v) if a is None else f'{a}={v!r}' for a, v in self.__repr_args__())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\_internal\_repr.py", line 63, in <genexpr>
+    return join_str.join(repr(v) if a is None else f'{a}={v!r}' for a, v in self.__repr_args__())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\pydantic\main.py", line 1209, in __repr_args__
+    (k, getattr(self, k)) for k, v in self.__pydantic_computed_fields__.items() if v.repr
+        ^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\lazy_model\parser\new.py", line 110, in __getattribute__
+    res = object.__getattribute__(self, item)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\database\models.py", line 126, in is_finale
+    return movie_service.is_finale(self.episodes_info)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\services\movie_service.py", line 47, in is_finale
+    have_date_episodes=[e for e in episodes_info if e.air_date]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'NoneType' object is not iterable
+2025-09-09 20:11:25 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: TypeError: 'NoneType' object is not iterable")
+2025-09-09 20:11:25 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8933
+2025-09-09 20:11:25 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 20:20:07 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8253
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-09 20:20:17 [INFO] prefect.flow_runs:1237 - Beginning flow run 'fascinating-moose' for flow 'flow1'
+2025-09-09 20:20:18 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 20:20:18 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 20:20:20 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 20:20:25 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 20:20:25 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 20:20:26 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 20:20:34 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 20:20:35 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 20:20:35 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 20:20:36 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 20:20:39 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 20:20:39 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 20:20:39 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 20:20:41 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 20:20:44 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 20:20:44 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 20:20:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 20:20:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 20:20:44 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 20:20:44 [ERROR] prefect.task_runs:1172 - Task run failed with exception: ValueError('Cannot encode datetime.time(20, 0)') - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 52, in save_to_database
+    await movie_repository.upsert(movies,ignore_none=True)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\database\movie_repository.py", line 48, in upsert
+    await Movie.find_one(Movie.douban_id == movie.douban_id).upsert(
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\queries\update.py", line 346, in __await__
+    update_result = yield from self._update().__await__()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\queries\update.py", line 310, in _update
+    self.update_query,
+    ^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\queries\update.py", line 96, in update_query
+    return Encoder(custom_encoders=self.encoders).encode(query)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 146, in encode
+    key if isinstance(key, Enum) else str(key): self.encode(value)
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 146, in encode
+    key if isinstance(key, Enum) else str(key): self.encode(value)
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 150, in encode
+    return [self.encode(value) for value in obj]
+            ^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 146, in encode
+    key if isinstance(key, Enum) else str(key): self.encode(value)
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 152, in encode
+    raise ValueError(f"Cannot encode {obj!r}")
+ValueError: Cannot encode datetime.time(20, 0)
+2025-09-09 20:20:44 [ERROR] prefect.task_runs:293 - Finished in state Failed('Task run encountered an exception ValueError: Cannot encode datetime.time(20, 0)')
+2025-09-09 20:20:44 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: ValueError('Cannot encode datetime.time(20, 0)')
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 61, in flow1
+    await save_to_database(combin_results)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 52, in save_to_database
+    await movie_repository.upsert(movies,ignore_none=True)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\database\movie_repository.py", line 48, in upsert
+    await Movie.find_one(Movie.douban_id == movie.douban_id).upsert(
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\queries\update.py", line 346, in __await__
+    update_result = yield from self._update().__await__()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\queries\update.py", line 310, in _update
+    self.update_query,
+    ^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\queries\update.py", line 96, in update_query
+    return Encoder(custom_encoders=self.encoders).encode(query)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 146, in encode
+    key if isinstance(key, Enum) else str(key): self.encode(value)
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 146, in encode
+    key if isinstance(key, Enum) else str(key): self.encode(value)
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 150, in encode
+    return [self.encode(value) for value in obj]
+            ^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 146, in encode
+    key if isinstance(key, Enum) else str(key): self.encode(value)
+                                                ^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 152, in encode
+    raise ValueError(f"Cannot encode {obj!r}")
+ValueError: Cannot encode datetime.time(20, 0)
+2025-09-09 20:20:44 [ERROR] prefect.flow_runs:1316 - Finished in state Failed('Flow run encountered an exception: ValueError: Cannot encode datetime.time(20, 0)')
+2025-09-09 20:20:44 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8253
+2025-09-09 20:20:45 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 21:36:46 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8220
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-09 21:36:56 [INFO] prefect.flow_runs:1237 - Beginning flow run 'ubiquitous-caiman' for flow 'flow1'
+2025-09-09 21:36:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 21:36:56 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 21:36:59 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 21:37:03 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 21:37:03 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 21:37:04 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 21:39:05 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8050
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-09 21:39:14 [INFO] prefect.flow_runs:1237 - Beginning flow run 'tireless-falcon' for flow 'flow1'
+2025-09-09 21:39:15 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 21:39:16 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 21:39:17 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 21:39:21 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 21:39:21 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 21:39:22 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 21:39:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 21:39:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 21:39:26 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 21:39:26 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 21:39:26 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 21:39:27 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 21:39:44 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 21:39:44 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 21:39:44 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 21:39:47 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 21:39:53 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 21:39:53 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 21:39:53 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 21:39:57 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 21:40:02 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 21:40:02 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 21:40:02 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 21:40:07 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 21:40:18 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 21:40:18 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 21:40:18 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 21:40:18 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 21:40:18 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=行骗天下KR 为匹配到任何分割规则
+2025-09-09 21:40:18 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 21:40:18 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 21:40:18 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-09 21:40:18 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8050
+2025-09-09 21:40:19 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 22:16:40 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8542
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-09 22:16:49 [INFO] prefect.flow_runs:1237 - Beginning flow run 'esoteric-ara' for flow 'flow1'
+2025-09-09 22:16:50 [ERROR] prefect.task_runs:1172 - Task run failed with exception: TypeError("object of type 'NoneType' has no len()") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 31, in collect_data_hot
+    return await data_collection_get_hot_flow(categories,count)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 73, in data_collection_get_hot_flow
+    match_resp= await match_to_database(movie_data_results=hot_resp,match_to_database_service=match_to_database_service)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 41, in match_to_database
+    result= await match_to_database_service.match(movie_data_results)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\services\match_to_database_service.py", line 39, in match
+    await MatchToDatabaseService.combin(movie_data,movie)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\services\match_to_database_service.py", line 28, in combin
+    if movie.episodes_info and len(movie.episodes_info)>=len(await movie_data_source.episodes_info):
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object of type 'NoneType' has no len()
+2025-09-09 22:16:50 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception TypeError: object of type 'NoneType' has no len()")
+2025-09-09 22:16:50 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: TypeError("object of type 'NoneType' has no len()")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 57, in flow1
+    movie_data_source_results=  await collect_data_hot([TVCategory.CHINA,TVCategory.KOREA],count=5)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 31, in collect_data_hot
+    return await data_collection_get_hot_flow(categories,count)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 73, in data_collection_get_hot_flow
+    match_resp= await match_to_database(movie_data_results=hot_resp,match_to_database_service=match_to_database_service)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 41, in match_to_database
+    result= await match_to_database_service.match(movie_data_results)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\services\match_to_database_service.py", line 39, in match
+    await MatchToDatabaseService.combin(movie_data,movie)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\services\match_to_database_service.py", line 28, in combin
+    if movie.episodes_info and len(movie.episodes_info)>=len(await movie_data_source.episodes_info):
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: object of type 'NoneType' has no len()
+2025-09-09 22:16:50 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: TypeError: object of type 'NoneType' has no len()")
+2025-09-09 22:16:51 [WARNING] EventsWorker:144 - Still processing items: 3 items remaining...
+2025-09-09 22:16:51 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8542
+2025-09-09 22:17:51 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8597
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-09 22:18:01 [INFO] prefect.flow_runs:1237 - Beginning flow run 'gifted-gibbon' for flow 'flow1'
+2025-09-09 22:18:02 [ERROR] prefect.task_runs:1172 - Task run failed with exception: SSLError(MaxRetryError("HTTPSConnectionPool(host='api.themoviedb.org', port=443): Max retries exceeded with url: /3/tv/290886/season/1?language=zh-CN&api_key=39d0656bb993c02b4165616fd9cb0f8c (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))")) - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\connection.py", line 741, in connect
+    sock_and_verified = _ssl_wrap_socket_and_match_hostname(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\connection.py", line 920, in _ssl_wrap_socket_and_match_hostname
+    ssl_sock = ssl_wrap_socket(
+               ^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\util\ssl_.py", line 480, in ssl_wrap_socket
+    ssl_sock = _ssl_wrap_socket_impl(sock, context, tls_in_tls, server_hostname)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\util\ssl_.py", line 524, in _ssl_wrap_socket_impl
+    return ssl_context.wrap_socket(sock, server_hostname=server_hostname)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\helon\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 455, in wrap_socket
+    return self.sslsocket_class._create(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\helon\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1046, in _create
+    self.do_handshake()
+  File "C:\Users\helon\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1317, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLEOFError: [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\connectionpool.py", line 488, in _make_request
+    raise new_e
+urllib3.exceptions.SSLError: [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\requests\adapters.py", line 667, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\util\retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.themoviedb.org', port=443): Max retries exceeded with url: /3/tv/290886/season/1?language=zh-CN&api_key=39d0656bb993c02b4165616fd9cb0f8c (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 31, in collect_data_hot
+    return await data_collection_get_hot_flow(categories,count)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 82, in data_collection_get_hot_flow
+    set_episodes_infos_resp=await set_episodes_infos(set_total_episodes_resp,episodes_info_provider=episodes_info_provider_service)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 67, in set_episodes_infos
+    result=await episodes_info_provider.set_episodes_infos(movie_date_results)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\interfaces\episodes_infos_provider_interface.py", line 26, in set_episodes_infos
+    total_episodes = await movie_data_result.total_episodes
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\lazy_load.py", line 58, in _ensure_run
+    res = await task
+          ^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\lazy_load.py", line 46, in _call_provider
+    return await maybe
+           ^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\services\tmdb_episodes_provider_service.py", line 52, in get_total_episodes
+    _, total_episodes = await self._fetch_infos(tmdb_infos.id,tmdb_infos.season_number)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\cache.py", line 67, in async_wrapper
+    val = await maybe
+          ^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\services\tmdb_episodes_provider_service.py", line 34, in _fetch_infos
+    response = tv_season.info(language='zh-CN')
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\tmdbsimple\tv.py", line 524, in info
+    response = self._GET(path, kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\tmdbsimple\base.py", line 110, in _GET
+    return self._request('GET', path, params=params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\tmdbsimple\base.py", line 87, in _request
+    response = requests.request(
+               ^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\requests\adapters.py", line 698, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='api.themoviedb.org', port=443): Max retries exceeded with url: /3/tv/290886/season/1?language=zh-CN&api_key=39d0656bb993c02b4165616fd9cb0f8c (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))
+2025-09-09 22:18:02 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception SSLError: HTTPSConnectionPool(host='api.themoviedb.org', port=443): Max retries exceeded with url: /3/tv/290886/season/1?language=zh-CN&api_key=39d0656bb993c02b4165616fd9cb0f8c (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))")
+2025-09-09 22:18:02 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: SSLError(MaxRetryError("HTTPSConnectionPool(host='api.themoviedb.org', port=443): Max retries exceeded with url: /3/tv/290886/season/1?language=zh-CN&api_key=39d0656bb993c02b4165616fd9cb0f8c (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))"))
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\connection.py", line 741, in connect
+    sock_and_verified = _ssl_wrap_socket_and_match_hostname(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\connection.py", line 920, in _ssl_wrap_socket_and_match_hostname
+    ssl_sock = ssl_wrap_socket(
+               ^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\util\ssl_.py", line 480, in ssl_wrap_socket
+    ssl_sock = _ssl_wrap_socket_impl(sock, context, tls_in_tls, server_hostname)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\util\ssl_.py", line 524, in _ssl_wrap_socket_impl
+    return ssl_context.wrap_socket(sock, server_hostname=server_hostname)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\helon\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 455, in wrap_socket
+    return self.sslsocket_class._create(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\helon\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1046, in _create
+    self.do_handshake()
+  File "C:\Users\helon\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1317, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLEOFError: [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\connectionpool.py", line 488, in _make_request
+    raise new_e
+urllib3.exceptions.SSLError: [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\requests\adapters.py", line 667, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\urllib3\util\retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='api.themoviedb.org', port=443): Max retries exceeded with url: /3/tv/290886/season/1?language=zh-CN&api_key=39d0656bb993c02b4165616fd9cb0f8c (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 57, in flow1
+    movie_data_source_results=  await collect_data_hot([TVCategory.CHINA,TVCategory.KOREA],count=5)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 31, in collect_data_hot
+    return await data_collection_get_hot_flow(categories,count)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 82, in data_collection_get_hot_flow
+    set_episodes_infos_resp=await set_episodes_infos(set_total_episodes_resp,episodes_info_provider=episodes_info_provider_service)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 67, in set_episodes_infos
+    result=await episodes_info_provider.set_episodes_infos(movie_date_results)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\interfaces\episodes_infos_provider_interface.py", line 26, in set_episodes_infos
+    total_episodes = await movie_data_result.total_episodes
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\lazy_load.py", line 58, in _ensure_run
+    res = await task
+          ^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\lazy_load.py", line 46, in _call_provider
+    return await maybe
+           ^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\services\tmdb_episodes_provider_service.py", line 52, in get_total_episodes
+    _, total_episodes = await self._fetch_infos(tmdb_infos.id,tmdb_infos.season_number)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\utils\cache.py", line 67, in async_wrapper
+    val = await maybe
+          ^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\services\tmdb_episodes_provider_service.py", line 34, in _fetch_infos
+    response = tv_season.info(language='zh-CN')
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\tmdbsimple\tv.py", line 524, in info
+    response = self._GET(path, kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\tmdbsimple\base.py", line 110, in _GET
+    return self._request('GET', path, params=params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\tmdbsimple\base.py", line 87, in _request
+    response = requests.request(
+               ^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\requests\adapters.py", line 698, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='api.themoviedb.org', port=443): Max retries exceeded with url: /3/tv/290886/season/1?language=zh-CN&api_key=39d0656bb993c02b4165616fd9cb0f8c (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))
+2025-09-09 22:18:02 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: SSLError: HTTPSConnectionPool(host='api.themoviedb.org', port=443): Max retries exceeded with url: /3/tv/290886/season/1?language=zh-CN&api_key=39d0656bb993c02b4165616fd9cb0f8c (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))")
+2025-09-09 22:18:02 [WARNING] EventsWorker:144 - Still processing items: 3 items remaining...
+2025-09-09 22:18:02 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8597
+2025-09-09 22:41:22 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8900
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-09 22:41:32 [INFO] prefect.flow_runs:1237 - Beginning flow run 'attractive-salmon' for flow 'flow1'
+2025-09-09 22:41:43 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 22:41:43 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 22:41:45 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 22:42:22 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 22:42:22 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 22:42:22 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 22:42:25 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 22:42:31 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 22:42:31 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 22:42:31 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 22:42:35 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 22:42:37 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 22:42:37 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 22:42:38 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 22:42:40 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 22:42:44 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 22:42:44 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 22:42:45 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 22:42:47 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 22:42:50 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 22:42:52 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 22:42:52 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 22:42:52 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 22:42:52 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 22:42:52 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-09 22:42:53 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8900
+2025-09-09 22:42:53 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 22:56:29 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8781
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-09 22:56:39 [INFO] prefect.flow_runs:1237 - Beginning flow run 'amaranth-hedgehog' for flow 'flow1'
+2025-09-09 22:56:44 [ERROR] prefect.task_runs:1172 - Task run failed with exception: TypeError("'<' not supported between instances of 'int' and 'NoneType'") - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 31, in collect_data_hot
+    return await data_collection_get_hot_flow(categories,count)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 82, in data_collection_get_hot_flow
+    set_episodes_infos_resp=await set_episodes_infos(set_total_episodes_resp,episodes_info_provider=episodes_info_provider_service)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 67, in set_episodes_infos
+    result=await episodes_info_provider.set_episodes_infos(movie_date_results)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\interfaces\episodes_infos_provider_interface.py", line 27, in set_episodes_infos
+    if  episodes_infos is None or len(episodes_infos) <movie_service.extract_episode_number(total_episodes) :
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+2025-09-09 22:56:44 [ERROR] prefect.task_runs:293 - Finished in state Failed("Task run encountered an exception TypeError: '<' not supported between instances of 'int' and 'NoneType'")
+2025-09-09 22:56:44 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: TypeError("'<' not supported between instances of 'int' and 'NoneType'")
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 57, in flow1
+    movie_data_source_results=  await collect_data_hot([TVCategory.CHINA,TVCategory.KOREA],count=5)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 31, in collect_data_hot
+    return await data_collection_get_hot_flow(categories,count)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 82, in data_collection_get_hot_flow
+    set_episodes_infos_resp=await set_episodes_infos(set_total_episodes_resp,episodes_info_provider=episodes_info_provider_service)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\flow.py", line 67, in set_episodes_infos
+    result=await episodes_info_provider.set_episodes_infos(movie_date_results)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\modules\data_collection\interfaces\episodes_infos_provider_interface.py", line 27, in set_episodes_infos
+    if  episodes_infos is None or len(episodes_infos) <movie_service.extract_episode_number(total_episodes) :
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: '<' not supported between instances of 'int' and 'NoneType'
+2025-09-09 22:56:44 [ERROR] prefect.flow_runs:1316 - Finished in state Failed("Flow run encountered an exception: TypeError: '<' not supported between instances of 'int' and 'NoneType'")
+2025-09-09 22:56:44 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8781
+2025-09-09 23:00:55 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8842
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-09 23:01:05 [INFO] prefect.flow_runs:1237 - Beginning flow run 'ambrosial-basilisk' for flow 'flow1'
+2025-09-09 23:01:11 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 23:01:11 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 23:01:11 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 23:01:11 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-09 23:01:11 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8842
+2025-09-09 23:06:23 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8847
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-09 23:06:33 [INFO] prefect.flow_runs:1237 - Beginning flow run 'woodoo-wolf' for flow 'flow1'
+2025-09-09 23:06:36 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 23:06:36 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 23:06:36 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 23:06:36 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-09 23:06:36 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8847
+2025-09-09 23:14:22 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8659
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-09 23:14:32 [INFO] prefect.flow_runs:1237 - Beginning flow run 'vehement-curassow' for flow 'flow1'
+2025-09-09 23:14:35 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 23:14:35 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 23:14:39 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 23:14:45 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 23:14:45 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 23:14:45 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 23:14:45 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 23:14:45 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-09 23:14:45 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8659
+2025-09-09 23:14:46 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 23:19:41 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8130
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-09 23:19:51 [INFO] prefect.flow_runs:1237 - Beginning flow run 'boisterous-gaur' for flow 'flow1'
+2025-09-09 23:19:53 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 23:19:53 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 23:19:53 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 23:19:53 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-09 23:19:53 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8130
+2025-09-09 23:20:47 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8071
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-09 23:20:57 [INFO] prefect.flow_runs:1237 - Beginning flow run 'dark-parakeet' for flow 'flow1'
+2025-09-09 23:20:58 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=献鱼 为匹配到任何分割规则
+2025-09-09 23:20:58 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 23:20:59 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 23:21:12 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 23:21:12 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 23:21:12 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=与晋长安 为匹配到任何分割规则
+2025-09-09 23:21:12 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-09 23:21:12 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=凡人修仙传 为匹配到任何分割规则
+2025-09-09 23:21:12 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=归队 为匹配到任何分割规则
+2025-09-09 23:21:12 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-09 23:21:12 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-09 23:21:12 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-09 23:21:12 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=献鱼 为匹配到任何分割规则
+2025-09-09 23:21:14 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 23:21:15 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=与晋长安 为匹配到任何分割规则
+2025-09-09 23:21:15 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=与晋长安 为匹配到任何分割规则
+2025-09-09 23:21:18 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-09 23:21:18 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-09 23:21:18 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=凡人修仙传 为匹配到任何分割规则
+2025-09-09 23:21:18 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=归队 为匹配到任何分割规则
+2025-09-09 23:21:18 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-09 23:21:23 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-09 23:21:23 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-09 23:21:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-09 23:21:25 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-09 23:21:27 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-09 23:21:27 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-09 23:21:27 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=献鱼 为匹配到任何分割规则
+2025-09-09 23:21:27 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=与晋长安 为匹配到任何分割规则
+2025-09-09 23:21:27 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=与晋长安 为匹配到任何分割规则
+2025-09-09 23:21:27 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=与晋长安 为匹配到任何分割规则
+2025-09-09 23:21:27 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-09 23:21:27 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-09 23:21:27 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-09 23:21:27 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=凡人修仙传 为匹配到任何分割规则
+2025-09-09 23:21:27 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=归队 为匹配到任何分割规则
+2025-09-09 23:21:28 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-09 23:21:29 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-09 23:21:29 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-09 23:21:29 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-09 23:21:29 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-09 23:21:29 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-09 23:21:29 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-09 23:21:29 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-09 23:21:29 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-09 23:21:29 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-09 23:21:29 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-09 23:21:32 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=献鱼 为匹配到任何分割规则
+2025-09-09 23:21:33 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=与晋长安 为匹配到任何分割规则
+2025-09-09 23:21:33 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=与晋长安 为匹配到任何分割规则
+2025-09-09 23:21:33 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-09 23:21:33 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-09 23:21:36 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=凡人修仙传 为匹配到任何分割规则
+2025-09-09 23:21:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=归队 为匹配到任何分割规则
+2025-09-09 23:21:40 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-09 23:21:42 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-09 23:21:42 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-09 23:21:42 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-09 23:21:43 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-09 23:21:43 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-09 23:21:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-09 23:21:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-09 23:21:44 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 23:21:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=献鱼 为匹配到任何分割规则
+2025-09-09 23:21:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=献鱼 为匹配到任何分割规则
+2025-09-09 23:21:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=与晋长安 为匹配到任何分割规则
+2025-09-09 23:21:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=与晋长安 为匹配到任何分割规则
+2025-09-09 23:21:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=与晋长安 为匹配到任何分割规则
+2025-09-09 23:21:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=与晋长安 为匹配到任何分割规则
+2025-09-09 23:21:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-09 23:21:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=足迹 为匹配到任何分割规则
+2025-09-09 23:21:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-09 23:21:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-09 23:21:44 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 23:21:44 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 23:21:56 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 23:21:56 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 23:21:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=凡人修仙传 为匹配到任何分割规则
+2025-09-09 23:21:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=凡人修仙传 为匹配到任何分割规则
+2025-09-09 23:21:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=归队 为匹配到任何分割规则
+2025-09-09 23:21:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=归队 为匹配到任何分割规则
+2025-09-09 23:21:56 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 23:22:00 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 23:22:11 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 23:22:11 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 23:22:11 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 23:22:15 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 23:22:17 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 23:22:17 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 23:22:18 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-09 23:22:19 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-09 23:22:19 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-09 23:22:20 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 23:22:20 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-09 23:22:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-09 23:22:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=我的青春 为匹配到任何分割规则
+2025-09-09 23:22:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-09 23:22:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-09 23:22:20 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-09 23:22:25 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-09 23:22:30 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 23:22:30 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-09 23:22:30 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-09 23:22:30 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-09 23:22:31 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-09 23:22:31 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-09 23:22:31 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-09 23:22:31 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-09 23:22:31 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-09 23:22:31 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-09 23:22:31 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-09 23:22:32 [ERROR] prefect.task_runs:1172 - Task run failed with exception: ValueError('Cannot encode datetime.time(19, 30)') - No retries configured for this task.
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 52, in save_to_database
+    await movie_repository.upsert(movies,ignore_none=True)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\database\movie_repository.py", line 48, in upsert
+    await Movie.find_one(Movie.douban_id == movie.douban_id).upsert(
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\queries\update.py", line 359, in __await__
+    yield from self.document_model.insert_one(
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\documents.py", line 416, in insert_one
+    return await document.insert(link_rule=link_rule, session=session)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\actions.py", line 237, in wrapper
+    result = await f(
+             ^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\state.py", line 89, in wrapper
+    result = await f(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\self_validation.py", line 19, in wrapper
+    return await f(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\documents.py", line 369, in insert
+    get_dict(
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\dump.py", line 22, in get_dict
+    return encoder.encode(document)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 138, in encode
+    return self._encode_document(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 121, in _encode_document
+    obj_dict[key] = sub_encoder.encode(value)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 150, in encode
+    return [self.encode(value) for value in obj]
+            ^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 143, in encode
+    return {key: self.encode(value) for key, value in items}
+                 ^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 152, in encode
+    raise ValueError(f"Cannot encode {obj!r}")
+ValueError: Cannot encode datetime.time(19, 30)
+2025-09-09 23:22:32 [ERROR] prefect.task_runs:293 - Finished in state Failed('Task run encountered an exception ValueError: Cannot encode datetime.time(19, 30)')
+2025-09-09 23:22:32 [ERROR] prefect.flow_runs:1361 - Encountered exception during execution: ValueError('Cannot encode datetime.time(19, 30)')
+Traceback (most recent call last):
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1357, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1419, in run_flow_async
+    await engine.call_flow_fn()
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\flow_engine.py", line 1371, in call_flow_fn
+    result = await call_with_parameters(self.flow.fn, self.parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 61, in flow1
+    await save_to_database(combin_results)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1538, in run_task_async
+    return engine.state if return_type == "state" else await engine.result()
+                                                       ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1086, in result
+    raise self._raised
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1457, in run_context
+    yield self
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1536, in run_task_async
+    await engine.call_task_fn(txn)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\prefect\task_engine.py", line 1474, in call_task_fn
+    result = await call_with_parameters(self.task.fn, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\flow\sync_new_movie_flow.py", line 52, in save_to_database
+    await movie_repository.upsert(movies,ignore_none=True)
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\app\database\movie_repository.py", line 48, in upsert
+    await Movie.find_one(Movie.douban_id == movie.douban_id).upsert(
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\queries\update.py", line 359, in __await__
+    yield from self.document_model.insert_one(
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\documents.py", line 416, in insert_one
+    return await document.insert(link_rule=link_rule, session=session)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\actions.py", line 237, in wrapper
+    result = await f(
+             ^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\state.py", line 89, in wrapper
+    result = await f(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\self_validation.py", line 19, in wrapper
+    return await f(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\documents.py", line 369, in insert
+    get_dict(
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\dump.py", line 22, in get_dict
+    return encoder.encode(document)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 138, in encode
+    return self._encode_document(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 121, in _encode_document
+    obj_dict[key] = sub_encoder.encode(value)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 150, in encode
+    return [self.encode(value) for value in obj]
+            ^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 143, in encode
+    return {key: self.encode(value) for key, value in items}
+                 ^^^^^^^^^^^^^^^^^^
+  File "D:\HLworkspace\temp\SyncCloudDisk2.0\.venv\Lib\site-packages\beanie\odm\utils\encoder.py", line 152, in encode
+    raise ValueError(f"Cannot encode {obj!r}")
+ValueError: Cannot encode datetime.time(19, 30)
+2025-09-09 23:22:32 [ERROR] prefect.flow_runs:1316 - Finished in state Failed('Flow run encountered an exception: ValueError: Cannot encode datetime.time(19, 30)')
+2025-09-09 23:22:32 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8071
+2025-09-09 23:22:32 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-10 00:19:23 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8341
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-10 00:19:32 [INFO] prefect.flow_runs:1237 - Beginning flow run 'strange-sunfish' for flow 'flow1'
+2025-09-10 00:19:33 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-10 00:19:33 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-10 00:19:35 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-10 00:19:41 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-10 00:19:41 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-10 00:19:41 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=凡人修仙传 为匹配到任何分割规则
+2025-09-10 00:19:41 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=归队 为匹配到任何分割规则
+2025-09-10 00:19:41 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-10 00:19:41 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-10 00:19:41 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:19:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-10 00:19:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-10 00:19:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=凡人修仙传 为匹配到任何分割规则
+2025-09-10 00:19:44 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=归队 为匹配到任何分割规则
+2025-09-10 00:19:45 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-10 00:19:45 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-10 00:19:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-10 00:19:51 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-10 00:19:54 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-10 00:19:54 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-10 00:19:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:19:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:19:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-10 00:19:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-10 00:19:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-10 00:19:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=凡人修仙传 为匹配到任何分割规则
+2025-09-10 00:19:57 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=归队 为匹配到任何分割规则
+2025-09-10 00:19:58 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-10 00:19:59 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-10 00:19:59 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-10 00:19:59 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-10 00:19:59 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-10 00:19:59 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-10 00:19:59 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-10 00:19:59 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-10 00:19:59 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:19:59 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:19:59 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:20:01 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-10 00:20:01 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-10 00:20:03 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=凡人修仙传 为匹配到任何分割规则
+2025-09-10 00:20:06 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=归队 为匹配到任何分割规则
+2025-09-10 00:20:09 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-10 00:20:11 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-10 00:20:12 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-10 00:20:12 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-10 00:20:12 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-10 00:20:12 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-10 00:20:13 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:20:13 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:20:13 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-10 00:20:13 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-10 00:20:13 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=足迹 为匹配到任何分割规则
+2025-09-10 00:20:13 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-10 00:20:13 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=足迹 为匹配到任何分割规则
+2025-09-10 00:20:13 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-10 00:20:15 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-10 00:20:20 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-10 00:20:20 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-10 00:20:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=凡人修仙传 为匹配到任何分割规则
+2025-09-10 00:20:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=凡人修仙传 为匹配到任何分割规则
+2025-09-10 00:20:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=归队 为匹配到任何分割规则
+2025-09-10 00:20:20 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=归队 为匹配到任何分割规则
+2025-09-10 00:20:20 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-10 00:20:25 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-10 00:20:28 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-10 00:20:28 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-10 00:20:29 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-10 00:20:30 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-10 00:20:30 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-10 00:20:31 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-10 00:20:31 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=清潭国际高中 第二季,movie_type=MovieType.TV,year=2025
+2025-09-10 00:20:31 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-10 00:20:31 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=我的青春 为匹配到任何分割规则
+2025-09-10 00:20:31 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-10 00:20:31 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=我的青春 为匹配到任何分割规则
+2025-09-10 00:20:31 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-10 00:20:35 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-10 00:20:38 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-10 00:20:38 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-10 00:20:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-10 00:20:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-10 00:20:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-10 00:20:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=瑞草洞 为匹配到任何分割规则
+2025-09-10 00:20:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:20:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:20:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:20:38 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:20:38 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-10 00:20:38 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-10 00:20:38 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-10 00:20:38 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8341
+2025-09-10 00:20:38 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-10 00:34:10 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8000
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-10 00:34:20 [INFO] prefect.flow_runs:1237 - Beginning flow run 'adamant-crocodile' for flow 'flow1'
+2025-09-10 00:34:21 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:34:21 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-10 00:34:23 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-10 00:34:29 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-10 00:34:29 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-10 00:34:32 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:34:32 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:34:32 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:34:32 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:34:32 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:34:33 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-10 00:34:34 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:34:34 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:34:34 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-10 00:34:34 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:34:34 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:34:34 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:34:34 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=以幸存者之名：深入韩国惨案 为匹配到任何分割规则
+2025-09-10 00:34:34 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-10 00:34:34 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-10 00:34:34 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-10 00:34:34 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8000
+2025-09-15 18:11:49 [WARNING] __main__:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-15 18:11:49 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 18:30:22 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 19:15:18 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 19:54:20 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 19:56:43 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 19:57:44 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 20:00:55 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 20:03:26 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 20:03:37 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 20:05:28 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 20:06:33 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 20:07:08 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 20:07:27 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 20:07:44 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 20:16:41 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8813
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-15 20:16:48 [INFO] prefect.flow_runs:1237 - Beginning flow run 'granite-curassow' for flow 'flow1'
+2025-09-15 20:16:49 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=赴山海 为匹配到任何分割规则
+2025-09-15 20:16:49 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-15 20:16:51 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.396879 seconds
+2025-09-15 20:16:52 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-15 20:16:54 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.808189 seconds
+2025-09-15 20:16:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:25 - litellm.APIError: APIError: OpenAIException - Connection error.
+2025-09-15 20:16:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:26 - 获取title失败，title_season=赴山海失败，将返回None
+2025-09-15 20:16:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:16:56 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-15 20:16:57 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-15 20:16:58 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.459717 seconds
+2025-09-15 20:17:01 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.797304 seconds
+2025-09-15 20:17:24 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-15 20:17:24 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-15 20:17:26 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=赴山海 为匹配到任何分割规则
+2025-09-15 20:17:26 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=赴山海 为匹配到任何分割规则
+2025-09-15 20:17:27 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=暴风圈,movie_type=MovieType.TV,year=2025
+2025-09-15 20:17:27 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:27 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:27 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-15 20:17:28 [INFO] app.modules.data_collection.interfaces.tmdb_id_provider_interface:30 - 未搜索到任何内容或与搜索结果title不同，参数：title=暴风圈,season=第 1 季  搜索结果：浪漫暴风圈
+2025-09-15 20:17:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=赴山海 为匹配到任何分割规则
+2025-09-15 20:17:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=赴山海 为匹配到任何分割规则
+2025-09-15 20:17:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=赴山海 为匹配到任何分割规则
+2025-09-15 20:17:28 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=暴风圈,movie_type=MovieType.TV,year=2025
+2025-09-15 20:17:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:28 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:29 [INFO] app.modules.data_collection.interfaces.tmdb_id_provider_interface:30 - 未搜索到任何内容或与搜索结果title不同，参数：title=暴风圈,season=第 1 季  搜索结果：浪漫暴风圈
+2025-09-15 20:17:29 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:29 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=暴风圈,movie_type=MovieType.TV,year=2025
+2025-09-15 20:17:29 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:29 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:30 [INFO] app.modules.data_collection.interfaces.tmdb_id_provider_interface:30 - 未搜索到任何内容或与搜索结果title不同，参数：title=暴风圈,season=第 1 季  搜索结果：浪漫暴风圈
+2025-09-15 20:17:30 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:30 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:31 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=赴山海 为匹配到任何分割规则
+2025-09-15 20:17:31 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=赴山海 为匹配到任何分割规则
+2025-09-15 20:17:31 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=暴风圈,movie_type=MovieType.TV,year=2025
+2025-09-15 20:17:31 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:31 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:32 [INFO] app.modules.data_collection.interfaces.tmdb_id_provider_interface:30 - 未搜索到任何内容或与搜索结果title不同，参数：title=暴风圈,season=第 1 季  搜索结果：浪漫暴风圈
+2025-09-15 20:17:32 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:32 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:32 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-15 20:17:32 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=赴山海 为匹配到任何分割规则
+2025-09-15 20:17:32 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=赴山海 为匹配到任何分割规则
+2025-09-15 20:17:33 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=赴山海 为匹配到任何分割规则
+2025-09-15 20:17:33 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=赴山海 为匹配到任何分割规则
+2025-09-15 20:17:33 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-15 20:17:37 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-15 20:17:46 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-15 20:17:46 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-15 20:17:46 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:46 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:47 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=暴风圈,movie_type=MovieType.TV,year=2025
+2025-09-15 20:17:47 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:47 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:47 [INFO] app.modules.data_collection.interfaces.tmdb_id_provider_interface:30 - 未搜索到任何内容或与搜索结果title不同，参数：title=暴风圈,season=第 1 季  搜索结果：浪漫暴风圈
+2025-09-15 20:17:47 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:47 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-15 20:17:48 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=暴风圈,movie_type=MovieType.TV,year=2025
+2025-09-15 20:17:48 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:48 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:49 [INFO] app.modules.data_collection.interfaces.tmdb_id_provider_interface:30 - 未搜索到任何内容或与搜索结果title不同，参数：title=暴风圈,season=第 1 季  搜索结果：浪漫暴风圈
+2025-09-15 20:17:49 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=暴风圈,movie_type=MovieType.TV,year=2025
+2025-09-15 20:17:49 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:49 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:50 [INFO] app.modules.data_collection.interfaces.tmdb_id_provider_interface:30 - 未搜索到任何内容或与搜索结果title不同，参数：title=暴风圈,season=第 1 季  搜索结果：浪漫暴风圈
+2025-09-15 20:17:50 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=暴风圈 为匹配到任何分割规则
+2025-09-15 20:17:50 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-15 20:17:50 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-15 20:17:50 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-15 20:17:50 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-15 20:17:59 [INFO] prefect.flow_runs:1316 - Finished in state Completed()
+2025-09-15 20:17:59 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8813
+2025-09-15 20:17:59 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 22:33:03 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 22:33:50 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 22:34:24 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 22:36:21 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 22:40:16 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 22:48:46 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 22:49:25 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 23:13:55 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 23:18:33 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 23:24:23 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 23:38:36 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 23:49:55 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 23:50:44 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-15 23:50:48 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-15 23:50:49 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-15 23:54:50 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-15 23:54:56 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-15 23:54:56 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 15:06:06 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 15:06:25 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 15:06:44 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 15:09:07 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 15:09:57 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 19:18:15 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 19:18:33 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 19:19:54 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 19:20:49 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 19:21:10 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 19:21:37 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 19:23:18 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 21:09:46 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 21:14:32 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 21:15:41 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 21:16:26 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-16 21:16:30 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-16 21:16:30 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-16 21:16:30 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 22:03:47 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 22:04:43 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-16 22:04:48 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-16 22:04:49 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-16 22:04:49 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 22:08:43 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-16 22:08:48 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-16 22:08:48 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-16 22:08:48 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 22:09:30 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-16 22:09:34 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-16 22:09:35 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-16 22:09:46 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-16 22:09:50 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-16 22:09:51 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-16 22:09:51 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 09:57:28 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8088
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-17 09:57:35 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-17 09:57:36 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-17 09:57:36 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8088
+2025-09-17 09:57:36 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 10:08:55 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8902
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-17 10:09:02 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-17 10:09:03 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-17 10:09:08 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8902
+2025-09-17 10:09:08 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 10:10:33 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8888
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-17 10:10:39 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-17 10:10:40 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-17 10:10:45 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8888
+2025-09-17 10:10:45 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 10:14:40 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8999
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-17 10:14:47 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-17 10:14:48 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-17 10:14:52 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8999
+2025-09-17 10:14:52 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 10:17:16 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8422
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-17 10:17:24 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-17 10:17:25 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-17 10:17:29 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8422
+2025-09-17 10:17:29 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 10:19:13 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8531
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-17 10:19:19 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-17 10:19:20 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-17 10:19:25 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8531
+2025-09-17 10:19:25 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 10:21:54 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8706
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-17 10:22:01 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-17 10:22:01 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-17 10:22:02 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8706
+2025-09-17 10:22:02 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 10:22:23 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8350
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-17 10:22:30 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-17 10:22:31 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-17 10:22:35 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8350
+2025-09-17 10:22:35 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 10:30:41 [INFO] prefect:838 - Starting temporary server on http://127.0.0.1:8004
+See https://docs.prefect.io/v3/concepts/server#how-to-guides for more information on running a dedicated Prefect server.
+2025-09-17 10:30:48 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-17 10:30:49 [INFO] prefect.task_runs:293 - Finished in state Completed()
+2025-09-17 10:30:49 [INFO] prefect:917 - Stopping temporary server on http://127.0.0.1:8004
+2025-09-17 10:30:49 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 10:31:48 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 11:52:03 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 11:55:36 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 12:00:22 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 12:02:15 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 12:09:46 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=暴风圈,movie_type=MovieType.TV,year=2025
+2025-09-17 12:09:47 [INFO] app.modules.data_collection.interfaces.tmdb_id_provider_interface:30 - 未搜索到任何内容或与搜索结果title不同，参数：title=暴风圈,season=第 1 季  搜索结果：浪漫暴风圈
+2025-09-17 12:09:47 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=暴风圈,movie_type=MovieType.TV,year=2025
+2025-09-17 12:09:48 [INFO] app.modules.data_collection.interfaces.tmdb_id_provider_interface:30 - 未搜索到任何内容或与搜索结果title不同，参数：title=暴风圈,season=第 1 季  搜索结果：浪漫暴风圈
+2025-09-17 12:09:49 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=暴风圈,movie_type=MovieType.TV,year=2025
+2025-09-17 12:09:49 [INFO] app.modules.data_collection.interfaces.tmdb_id_provider_interface:30 - 未搜索到任何内容或与搜索结果title不同，参数：title=暴风圈,season=第 1 季  搜索结果：浪漫暴风圈
+2025-09-17 12:09:49 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 12:10:52 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 12:14:57 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 12:22:52 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 12:23:40 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 12:25:53 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 12:31:55 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=暴风圈,movie_type=MovieType.TV,year=2025
+2025-09-17 12:31:56 [INFO] app.modules.data_collection.interfaces.tmdb_id_provider_interface:31 - 未搜索到任何内容或与搜索结果title不同，参数：title=暴风圈,season=第 1 季  搜索结果：浪漫暴风圈
+2025-09-17 12:31:56 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 12:36:41 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=暴风圈,movie_type=MovieType.TV,year=2025
+2025-09-17 12:36:41 [INFO] app.modules.data_collection.interfaces.tmdb_id_provider_interface:31 - 未搜索到任何内容或与搜索结果title不同，参数：title=暴风圈,season=第 1 季  搜索结果：浪漫暴风圈
+2025-09-17 12:36:41 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 12:58:33 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=暴风圈,movie_type=MovieType.TV,year=2025
+2025-09-17 12:58:34 [INFO] app.modules.data_collection.interfaces.tmdb_id_provider_interface:31 - 未搜索到任何内容或与搜索结果title不同，参数：title=暴风圈,season=第 1 季  搜索结果：浪漫暴风圈
+2025-09-17 12:58:38 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 15:43:20 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=暴风圈,movie_type=MovieType.TV,year=2025
+2025-09-17 15:43:21 [INFO] app.modules.data_collection.interfaces.tmdb_id_provider_interface:31 - 未搜索到任何内容或与搜索结果title不同，参数：title=暴风圈,season=第 1 季  搜索结果：浪漫暴风圈
+2025-09-17 15:43:25 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 15:44:13 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=暴风圈,movie_type=MovieType.TV,year=2025
+2025-09-17 15:44:14 [INFO] app.modules.data_collection.interfaces.tmdb_id_provider_interface:31 - 未搜索到任何内容或与搜索结果title不同，参数：title=暴风圈,season=第 1 季  搜索结果：浪漫暴风圈
+2025-09-17 15:44:22 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 15:46:26 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=灼灼韶华 为匹配到任何分割规则
+2025-09-17 15:46:26 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-17 15:46:28 [INFO] openai._base_client:1573 - Retrying request to /chat/completions in 0.411084 seconds
+2025-09-17 15:46:29 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-17 15:46:29 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 15:46:29 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-17 15:48:16 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=暴风圈,movie_type=MovieType.TV,year=2025
+2025-09-17 15:48:16 [INFO] app.modules.data_collection.interfaces.tmdb_id_provider_interface:31 - 未搜索到任何内容或与搜索结果title不同，参数：title=暴风圈,season=第 1 季  搜索结果：浪漫暴风圈
+2025-09-17 15:48:25 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 15:50:30 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-17 15:50:32 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-17 15:50:52 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-17 15:50:52 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-17 15:50:57 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-17 15:51:01 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 15:53:43 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=灼灼韶华 为匹配到任何分割规则
+2025-09-17 15:53:43 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-17 15:53:45 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-17 15:53:47 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-17 15:53:47 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-17 15:53:47 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=欢乐家长群2 为匹配到任何分割规则
+2025-09-17 15:53:47 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=你和其余的一切 为匹配到任何分割规则
+2025-09-17 15:53:47 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=十二使者 为匹配到任何分割规则
+2025-09-17 15:53:50 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=欢乐家长群2,movie_type=MovieType.TV,year=2025
+2025-09-17 15:53:50 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:21 - title_season=欢乐家长群2 为匹配到任何分割规则
+2025-09-17 15:53:50 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=欢乐家长群2 为匹配到任何分割规则
+2025-09-17 15:53:50 [INFO] app.modules.data_collection.interfaces.tmdb_id_provider_interface:31 - title或者season为空：title=欢乐家长群 season=None
+2025-09-17 15:53:50 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-17 15:53:56 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=灼灼韶华 为匹配到任何分割规则
+2025-09-17 15:53:56 [INFO] LiteLLM:2958 - 
+LiteLLM completion() model= gpt-5; provider = openai
+2025-09-17 15:54:00 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-17 15:54:03 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-17 15:54:03 [INFO] LiteLLM:655 - selected model name for cost calculation: openai/gpt-5
+2025-09-17 15:54:03 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=欢乐家长群2 为匹配到任何分割规则
+2025-09-17 15:54:03 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=你和其余的一切 为匹配到任何分割规则
+2025-09-17 15:54:03 [WARNING] app.modules.data_collection.services.fallback_split_title_season_service:35 - title_season=十二使者 为匹配到任何分割规则
+2025-09-17 15:54:05 [WARNING] openai.agents:93 - OPENAI_API_KEY is not set, skipping trace export
+2025-09-17 15:54:25 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-17 15:54:38 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-17 15:54:38 [WARNING] app.modules.link_parse.clients.quark_parse_client:98 - 请求 stoken 失败（网络层）: 404, message='', url='https://drive-pc.quark.cn/1/clouddrive/share/sharepage/token?pr=ucpro&fr=pc'
+2025-09-17 15:55:31 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 16:22:07 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=欢乐家长群2,movie_type=MovieType.TV,year=2025
+2025-09-17 16:22:07 [INFO] app.modules.data_collection.interfaces.tmdb_id_provider_interface:31 - title或者season为空：title=欢乐家长群 season=None
+2025-09-17 16:22:08 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 16:37:05 [INFO] app.modules.data_collection.services.fallback_tmdb_id_provider_service:25 - 未匹配到与title_season的tmdb_id和season，title_season=欢乐家长群2,movie_type=MovieType.TV,year=2025
+2025-09-17 16:37:05 [INFO] app.modules.data_collection.interfaces.tmdb_id_provider_interface:31 - title或者season为空：title=欢乐家长群 season=None
+2025-09-17 16:37:05 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-17 19:26:52 [INFO] root:138 - [task c8ff0194544542b98b928fcd037ad7ee] log handler attached for capture
+2025-09-17 19:31:16 [INFO] root:138 - [task b213f2f7308640459b9189f74bf0d811] log handler attached for capture
+2025-09-17 19:39:35 [INFO] root:138 - [task 4c900dfaa819413ebde659b8744baef2] log handler attached for capture
+2025-09-17 19:43:29 [INFO] root:138 - [task 901efd5abf894422a57df04b8463c9f2] log handler attached for capture
+2025-09-17 19:48:14 [INFO] root:138 - [task 351725e8cc414789ada2923bfc8cb61e] log handler attached for capture
+2025-09-17 21:37:10 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-18 00:10:38 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-18 00:15:40 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-18 00:19:53 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-18 00:25:20 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-18 00:30:20 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-18 00:34:49 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-18 01:01:35 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-18 01:06:35 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-18 01:06:50 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-18 01:15:24 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-18 01:20:24 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-18 01:30:26 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-18 01:32:13 [INFO] root:138 - [task d2189cbf56af4199b48c8abd004b37a9] log handler attached for capture
+2025-09-18 01:33:51 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-18 01:34:18 [INFO] root:138 - [task 18f0927834314442922a8568a55995a3] log handler attached for capture
+2025-09-18 01:42:31 [INFO] root:138 - [task 75b5fa6610ab447b86c59b4f041338af] log handler attached for capture
+2025-09-18 01:45:20 [INFO] root:138 - [task 9147bad9dfd24abe98d16ecffe1eb99a] log handler attached for capture
+2025-09-18 01:48:26 [INFO] root:138 - [task 57936fdc21d94dc482f6522e3309f9db] log handler attached for capture
+2025-09-18 01:52:51 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-18 01:57:51 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-18 02:01:19 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-18 02:02:18 [INFO] root:138 - [task 4f2a3013e94e4296bc5ada04bebe2e56] log handler attached for capture
+2025-09-18 02:10:56 [INFO] root:138 - [task db9b3a19c26346efa21498a06c2c3ae9] log handler attached for capture
+2025-09-18 02:10:57 [INFO] root:138 - [task dc8c0e48db504f54913d7eeac07d4db8] log handler attached for capture
+2025-09-18 02:11:32 [INFO] app.core.abc_aio_client:149 - AioClientManager shutdown complete.
+2025-09-18 02:14:55 [INFO] root:138 - [task eb0d9215cdd84cf6bb769a2099c75daf] log handler attached for capture
+2025-09-18 02:19:35 [INFO] root:138 - [task 600a3add1d94482a85cbfaa922f586de] log handler attached for capture

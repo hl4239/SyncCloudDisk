@@ -25,15 +25,14 @@ class MovieDataSourceAdapter:
         movie_type = await movie_data_source.movie_type
         season = await movie_data_source.season
         total_episodes = await movie_data_source.total_episodes
-        current_episodes = await movie_data_source.current_episodes
         status = await movie_data_source.status
         tmdb_infos = await movie_data_source.tmdb_infos
         movie_info = await movie_data_source.movie_info
 
         movie=Movie(title=title,douban_id=douban_id,title_season=title_season,subtitle=subtitle
                     ,description=description,year=year,category=category,movie_type=movie_type
-                    ,season=season,total_episodes=total_episodes,current_episodes=current_episodes
-                    ,status=status,
+                    ,season=season,total_episodes=total_episodes,
+
                     tmdb_infos=tmdb_infos,
         )
         return movie

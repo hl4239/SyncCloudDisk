@@ -8,5 +8,4 @@ init_db_sync()
 def test_lazy_load_():
     movie=Movie(title_season='',year='2024',movie_type=MovieType.MOVIE)
     movie.register_lazy_field('current_episodes',lambda self:'草泥马')
-    l=movie.current_episodes
-    print(l)
+
