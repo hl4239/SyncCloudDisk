@@ -12,6 +12,9 @@ from app.utils.cache import async_ttl_cache
 import tmdbsimple as tmdb
 logger=logging.getLogger(__name__)
 class TMDBAirDateProviderService(IEpisodesAirDateProvider):
+    """
+
+    """
     async def _fetch_infos(self, tmdb_id: int, season_number: int) -> List[EpisodesInfo]:
 
         """
@@ -45,6 +48,7 @@ class TMDBAirDateProviderService(IEpisodesAirDateProvider):
         title_season=await movie_data_source.title_season
         if not tmdb_id or  season is None:
             logger.warning(f'title_season={title_season}, tmdb_id={tmdb_id}, season={season} tmdb_id和tmdb_season至少一个为空，无法搜索tmdb数据库')
+            return await movie_data_source.episodes_info
         tmdb_episodes_infos = await self._fetch_infos(tmdb_id=tmdb_id, season_number=season)
         episodes_infos=await movie_data_source.episodes_info
         episodes_infos_map={

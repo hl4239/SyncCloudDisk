@@ -4,7 +4,7 @@ from beanie import init_beanie
 from app.core.config import settings
 import asyncio
 
-from app.database.models import PanCloud, SplitTitleSeasonRegular, OpenAISource
+from app.database.models import PanCloud, SplitTitleSeasonRegular, OpenAISource, CronJobDoc, SystemConfig
 
 # 使用 motor + beanie 异步初始化数据库
 _client: Optional[AsyncIOMotorClient] = None
@@ -21,7 +21,7 @@ async def init_db():
 		# beanie 需要数据库实例和 Document 列表进行初始化；为了避免循环依赖，这里延迟导入 models
 		from app.database.models import Movie
 
-		await init_beanie(database=db, document_models=[Movie,PanCloud,SplitTitleSeasonRegular,OpenAISource],)
+		await init_beanie(database=db, document_models=[Movie,PanCloud,SplitTitleSeasonRegular,OpenAISource,CronJobDoc,SystemConfig],)
 	else:
 		db = _client.get_default_database()
 	return db

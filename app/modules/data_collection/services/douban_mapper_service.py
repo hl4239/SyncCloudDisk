@@ -35,7 +35,7 @@ class DoubanMapperService(IMapper):
         countries = self.extract_countries(card_subtitle)
         first_country = countries[0]
         if movie_type==MovieType.TV:
-            if any(kw ==first_country for kw in ['中国']):
+            if any(kw ==first_country for kw in ['中国','中国大陆','大陆']):
                 return TVCategory.CHINA
             elif any(kw ==first_country for kw in ['英国','美国']):
                 return TVCategory.EUROPE

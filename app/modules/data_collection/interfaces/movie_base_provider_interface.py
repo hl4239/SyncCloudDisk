@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List, Union
 
-from app.database.models import TVCategory, Movie, MovieCategory
+from app.database.models import TVCategory, Movie, MovieCategory, MovieType
+from app.modules.data_collection.schemas.douban_schemas import DoubanDetailResponse
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
 
 
@@ -21,7 +22,7 @@ class IMovieBaseProvider(ABC):
         ...
 
     @abstractmethod
-    async def search(self,keyword:str,count=1) -> List[MovieDataSourceResult]:
+    async def search(self,keyword:str,count=10):
         """
         根据关键词搜索，只返回匹配到的前count个数据
         :param count:
@@ -29,3 +30,6 @@ class IMovieBaseProvider(ABC):
         :return:
         """
         ...
+
+    async def get_movie_by_douban_id(self, douban_id: str, movie_type: MovieType) -> List[MovieDataSourceResult]:
+       ...

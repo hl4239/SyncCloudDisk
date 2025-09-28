@@ -19,12 +19,12 @@ class AICopilotEpisodesInfoProvider(IEpisodesAirDateProvider,IEpisodesAirTimePro
     def __init__(self, open_ai_service:OpenAIService):
         self.open_ai_service = open_ai_service
 
-    @async_ttl_cache
+
     async def _get_ai_agent_air_date(self):
         instruction = """
         你是一位影视剧追剧日历专家，你将从我提供的title_season,description确定一个影视剧，并搜寻其剧集播出日历
         【输出格式要求】
-        输出必须严格遵循以下JSON结构：
+        输出必须严格遵循以下JSON结构,确保用markdown···json格式包裹文字：
         [
             {
               "air_date":"字符串类型，格式如：'2025-09-17T20:00:00+08:00'"
@@ -32,15 +32,15 @@ class AICopilotEpisodesInfoProvider(IEpisodesAirDateProvider,IEpisodesAirTimePro
             }
         ]
         """
-        return await self.open_ai_service.get_agent(name='copilot', model='gpt-5', instructions=instruction)
+        return await self.open_ai_service.get_agent( instructions=instruction)
 
-    @async_ttl_cache
+
     async def _get_ai_agent_air_time(self):
         instruction = """
         你是一位影视剧追剧日历专家，你将从我提供的title_season,description确定一个影视剧，并补充我给出的剧集播放时间表episodes_info
         补充说明：其中air_date是我已经确定绝对正确的日期，你需要做的是对air_time补充
         【输出格式要求】
-        输出必须严格遵循以下JSON结构：
+        输出必须严格遵循以下JSON结构,确保用markdown···json格式包裹文字：
         [
             {
               "air_time":"字符串类型 格式为'hh:mm:ss'，时区为北京时间(utc+8)"
@@ -48,7 +48,7 @@ class AICopilotEpisodesInfoProvider(IEpisodesAirDateProvider,IEpisodesAirTimePro
             }
         ]
         """
-        return await self.open_ai_service.get_agent(name='copilot', model='gpt-5', instructions=instruction)
+        return await self.open_ai_service.get_agent( instructions=instruction)
 
 
 
@@ -61,20 +61,25 @@ class AICopilotEpisodesInfoProvider(IEpisodesAirDateProvider,IEpisodesAirTimePro
         agent = await self._get_ai_agent_air_time()
         description=await movie_data_source.description
         result = await Runner.run(agent, input=f'title_season={title_season} description={description} episodes_info_list={[e for e in episodes_info if e]}' )
-        json_resp = self.open_ai_service.format_to_json(result.final_output)
-        logger.debug(f'ai对air_time补充：{json_resp}')
+        for i in range(3):
+            try:
+                json_resp = self.open_ai_service.format_to_json(result.final_output)
+                logger.debug(f'ai对air_time补充：{json_resp}')
 
 
-        episodes_info_episode_number_map={
-            e.episode_number:e
-        for e in episodes_info
-        }
-        for r in json_resp:
-            air_time_str=r['air_time']
-            episode_number=r['episode_number']
-            episodes_info_item=episodes_info_episode_number_map[episode_number]
-            episodes_info_item.air_time=air_time_str
+                episodes_info_episode_number_map={
+                    e.episode_number:e
+                for e in episodes_info
+                }
+                for r in json_resp:
+                    air_time_str=r['air_time']
+                    episode_number=r['episode_number']
+                    episodes_info_item=episodes_info_episode_number_map[episode_number]
+                    episodes_info_item.air_time=air_time_str
 
+                return episodes_info
+            except Exception as e:
+                logger.exception(f'发送了错误,重试第{i+1}/3次 :{e}')
         return episodes_info
 
     async def get_air_date(self, movie_data_source: MovieDataSourceResult) -> List[EpisodesInfo]:

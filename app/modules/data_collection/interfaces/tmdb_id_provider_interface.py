@@ -16,23 +16,13 @@ class ITMDBIDProvider(ABC):
         ...
 
     async def get_tmdb_infos(self,movie_data_source:MovieDataSourceResult)->TMDBInfos:
-        print(f'title_season={await movie_data_source.title_season}' )
         tmdb_infos = await movie_data_source.tmdb_infos
-        print(f'tmdb_infos={tmdb_infos}')
         if tmdb_infos:
             if tmdb_infos.id:
                 return tmdb_infos
         else:
             tmdb_infos = TMDBInfos()
-        try:
-            tmdb_infos.id,tmdb_infos.season_number = await self.get_tmdb_id(movie_data_source)
-            tmdb_infos.not_ensure=False
-        except TMDBIDNotFound as e:
-            logger.info(e)
-
-        except TMDBIDNotEnsure as e:
-            logger.info(e)
-            tmdb_infos.not_ensure=True
+        tmdb_infos.id,tmdb_infos.season_number = await self.get_tmdb_id(movie_data_source)
         return tmdb_infos
 
     async def set_id(self, movie_data_sources: List[MovieDataSourceResult]) -> List[MovieDataSourceResult]:
@@ -43,7 +33,3 @@ class ITMDBIDProvider(ABC):
 
         return movie_data_sources
 
-class TMDBIDNotEnsure(Exception):
-    ...
-class TMDBIDNotFound(Exception):
-    ...

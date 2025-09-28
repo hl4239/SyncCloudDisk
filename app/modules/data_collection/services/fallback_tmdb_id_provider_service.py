@@ -5,8 +5,7 @@ from typing import Tuple
 from app.core.config import settings
 from app.core.logging_config import setup_logging
 from app.database.models import MovieType
-from app.modules.data_collection.interfaces.tmdb_id_provider_interface import ITMDBIDProvider, TMDBIDNotEnsure, \
-    TMDBIDNotFound
+from app.modules.data_collection.interfaces.tmdb_id_provider_interface import ITMDBIDProvider
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
 from app.modules.data_collection.services.a_tmdb_id_provider_service import a_tmdb_id_provider_service
 from app.modules.data_collection.services.b_tmdb_provider_service import b_tmdb_provider_service
@@ -19,12 +18,16 @@ class FallbackTMDBIDProviderService(ITMDBIDProvider):
         self.b_tmdb_id_provider_service = b_tmdb_id_provider_service
 
     async def get_tmdb_id(self, movie_data_source: MovieDataSourceResult) -> Tuple[int, int]:
-        try:
-            tmdb_id,season_number=await self.a_tmdb_id_provider_service.get_tmdb_id(movie_data_source)
-        except Exception as e:
-            logger.info(e)
 
-            tmdb_id,season_number=await self.b_tmdb_id_provider_service.get_tmdb_id(movie_data_source)
+        r= await self.a_tmdb_id_provider_service.get_tmdb_id(movie_data_source)
+        if not r:
+            r=await self.b_tmdb_id_provider_service.get_tmdb_id(movie_data_source)
+        if r:
+            tmdb_id=r[0]
+            season_number=r[1]
+        else:
+            tmdb_id=None
+            season_number=None
         return tmdb_id,season_number
 fallback_tmdb_id_provider_service = FallbackTMDBIDProviderService(a_tmdb_id_provider_service=a_tmdb_id_provider_service,b_tmdb_id_provider_service=b_tmdb_provider_service)
 async def main():

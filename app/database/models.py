@@ -1,14 +1,17 @@
+import uuid
 from datetime import time, datetime, date, timezone, timedelta
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional,  Union
+from typing import List, Optional, Union, Dict, Any, Annotated
 
 import pydantic
-from beanie import Document, Indexed
-from pydantic import Field, model_validator, BaseModel, field_validator, computed_field, field_serializer
+import pytz
+from beanie import Document, Indexed, Link
+from pydantic import Field, model_validator, BaseModel, field_validator, computed_field, field_serializer, validator
 
 from app.core.config import settings
 from app.utils.date_to_weekday import weekday_cn
+from app.utils.generic_crud import Filter
 
 
 # --- 数据模型定义 ---
@@ -23,32 +26,32 @@ class CloudType(str, Enum):
     BAIDU="Baidu"
     UNKNOWN="Unknown"
 class PanCloud(Document):
+    name: Optional[str] = Indexed(
+        str, default=None, unique=True, description="唯一标识，创建时由用户手动输入"
+    )
+
+    cloud_type:Optional[CloudType] = Field(None,description='网盘类型')
+    cookie: Optional[str] = Field(default=None, description="登录cookie")
+    enable: bool = Field(default=False, description="是否启用该网盘")
 
 
-    phone_tail:str=Field(default=None,description='手机尾号后4位')
-    cloud_type:CloudType=Field(default=CloudType.QUARK)
-    cookie:str=Field(default=None,description='登录cookie')
-    unique_key: Optional[Indexed(str, unique=True)] = None
-    @model_validator(mode="after")
-    def generate_unique_key(self) -> 'PanCloud':
-        """
-        在模型初始化并填充默认值后，生成 unique_key。
-        """
-        # 检查 unique_key 是否已经被赋值，如果没有，则生成它
-        if not self.unique_key:
-            # 此处可以直接访问 self 的属性，它们已经包含了用户输入或字段的默认值
-            # 例如，如果创建实例时未提供 season，self.season 的值会是 "第一季"
 
-            self.unique_key = f"{self.cloud_type.value}_{self.phone_tail}"
-
-        # 'after' 模式的验证器必须返回模型实例 self
-        return self
 class MovieCloudInfo(pydantic.BaseModel):
-    cloud_type: Optional[CloudType]=Field(default=None,description='网盘类型')
-    cloud_unique_key:Optional[PanCloud]=None
-    path:Optional[Path]=None
-
-
+    pancloud_name:Optional[str]=Field(default=None, description="PanCloud name")
+    last_save_time:Optional[datetime]=Field(None)
+    last_save_link:Optional[str]=Field(None)
+    last_save_success:bool=Field(default=False)
+    pdir_name:Optional[str]=Field(default=None,)
+    latest_episode_number:Optional[int]=Field(default=None)
+    share_link:Optional[str]=Field(default=None)
+    @model_validator(mode='after')
+    def convert_datetimes(self):
+        """在模型验证后转换时间字段"""
+        if self.last_save_time:
+            if self.last_save_time.tzinfo is None:
+                self.last_save_time = self.last_save_time.replace(tzinfo=timezone.utc)
+            self.last_save_time = self.last_save_time.astimezone(pytz.timezone("Asia/Shanghai"))
+        return self
 class TVCategory(str, Enum):
     CHINA="China"
     JAPAN="Japan"
@@ -68,8 +71,6 @@ class EpisodesInfo(pydantic.BaseModel):
     air_date: Optional[date] = None  # 只有年月日
     # 用户补充的数据 - 改为存储字符串格式
     air_time: Optional[str] = Field(default=None, description="用户补充的时间（ISO格式字符串，如 '20:00:00'）")
-    tz_offset: int = Field(default=8)  # 时区偏移（默认北京时间 +8）
-
     # 自定义验证器处理 time 对象输入
     @field_validator('air_time', mode='before')
     @classmethod
@@ -103,13 +104,12 @@ class EpisodesInfo(pydantic.BaseModel):
         如果有 air_date，则返回合成的完整 datetime；
         如果 air_date 为 None，则返回 None；
         如果 air_time 为 None，则默认为 00:00（午夜）。
-        tz_offset 用于构造时区偏移（默认 +8 小时）。
         """
         if self.air_date is None:
             return None
         # 如果没有提供 air_time，默认 00:00
         air_time_obj = self.air_time_obj or time(0, 0)
-        tzinfo = timezone(timedelta(hours=self.tz_offset))
+        tzinfo = pytz.timezone("Asia/Shanghai")
         return datetime.combine(self.air_date, air_time_obj, tzinfo=tzinfo)
 
     @computed_field
@@ -146,41 +146,62 @@ class CloudShareLink(BaseModel):
         if 'quark' in self.url:
             return CloudType.QUARK
         return CloudType.UNKNOWN
+
+class MetaDataProviderEnum (str, Enum):
+    RENREN = "人人视频"
+
+class MetaDataProvider(BaseModel):
+    provider: MetaDataProviderEnum=Field(default=None)
+    title: Optional[str] = Field(default=None)
+    id:Optional[str]=Field(default=None)
+
 class Movie(Document):
     # 1. 首先，定义 unique_key 字段
     douban_id: Indexed(str, unique=True) = Field(
         description="豆瓣影视id"
     )
     title: Optional[str] = Field(default=None)
-    title_season:str = Field(description='title和season一起')
+    title_season:Annotated[str, Filter(ops=["eq", "contains"])] = Field(description='title和season一起')
+    original_title:Optional[str]=Field(default=None,description='原名，比如tmdb中可能只能用韩剧的韩语原名在哪查询到')
     subtitle: Optional[list[str]] = Field(default=None, description='子标题')
+    pic:Optional[str] = Field(default=None,description='图片地址')
     description: Optional[str] = Field(default=None)
     year: Optional[str]=Field(default=None)
-    category: Union[TVCategory, MovieCategory]=Field(default=None)
-    movie_type: MovieType = Field( description='影视类型电影或电视')
+    category:Annotated[Union[TVCategory, MovieCategory],Filter(ops=["eq"])] =Field(default=None)
+    movie_type: Annotated[ MovieType,Filter(ops=["eq"])] = Field( description='影视类型电影或电视')
     season: Optional[str] = Field(default=None, description='描述影视第几季, e.g., "1", "第一季"')
-    total_episodes:Optional[str]=Field(default=None)
-    cloud_infos: Optional[list[MovieCloudInfo]] = Field(default=None, description='网盘信息')
-    tmdb_infos:Optional[TMDBInfos]=Field(default=None)
-    have_newer_episodes:bool=Field(default=False)
-    episodes_info:Optional[list[EpisodesInfo]]=Field(default=None,description='剧集信息')
+    total_episodes:Optional[str]=Field(default=None,description='描述影视总剧集数')
+    cloud_infos: Optional[list[MovieCloudInfo]] = Field(default_factory=list, description='网盘信息')
+    tmdb_infos:Optional[TMDBInfos]=Field(default=TMDBInfos(not_ensure=True))
+    episodes_info:Optional[list[EpisodesInfo]]=Field(default_factory=list,description='剧集信息')
+    share_links:Optional[List[str]]=Field(default_factory=list,description='追踪的网盘分享链接')
+    metadata_providers:Optional[List[MetaDataProvider]]=Field(default_factory=list,description='元数据提供者的信息')
+    create_time:Annotated[Optional[datetime],Filter(ops=["eq","gt","lt"])] =Field(default=None,description='创建时间')
+    update_time:Annotated[Optional[datetime],Filter(ops=["eq","gt","lt"])]=Field(default=None,description='更新时间')
+
+    @model_validator(mode='after')
+    def convert_datetimes(self):
+        """在模型验证后转换时间字段"""
+        if self.create_time:
+            if self.create_time.tzinfo is None:
+                self.create_time = self.create_time.replace(tzinfo=timezone.utc)
+            self.create_time = self.create_time.astimezone(pytz.timezone("Asia/Shanghai"))
+
+        if self.update_time:
+            if self.update_time.tzinfo is None:
+                self.update_time = self.update_time.replace(tzinfo=timezone.utc)
+            self.update_time = self.update_time.astimezone(pytz.timezone("Asia/Shanghai"))
+
+        return self
 
 
-    @computed_field
-    @property
-    def is_finale(self)->bool:
-        from app.services.movie_service import movie_service
-
-        return movie_service.is_finale(self.episodes_info)
 
     def generate_path(self, ):
-        return Path(settings.CLOUD_ROOT) / self.movie_type.value /  self.category /  self.year /  self.title_season
+        return  Path(settings.CLOUD_ROOT) / self.movie_type.value /  self.category /  self.year /  self.title_season
 
     def get_season_number(self):
         return self.tmdb_infos.season_number
 
-    @computed_field
-    @property
     def get_latest_episode_info(self)->Optional[EpisodesInfo]:
         """
         从列表中挑选已播出的最新剧集
@@ -192,8 +213,7 @@ class Movie(Document):
             return None
 
         # 当前时间 (北京时间)
-        tz_beijing = timezone(timedelta(hours=8))
-        now = datetime.now(tz_beijing)
+        now = datetime.now(pytz.timezone("Asia/Shanghai"))
 
             # 筛选出已播出的剧集
         aired = [ep for ep in episodes if ep.full_air_datetime and ep.full_air_datetime < now]
@@ -204,9 +224,12 @@ class Movie(Document):
         # 返回 episode_number 最大的
         return max(aired, key=lambda ep: ep.episode_number)
 
-
-
-
+    def get_today_will_update_episodes(self):
+        episodes=self.episodes_info
+        if not episodes:
+            return []
+        now = datetime.now(pytz.timezone("Asia/Shanghai"))
+        return [i for i in episodes if i.air_date==now.date()]
 
 
 
@@ -218,10 +241,76 @@ class OpenAISource(Document):
     name:str
     key:str
     base_url:str
-    models:List[str]
+    models:List[str]=Field(default_factory=list)
+    extra_body:Dict[str, Any]=Field(default={})
     # 关键配置，防list类型报错
     model_config = {
         "arbitrary_types_allowed": True
     }
+
+# -------------------------
+# Beanie Document (持久化模型)
+# -------------------------
+class CronJobDoc(Document):
+    """
+    使用 Beanie Document 持久化定时任务。
+    - job_id: 业务上的唯一 id（字符串），保留用于查询/UI 操作。
+    - created_at/last_run_at/next_run_at 使用 datetime（UTC）
+    - params 存储为 dict
+    """
+    job_id: str = Field(default_factory=lambda: uuid.uuid4().hex, index=True)
+    task_name: str
+    cron: str
+    params: Dict[str, Any] = Field(default_factory=dict)
+    tz: str = "UTC"
+    enabled: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(pytz.timezone("Asia/Shanghai")))
+    last_run_at: Optional[datetime] = None
+    next_run_at: Optional[datetime] = None
+
+    @model_validator(mode='after')
+    def convert_datetimes(self):
+        """在模型验证后转换时间字段"""
+        if self.created_at:
+            if self.created_at.tzinfo is None:
+                self.created_at = self.created_at.replace(tzinfo=timezone.utc)
+            self.created_at = self.created_at.astimezone(pytz.timezone("Asia/Shanghai"))
+
+        if self.last_run_at:
+            if self.last_run_at.tzinfo is None:
+                self.last_run_at = self.last_run_at.replace(tzinfo=timezone.utc)
+            self.last_run_at = self.last_run_at.astimezone(pytz.timezone("Asia/Shanghai"))
+
+        if self.next_run_at:
+            if self.next_run_at.tzinfo is None:
+                self.next_run_at = self.next_run_at.replace(tzinfo=timezone.utc)
+            self.next_run_at = self.next_run_at.astimezone(pytz.timezone("Asia/Shanghai"))
+
+        return self
+
+    class Settings:
+        name = "cron_jobs"  # Mongo collection name
+
+class OpenAiConfig(BaseModel):
+    default_source_name:Optional[str]=Field(default=None,description='')
+    sources:List[OpenAISource]=Field(default_factory=list)
+
+class SystemConfig(Document):
+    # system 字段支持 eq 和 contains 查询
+    system: str = Field(default='影视管理系统', description="系统名称或标识")
+
+    # version 字段只支持 eq 查询
+    version: str= Field(default='1.0',description='版本号')
+
+    open_ai_config:OpenAiConfig=Field(default=OpenAiConfig())
+
+    split_title_season_patterns:List[SplitTitleSeasonRegular]=Field(default_factory=list)
+
+
+
+
+    class Settings:
+        name = "system_config"
+
 
 

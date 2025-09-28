@@ -33,6 +33,7 @@ class MovieDataSourceAdapter:
                     ,description=description,year=year,category=category,movie_type=movie_type
                     ,season=season,total_episodes=total_episodes,
 
+
                     tmdb_infos=tmdb_infos,
         )
         return movie

@@ -21,10 +21,26 @@ class MatchToDatabaseService(IMatchToDatabase):
             if movie.tmdb_infos:
                 movie_data_source.tmdb_infos=lazy(movie.tmdb_infos)
 
-            if not await movie_data_source.total_episodes :
+            if movie.total_episodes :
                 movie_data_source.total_episodes=lazy(movie.total_episodes)
             if movie.season:
                 movie_data_source.season=lazy(movie.season)
+
+            if movie.title_season:
+                movie_data_source.title_season=lazy(movie.title_season)
+
+            if movie.description:
+                movie_data_source.description=lazy(movie.description)
+            if movie.douban_id:
+                movie_data_source.douban_id=lazy(movie.douban_id)
+            if movie.year:
+                movie_data_source.year=lazy(movie.year)
+            if movie.movie_type:
+                movie_data_source.movie_type=lazy(movie.movie_type)
+            if movie.category:
+                movie_data_source.category=lazy(movie.category)
+            if movie.pic:
+                movie_data_source.pic=lazy(movie.pic)
 
             movie_data_source.episodes_info=lazy(movie.episodes_info)
         else:

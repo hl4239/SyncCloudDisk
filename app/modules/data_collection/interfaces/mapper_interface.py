@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from pydantic import BaseModel
 
-from app.database.models import Movie
+from app.database.models import Movie, MovieType
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
 
 
@@ -38,3 +38,12 @@ class IMapper(ABC):
         :param original:
         :return:
         """
+
+    @staticmethod
+    def get_movie_type(douban_type):
+        if douban_type == 'tv':
+            return MovieType.TV
+        elif douban_type == 'movie':
+            return MovieType.MOVIE
+        else:
+            return MovieType.OTHER

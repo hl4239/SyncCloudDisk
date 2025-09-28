@@ -133,6 +133,11 @@ def setup_logging(
     logging.getLogger("websockets").setLevel(logging.WARNING) # 屏蔽 websockets 连接过程
     logging.getLogger("prefect").setLevel(logging.INFO)       # Prefect 只保留正常输出
     logging.getLogger('tensorflow').setLevel(logging.WARNING)
+    logging.getLogger('litellm_logging').setLevel(logging.WARNING)
+    logging.getLogger('LiteLLM').setLevel(logging.WARNING)
+    logging.getLogger('h5py._conv').setLevel(logging.WARNING)
+    logging.getLogger('app.core.abc_aio_client').setLevel(logging.WARNING)
+    logging.getLogger('')
 def get_logger(name: str) -> logging.Logger:
     return logging.getLogger(name)
 

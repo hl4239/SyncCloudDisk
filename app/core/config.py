@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     # --- 日志配置 ---
     LOG_LEVEL: str = "INFO"
 
-    CLOUD_ROOT:str='资源分享'
+    CLOUD_ROOT:str='/资源分享'
     TMDB_API_KEY:str=None
 
 # 创建一个全局唯一的配置实例

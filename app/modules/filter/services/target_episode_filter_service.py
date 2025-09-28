@@ -43,23 +43,24 @@ class TargetEpisodeFilter(ITargetEpisodeFilter):
         return None
 
     async def _get_target_episode(self, movie: Movie, link_parse: LinkParse):
+        logger.debug(f"开始从{link_parse.link.url}获取目标剧集")
         root = link_parse.root
-        latest_info = movie.get_latest_episode_info
+        latest_info = movie.get_latest_episode_info()
         if not latest_info:
+            logger.debug(f"[{movie.title}] 无最新剧集信息，跳过")
             return None
         latest = latest_info.episode_number
         season_needed = getattr(movie, "season", None)
 
-        # 改：用 container_key -> [files]，并保存 key -> container 映射
         groups = {}  # key -> [files]
         container_map = {}  # key -> container
         found_fake = False
 
         def collect(container, f):
-            # 使用 container 的 id（若没有则退回到 Python 的 id(container)）
             key = getattr(container, "id", None) or id(container)
             groups.setdefault(key, []).append(f)
             container_map.setdefault(key, container)
+            logger.debug(f"收集文件: container={getattr(container, 'name', None)} file={getattr(f, 'name', None)}")
 
         async def descend(node, container):
             nonlocal found_fake
@@ -72,31 +73,36 @@ class TargetEpisodeFilter(ITargetEpisodeFilter):
                 if std and std.resource_type == ResourceType.FILE_EPISODE:
                     ep = std.episode_number
                     if ep is not None and ep > latest:
+                        logger.debug(f"发现超前集 fake: file={node.name} ep={ep} latest={latest}")
                         found_fake = True
                         return
                     collect(container, node)
                 return
 
-            # 文件夹：await children（注意 children 可能为 None）
+            # 文件夹
             children = []
             if getattr(node, "children", None) is not None:
                 children = await node.children or []
             children = [c for c in children if c is not None]
+            logger.debug(f"进入文件夹: {getattr(node, 'name', None)} 子项数={len(children)}")
 
-            # 1) 只有一个子项且为文件夹 -> 直接进入它
+            # 1) 单子文件夹 -> 直接进入
             if len(children) == 1 and getattr(children[0], "is_folder", False):
+                logger.debug(f"唯一子文件夹，继续深入: {children[0].name}")
                 await descend(children[0], children[0])
                 return
 
-            # 2) season 文件夹优先（匹配 movie.season）
+            # 2) season 文件夹优先
             season_folder = None
             for c in children:
                 if getattr(c, "is_folder", False):
                     std = await c.standardized if getattr(c, "standardized", None) is not None else None
                     if std and std.resource_type == ResourceType.FOLDER_SEASON:
                         sn = getattr(std, "season_number", None)
+                        logger.debug(f"检测到季文件夹: {c.name} season={sn}")
                         if sn is not None and season_needed is not None:
                             if int(sn) == int(season_needed):
+                                logger.debug(f"匹配到目标季: {season_needed}")
                                 season_folder = c
                                 break
                         else:
@@ -105,7 +111,7 @@ class TargetEpisodeFilter(ITargetEpisodeFilter):
                 await descend(season_folder, season_folder)
                 return
 
-            # 3) quality 文件夹 -> 选画质最高的进入
+            # 3) quality 文件夹
             q_folders = []
             for c in children:
                 if getattr(c, "is_folder", False):
@@ -120,40 +126,47 @@ class TargetEpisodeFilter(ITargetEpisodeFilter):
                     q = std.quality if std and getattr(std, "quality", None) else self._guess_quality_from_name(
                         getattr(f, "name", "") or "")
                     r = self._quality_rank(q)
+                    logger.debug(f"候选画质文件夹: {f.name} quality={q} rank={r}")
                     if r > best_rank:
                         best_rank = r
                         best = f
                 if best:
+                    logger.debug(f"进入最佳画质文件夹: {best.name} rank={best_rank}")
                     await descend(best, best)
                     return
 
-            # 4) 遍历子项：收集文件（FILE_EPISODE），递归文件夹（忽略 FOLDER_OTHER）
+            # 4) 遍历子项
             for c in children:
                 if not getattr(c, "is_folder", False):
                     std = await c.standardized if getattr(c, "standardized", None) is not None else None
                     if std and std.resource_type == ResourceType.FILE_EPISODE:
                         ep = std.episode_number
                         if ep is not None and ep > latest:
+                            logger.debug(f"发现超前集 fake: file={c.name} ep={ep} latest={latest}")
                             found_fake = True
                             return
                         collect(node, c)
                 else:
                     std = await c.standardized if getattr(c, "standardized", None) is not None else None
                     if std and std.resource_type == ResourceType.FOLDER_OTHER:
+                        logger.debug(f"跳过无效文件夹: {c.name}")
                         continue
                     await descend(c, c)
                     if found_fake:
                         return
 
-        # 开始从 root 下钻（container 初始为 root）
+        # 开始递归
+        logger.debug(f"开始解析: root={getattr(root, 'name', None)} latest={latest} season_needed={season_needed}")
         await descend(root, root)
 
         if found_fake:
+            logger.debug("中止: 检测到 fake 资源")
             return None
         if not groups:
+            logger.debug("中止: 未找到有效剧集文件")
             return None
 
-        # 从 groups 中选最佳候选：优先覆盖 latest，再按画质 rank，再按 max episode
+        # 生成候选
         candidates = []
         for key, files in groups.items():
             container = container_map.get(key)
@@ -172,20 +185,27 @@ class TargetEpisodeFilter(ITargetEpisodeFilter):
                 if ep is not None:
                     if max_ep is None or ep > max_ep:
                         max_ep = ep
+            logger.debug(
+                f"候选容器: {getattr(container, 'name', None)} max_ep={max_ep} best_quality={best_q} rank={best_rank}")
             candidates.append((container, files, best_rank, max_ep, best_q.upper() if best_q else None))
 
-        # 排序并取最优
+        # 排序
         candidates.sort(key=lambda t: ((1 if (t[3] and t[3] >= latest) else 0), t[2], t[3] or 0), reverse=True)
         best_container, best_files, _, best_max_ep, best_q = candidates[0]
+        logger.debug(f"最终选择容器: {getattr(best_container, 'name', None)} max_ep={best_max_ep} quality={best_q}")
 
-        # 返回 TargetEpisode（share_files 用 lazy 包装，字段名按你定义的 schema）
         return TargetEpisode(share_files=best_files, link_parse=link_parse)
 
-    async def get_target_episode(self, movie: Movie, link_parses: AsyncCachedIterator):
+
+    async def get_target_episode(self, movie: Movie, link_parses: AsyncCachedIterator[LinkParse]):
         async for lp in link_parses:
+            print(f'开始：--- {lp.link.title} {lp.link.url}')
             res = await self._get_target_episode(movie, lp)
             if res:
-                return res
+                logger.info(f'获取到目标链接：{res.link_parse.link.url}')
+                yield res
+
+
 
 target_episode_filter = TargetEpisodeFilter()
 async def demo():

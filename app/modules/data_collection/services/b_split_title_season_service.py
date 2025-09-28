@@ -16,30 +16,35 @@ logger=get_logger(__name__)
 class BSplitTitleSeasonService(ISplitTitleSeasonInterface):
     def __init__(self,open_ai_service:IOpenAIService):
         self.open_ai_service=open_ai_service
-    @async_ttl_cache()
+
     async def _get_ai_agent(self):
         instruction="""
         你是一位影视媒体库分类专家，你将从我提供的{title_season_list}中提取出各个title_season所对应的title,season'
         【输出格式要求】
-        输出必须严格遵循以下JSON结构：
+        输出必须严格遵循以下JSON结构,确保用markdown···json格式包裹文字：
         [
             {
               "title_season":"字符串类型，必需字段，代表输入的title_season"
-              "title":"字符串类型，必需字段，代表提取后的title"
-              "season": "字符串类型，必需字段，代表提取后的season"
+              "title":"字符串类型，必需字段，代表提取后的title,如果你没有提取到，则返回空字符串"
+              "season": "字符串类型，必需字段，代表提取后的season,如果你没有提取到，则返回空字符串"
             },
         ]
         """
-        return await self.open_ai_service.get_agent(name='copilot',model='gpt-5',instructions=instruction)
+        return await self.open_ai_service.get_agent(instructions=instruction)
 
     # 缓存60秒，因为会批量title_season一次性交给ai生成后缓存60秒
     @async_ttl_cache(ttl=60)
     async def _split_title_season_1(self,title_seasons:Tuple[str,...]):
         agent=await self._get_ai_agent()
-        result = await Runner.run(agent, input=f'{json.dumps(title_seasons,indent=2,ensure_ascii=False)}')
-        json_resp=self.open_ai_service.format_to_json(result.final_output)
-        logger.debug(f'ai对title_season的分割结果：{ json_resp}')
-        return json_resp
+        for i in range(3):
+            try:
+                result = await Runner.run(agent, input=f'{json.dumps(title_seasons,indent=2,ensure_ascii=False)}')
+                json_resp=self.open_ai_service.format_to_json(result.final_output)
+                logger.debug(f'ai对title_season的分割结果：{ json_resp}')
+                return json_resp
+            except Exception as e:
+                logger.exception(f'发送了错误,重试第{i+1}/3次 :{e}')
+        return []
 
 
     async def _split_title_season(self,target_title_season:str,title_seasons:Tuple[str,...]):

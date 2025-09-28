@@ -26,7 +26,7 @@ class ShareFile(BaseModel):
     standardized:Lazy[StandardizedResult] =Field(lazy(None),description='标准化后的')
     id: Optional[str] = Field(None, description="在网盘系统中的唯一ID")
     parent_id: Optional[str] = Field(None, )
-
+    share_fid_token:Optional[str] = Field(None, )
     # --- 文件夹专属字段 ---
     children: Optional[Lazy[List['ShareFile']]] = Field(lazy(None), description="子条目列表 (仅文件夹拥有)")
 

@@ -1,8 +1,10 @@
+import datetime
 import re
 from datetime import date
 from typing import List, Optional
 
 import cn2an
+import pytz
 
 from app.database.models import Movie, EpisodesInfo
 from app.database.movie_repository import movie_repository, MovieRepository
@@ -168,24 +170,76 @@ class MovieService(IMovieService):
                     season=await movie_data_source.season,
                     total_episodes=await movie_data_source.total_episodes,
                     tmdb_infos=await movie_data_source.tmdb_infos,
-                    have_newer_episodes=False,
-                   episodes_info=await movie_data_source.episodes_info
+                   episodes_info=await movie_data_source.episodes_info,
+                    pic=await movie_data_source.pic,
+                    original_title=await movie_data_source.original_title,
+                    create_time=datetime.datetime.now(pytz.timezone("Asia/Shanghai")),
+                    update_time=datetime.datetime.now(pytz.timezone("Asia/Shanghai"))
                 )
             else:
+                is_update=False
                 if not movie.title:
                     movie.title = await movie_data_source.title
+                    is_update=True
                 if not movie.season :
                     movie.season = await movie_data_source.season
+                    is_update = True
                 if not movie.total_episodes :
-                    movie.total_episodes = await movie_data_source.total_episodes
+                    movie.total_episodes = await movie_data_source.total_episodes  
+                    is_update = True
+                if not movie.description:
+                    movie.description=await movie_data_source.description
+                    is_update = True
+                if not  movie.original_title:
+                    movie.original_title=await movie_data_source.original_title
+
+                if not movie.title:
+                    movie.title = await movie_data_source.title
+                    is_update = True
+
+                if not movie.title_season:
+                    movie.title_season = await movie_data_source.title_season
+                    is_update = True
+
+                if not movie.subtitle:
+                    movie.subtitle = await movie_data_source.subtitle
+                    is_update = True
+
+                if not movie.pic:
+                    movie.pic = await movie_data_source.pic
+                    is_update = True
+
+
+                if not movie.year:
+                    movie.year = await movie_data_source.year
+                    is_update = True
+
+                if not movie.category:
+                    movie.category = await movie_data_source.category
+                    is_update = True
+
+                if not movie.movie_type:
+                    movie.movie_type = await movie_data_source.movie_type
+                    is_update = True
+
+
+                orig_epi=movie.episodes_info
 
                 movie.episodes_info=await movie_data_source.episodes_info
+                if orig_epi!=movie.episodes_info:
+                    is_update=True
                 if movie.tmdb_infos is None:
+                    is_update = True
                     movie.tmdb_infos = await movie_data_source.tmdb_infos
+                if is_update:
+                    movie.update_time=datetime.datetime.now(pytz.timezone("Asia/Shanghai"))
+
             movies.append(movie)
         print(movies)
         return movies
 
+
+
 movie_service = MovieService(movie_repository)
 if __name__ == '__main__':
-    print(MovieService.douban_season_to_tmdb_season('第一季'))
+    ...

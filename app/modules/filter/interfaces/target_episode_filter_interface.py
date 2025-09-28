@@ -19,8 +19,7 @@ class ITargetEpisodeFilter(ABC):
         for link_scrape_result in link_parse_results:
             logger.debug(f'开始注册target_episode_filter: {link_scrape_result.movie.title_season}')
             target_link_result = TargetEpisodeFilterResult(quark_result=
-                                                  lazy(lambda i=link_scrape_result.movie,j=link_scrape_result.quark_parses: self.get_target_episode(i,
-                                                                          j)),
+                                                  AsyncCachedIterator( self.get_target_episode(link_scrape_result.movie,link_scrape_result.quark_parses)),
                                                movie=link_scrape_result.movie)
 
             results.append(target_link_result)

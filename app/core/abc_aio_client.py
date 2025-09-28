@@ -109,25 +109,81 @@ class AioClientManager:
             logger.debug("Created session for context %s (headers=%s, connector=%s)", name, headers, connector)
             return session
 
-    async def fetch_json(self, name: str, method: str, path: str, **kwargs) -> Any:
+    async def request(
+            self,
+            name: str,
+            method: str,
+            path: str,
+            *,
+            as_type: str = "json",
+            retries: int = 2,
+            backoff_factor: float = 0.5,
+            raise_for_status: bool = False,
+            **kwargs,
+    ):
         session = await self.get_session(name)
         cfg = self._configs.get(name, {})
         base = cfg.get("base_url", "") or ""
         url = path if path.startswith("http") else urljoin(base + "/", path.lstrip("/"))
-        request_headers = kwargs.pop("headers", None)
-        async with session.request(method, url, headers=request_headers, **kwargs) as resp:
-            resp.raise_for_status()
-            return await resp.json()
+
+        # 🚨 提前 special-case，避免 double request
+        if as_type == "resp":
+            resp = await session.request(method, url, **kwargs)
+            if raise_for_status:
+                resp.raise_for_status()
+            return resp
+
+        last_exc: Optional[BaseException] = None
+        attempts = retries + 1
+
+        for attempt in range(1, attempts + 1):
+            try:
+                async with session.request(method, url, **kwargs) as resp:
+                    if raise_for_status:
+                        resp.raise_for_status()
+
+                    if as_type == "json":
+                        return await resp.json()
+                    elif as_type == "text":
+                        return await resp.text()
+                    elif as_type == "bytes":
+                        return await resp.read()
+                    else:
+                        raise ValueError(f"unsupported as_type: {as_type!r}")
+
+            except (aiohttp.ClientResponseError,
+                    aiohttp.ClientConnectorError,
+                    aiohttp.ClientOSError,
+                    aiohttp.ClientPayloadError,
+                    asyncio.TimeoutError,
+                    aiohttp.ServerTimeoutError) as exc:
+                last_exc = exc
+                if isinstance(exc, aiohttp.ClientResponseError) and exc.status != 429:
+                    raise
+                if attempt < attempts:
+                    sleep_time = backoff_factor * (2 ** (attempt - 1))
+                    await asyncio.sleep(sleep_time)
+                    continue
+                raise
+
+            except Exception as exc:
+                last_exc = exc
+                if attempt < attempts:
+                    sleep_time = backoff_factor * (2 ** (attempt - 1))
+                    await asyncio.sleep(sleep_time)
+                    continue
+                raise
+
+        if last_exc:
+            raise last_exc
+
+    async def fetch_json(self, name: str, method: str, path: str, **kwargs) -> Any:
+        # 兼容旧接口，内部调用新的 request
+        return await self.request(name, method, path, as_type="json", **kwargs)
 
     async def fetch_text(self, name: str, method: str, path: str, **kwargs) -> str:
-        session = await self.get_session(name)
-        cfg = self._configs.get(name, {})
-        base = cfg.get("base_url", "") or ""
-        url = path if path.startswith("http") else urljoin(base + "/", path.lstrip("/"))
-        request_headers = kwargs.pop("headers", None)
-        async with session.request(method, url, headers=request_headers, **kwargs) as resp:
-            resp.raise_for_status()
-            return await resp.text()
+        # 兼容旧接口，内部调用新的 request
+        return await self.request(name, method, path, as_type="text", **kwargs)
 
     async def close_context(self, name: str):
         sess = self._sessions.pop(name, None)
@@ -195,7 +251,8 @@ class BaseAioClient:
             trust_env=trust_env,
         )
         self._context = name
-
+    async def get_session(self):
+        return await aio_client_manager.get_session(self._context)
     # 便捷代理方法（异步）
     async def fetch_json(self, method: str, path: str, **kwargs):
         if not self._context:
@@ -206,6 +263,16 @@ class BaseAioClient:
         if not self._context:
             raise RuntimeError("Client context not initialized; call super().init(...) in __init__")
         return await aio_client_manager.fetch_text(self._context, method, path, **kwargs)
+
+    async def request(self, method: str, path: str, **kwargs):
+        """
+        统一的请求封装代理。参数与 AioClientManager.request 保持一致，常见用法：
+            await client.request("GET", "/ping", as_type="json")
+            await client.request("POST", "/x", json={"a":1}, retries=3)
+        """
+        if not self._context:
+            raise RuntimeError("Client context not initialized; call super().init(...) in __init__")
+        return await aio_client_manager.request(self._context, method, path, **kwargs)
 
     async def close(self):
         if self._context:

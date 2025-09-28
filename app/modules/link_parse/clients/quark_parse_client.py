@@ -247,9 +247,9 @@ class QuarkParseClient(BaseAioClient):
 #     await client.close()
 async def main():
     setup_logging()
-    client = QuarkParseClient('https://pan.quark.cn/s/73b1e7e5d194')
+    client = QuarkParseClient('https://pan.quark.cn/s/969ddab7b51e')
     result= await client.parse_share_link()
-    ls_result=await client.ls_dir('22167e010d554a32b000d3999c041f67')
+    ls_result=await client.ls_dir('0')
     print(result)
     print(ls_result)
 if __name__ == '__main__':

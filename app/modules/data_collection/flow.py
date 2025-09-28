@@ -1,6 +1,6 @@
 import asyncio
 from logging import getLogger
-from typing import List
+from typing import List, Dict, Tuple
 
 import tmdbsimple
 
@@ -8,7 +8,7 @@ import tmdbsimple
 from app.core.config import settings
 from app.core.logging_config import setup_logging
 from app.database.database import init_db
-from app.database.models import TVCategory
+from app.database.models import TVCategory, MovieType
 from app.modules.data_collection.interfaces.episodes_air_date_provider_interface import IEpisodesAirDateProvider
 from app.modules.data_collection.interfaces.episodes_air_time_provider_interface import IEpisodesAirTimeProvider
 from app.modules.data_collection.interfaces.episodes_infos_provider_interface import IEpisodesInfosProvider
@@ -87,6 +87,41 @@ async def data_collection_get_hot_flow(categories:List[TVCategory],count:int):
 
         return set_air_time_resp
 
+
+
+async def get_movies_by_douban_id(params:List[Tuple[str, MovieType]]):
+    r=[]
+    for p in params:
+        r1=await (await get_douban_movie_base_provider_service()).get_movie_by_douban_id(douban_id=p[0],movie_type=p[1])
+        r.extend(r1)
+
+    match_resp = await match_to_database(movie_data_results=r,
+                                         match_to_database_service=match_to_database_service)
+
+    split_resp = await split_title_season(movie_data_results=match_resp,
+                                          split_title_season_service=fallback_split_title_season_service)
+
+    get_tmdb_id_resp = await set_tmdb_id(split_resp, tmdb_id_provider_service=fallback_tmdb_id_provider_service)
+
+    set_total_episodes_resp = await set_total_episodes(get_tmdb_id_resp,
+                                                       tmdb_episodes_provider_service=tmdb_episodes_provider_service)
+
+    set_episodes_infos_resp = await set_episodes_infos(set_total_episodes_resp,
+                                                       episodes_info_provider=episodes_info_provider_service)
+
+    set_air_date_resp = await set_air_date(set_episodes_infos_resp, episodes_air_date_provider=tmdb_air_date_provider)
+
+    set_air_time_resp = await set_air_time(set_air_date_resp,
+                                           episodes_air_time_provider=ai_copilot_episodes_air_time_provider)
+
+    return set_air_time_resp
+async def search(key):
+    """
+    从豆瓣搜索
+    :param key:
+    :return:
+    """
+    return await (await get_douban_movie_base_provider_service()).search(keyword=key)
 
 
 async def main():

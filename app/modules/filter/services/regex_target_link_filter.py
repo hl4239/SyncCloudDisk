@@ -1,6 +1,8 @@
 import asyncio
 import logging
 import re
+from typing import List
+
 from app.core.logging_config import setup_logging
 from app.database.database import init_db
 from app.database.models import Movie, MovieType
@@ -11,48 +13,59 @@ from app.modules.link_scraping.flow import link_scrape_flow_search
 from app.utils.async_iterator import AsyncCachedIterator
 
 logger=logging.getLogger(__name__)
-class RegexTargetLinkFilter(ITargetLinkFilter):
 
-    @staticmethod
-    def _normalize(title: str) -> str:
-        """
-        标准化标题：
-        - 转小写
-        - 去掉空格和常见分隔符（【】()[]-_等）
-        """
-        # 只保留中文、英文、数字
-        clean = re.sub(r"[^\w\u4e00-\u9fa5]", "", title)
-        return clean.lower()
+
+
+class RegexTargetLinkFilter(ITargetLinkFilter):
+    # 内部定义正则模板，其中 `{title}` 是占位符
+    _regex_templates = [
+        r"^{title}.*",                # 标题必须从开头匹配
+        r".*【{title}】.*",           # 标题被【】包裹
+        r".*{title}.*1080p.*",        # 标题后面带 1080p
+        r".*{title}.*S\d{{2}}E\d{{2}}" , # 标题后跟美剧 SxxExx 格式
+        r".*《{title}》.*",
+        r".*「{title}」.*"
+    ]
+
+    @classmethod
+    def _build_patterns(cls, movie_title_season: str):
+        """根据 movie_title_season 生成对应的正则 Pattern 列表"""
+        patterns = []
+        for template in cls._regex_templates:
+            regex = template.format(title=re.escape(movie_title_season))
+            patterns.append(re.compile(regex, re.IGNORECASE))
+        return patterns
 
     @classmethod
     def _is_target(cls, link_title: str, movie_title_season: str) -> bool:
         """
-        判断 link_title 是否对应 movie_title_season
-        规则：标准化后，要求 link_title 必须从开头匹配 movie_title_season
+        判断 link_title 是否符合针对 movie_title_season 动态生成的 regex
         """
-        link_norm = cls._normalize(link_title)
-        movie_norm = cls._normalize(movie_title_season)
+        patterns = cls._build_patterns(movie_title_season)
 
-        # 正则：必须从开头开始匹配
-        pattern = re.compile(rf"^{re.escape(movie_norm)}")
-        result = bool(pattern.search(link_norm))
+        for pattern in patterns:
+            if pattern.search(link_title):
+                logger.debug(
+                    f'匹配成功: '
+                    f'link_title="{link_title}" '
+                    f'movie_title_season="{movie_title_season}" '
+                    f'pattern="{pattern.pattern}"'
+                )
+                return True
 
         logger.debug(
-            f'判断是否为目标影视对应网盘资源的结果：'
-            f'link_title_norm={link_norm} '
-            f'movie_title_norm={movie_norm} '
-            f'pattern={pattern.pattern} '
-            f'result={result}'
+            f'未匹配: '
+            f'link_title="{link_title}" '
+            f'movie_title_season="{movie_title_season}" '
+            f'patterns={[p.pattern for p in patterns]}'
         )
-        return result
-    async def get_target_links(self,movie:Movie,link_parses:AsyncCachedIterator[LinkParse] ):
-        logger.debug('开始过滤目标link')
-        movie_title_season=movie.title_season
+        return False
+    async def get_target_links(self, movie: Movie, link_parses: AsyncCachedIterator[LinkParse]):
+        movie_title_season = movie.title_season
 
         async for link in link_parses:
-            if self._is_target(link.link.title,movie_title_season=movie_title_season):
-                yield link
-
+            if self._is_target(link.link.title, movie_title_season=movie_title_season):
+             yield link
 
 regex_target_link_filter = RegexTargetLinkFilter()
 async def main():
