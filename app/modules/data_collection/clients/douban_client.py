@@ -6,7 +6,7 @@ from typing import Optional, Dict, Union
 import aiohttp
 from pydantic import ValidationError
 
-from app.database.models import MovieCategory, TVCategory, MovieType
+from app.database.models import MovieCategory,  MovieType
 from app.modules.data_collection.schemas.douban_schemas import DoubanTVResponse, DoubanDetailResponse
 
 logger = logging.getLogger()
@@ -47,10 +47,10 @@ class DoubanClient:
     async def __aexit__(self, exc_type, exc, tb):
         await self.shutdown()
 
-    async def _fetch_hot_raw_data(self, tv_type: Union[TVCategory, MovieCategory], count: int):
+    async def _fetch_hot_raw_data(self, tv_type:  MovieCategory, count: int):
         url = ''
         params = {}
-        if tv_type == TVCategory.CHINA:
+        if tv_type == MovieCategory.CHINA:
             params = {
                 'playable': '0',
                 'start': '0',
@@ -69,7 +69,7 @@ class DoubanClient:
                 '_ts': '1745652498'
             }
             url = '/api/v2/subject_collection/tv_domestic/items'
-        elif tv_type == TVCategory.EUROPE:
+        elif tv_type == MovieCategory.EUROPE:
             params = {
                 'playable': '0',
                 'start': '0',
@@ -88,7 +88,7 @@ class DoubanClient:
                 '_ts': '1745598097'
             }
             url = '/api/v2/subject_collection/tv_american/items'
-        elif tv_type == TVCategory.KOREA:
+        elif tv_type == MovieCategory.KOREA:
             params = {
                 'playable': '0',
                 'start': '0',
@@ -107,7 +107,7 @@ class DoubanClient:
                 '_ts': '1745598444'
             }
             url = '/api/v2/subject_collection/tv_korean/items'
-        elif tv_type == TVCategory.JAPAN:
+        elif tv_type == MovieCategory.JAPAN:
             params = {
                 'playable': '0',
                 'start': '0',
@@ -126,7 +126,7 @@ class DoubanClient:
                 '_ts': '1745598415'
             }
             url = '/api/v2/subject_collection/tv_japanese/items'
-        elif tv_type == TVCategory.ANIMATION:
+        elif tv_type == MovieCategory.ANIMATION:
             params = {
                 'playable': '0',
                 'start': '0',
@@ -156,7 +156,7 @@ class DoubanClient:
                 logger.error(f"爬取数据失败: {e}")
                 return None
 
-    async def get_hot_tv(self, tv_type: Union[TVCategory, MovieCategory], count: int) -> Optional[DoubanTVResponse]:
+    async def get_hot_tv(self, tv_type:  MovieCategory  , count: int) -> Optional[DoubanTVResponse]:
         """获取热门电视剧数据（包含结构化解析）"""
         raw_data = await self._fetch_hot_raw_data(tv_type, count)
         if not raw_data:

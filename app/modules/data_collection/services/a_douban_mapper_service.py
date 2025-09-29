@@ -1,13 +1,14 @@
 import re
+from datetime import datetime
 from typing import List, Tuple, Optional, Union
 
 from pydantic import BaseModel
 
-from app.database.models import Movie, MovieType, TVCategory, MovieCategory
+from app.database.models import Movie, MovieType,  MovieCategory
 from app.modules.data_collection.interfaces.mapper_interface import IMapper
 from app.modules.data_collection.schemas.douban_schemas import DoubanDetailResponse, DoubanDetailLazyResponse
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
-from app.utils.lazy_load import lazy
+from app.utils.lazy_load import lazy, Lazy
 
 
 class DoubanMapperService1(IMapper):
@@ -26,26 +27,32 @@ class DoubanMapperService1(IMapper):
         return cls.get_movie_type(douban_type)
 
 
-    async def _get_movie_category(self, douban_item: DoubanDetailLazyResponse) -> Union[MovieCategory, TVCategory]:
+    async def _get_movie_category(self, douban_item: DoubanDetailLazyResponse) -> MovieCategory:
         movie_type =await self._get_movie_type(douban_item.subtype)
         countries =await douban_item.countries
         first_country = countries[0]
         print(first_country)
-        if movie_type == MovieType.TV:
-            if any(kw == first_country for kw in ['中国', '中国大陆', '大陆']):
-                return TVCategory.CHINA
-            elif any(kw == first_country for kw in ['英国', '美国']):
-                return TVCategory.EUROPE
-            elif any(kw == first_country for kw in ['韩国']):
-                return TVCategory.KOREA
-            elif any(kw == first_country for kw in ['日本']):
-                return TVCategory.JAPAN
-            else:
-                return TVCategory.OTHER
-        elif movie_type == MovieType.MOVIE:
-            return MovieCategory.ALL
+        if any(kw == first_country for kw in ['中国', '中国大陆', '大陆','中国香港']):
+            return MovieCategory.CHINA
+        elif any(kw == first_country for kw in  ['美国',
+                    "英国", "法国", "德国", "意大利", "西班牙", "葡萄牙",
+                    "荷兰", "比利时", "卢森堡", "瑞士", "奥地利", "爱尔兰",
+                    "挪威", "瑞典", "芬兰", "丹麦", "冰岛",
+                    "希腊", "塞浦路斯", "马耳他",
+                    "波兰", "捷克", "斯洛伐克", "匈牙利",
+                    "罗马尼亚", "保加利亚", "克罗地亚", "斯洛文尼亚",
+                    "塞尔维亚", "黑山", "北马其顿", "阿尔巴尼亚", "科索沃",
+                    "爱沙尼亚", "拉脱维亚", "立陶宛",
+                    "白俄罗斯", "乌克兰", "摩尔多瓦"
+                ]
+                ):
+            return MovieCategory.EUROPE
+        elif any(kw == first_country for kw in ['韩国']):
+            return MovieCategory.KOREA
+        elif any(kw == first_country for kw in ['日本']):
+            return MovieCategory.JAPAN
         else:
-            return TVCategory.OTHER
+            return MovieCategory.OTHER
 
 
     async def get_total_episodes(self,episodes_count):
@@ -53,6 +60,15 @@ class DoubanMapperService1(IMapper):
 
     async def get_pic(self,pic):
         return (await pic).large
+
+    async def get_date(self,date:Lazy[ List[str]]):
+        date_str=(await date)[0]
+        # 去掉括号和里面的内容
+        clean_date = date_str.split("(")[0]
+
+        # 转换为 datetime 对象
+        dt = datetime.strptime(clean_date, "%Y-%m-%d").date()
+        return dt
 
 
 
@@ -75,6 +91,7 @@ class DoubanMapperService1(IMapper):
         movie_data_source.total_episodes = total_episodes
         movie_data_source.pic=pic
         movie_data_source.original_title = lazy(original.original_title)
+        movie_data_source.pubdate = lazy(lambda :self.get_date(original.pubdate))
         return movie_data_source
 
 

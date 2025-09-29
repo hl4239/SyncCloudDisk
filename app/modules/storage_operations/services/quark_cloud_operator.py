@@ -95,18 +95,25 @@ class QuarkCloudOperator(ICloudDiskOperator):
             logger.error(f'目录创建失败,path={path_str},name={self.pancloud_name},error={e}')
             return None
 
-    async def save_file(self, share_files: List[ShareFile], parse: QuarkLinkParse, path: Path):
+    async def save_file_(self, share_files: List[ShareFile], parse: QuarkLinkParse, path: Path,pdir_file:CloudFile)->bool:
         if not share_files:
             return True
-        path_str=path.as_posix()
-        if pdir_file:=await self.ensure_get_dir(path):
+        if path:
+            if pdir_file:=await self.ensure_get_dir(path):
+                client=await self._get_client()
+                fids=[f.id for f in share_files]
+                fid_tokens=[f.share_fid_token for f in share_files]
+                return await client.save_file(fid_list=fids, fid_token_list=fid_tokens, pwd_id=parse.pwd_id,
+                                          stoken=parse.stoken, to_pdir_fid=pdir_file.id)
+            return False
+        if pdir_file:
             client=await self._get_client()
             fids=[f.id for f in share_files]
             fid_tokens=[f.share_fid_token for f in share_files]
             return await client.save_file(fid_list=fids, fid_token_list=fid_tokens, pwd_id=parse.pwd_id,
                                       stoken=parse.stoken, to_pdir_fid=pdir_file.id)
-        return False
 
+        return False
     async def create_share_link(self,path:Optional[Path]=None,files: Optional[List[CloudFile]]=None,password:str=None):
         if path:
             child_files=[await self.get_dir(path)]

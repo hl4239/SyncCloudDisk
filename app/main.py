@@ -16,7 +16,8 @@ async def lifespan(app: FastAPI):
     setup_logging()
     await init_db()
     # 确保需要在启动时导入的模块被导入（比如注册任务）
-    import app.flow.sync_new_movie_flow  # noqa: F401
+    from app.flow import sync_new_movie_flow
+    # noqa: F401
     import tmdbsimple as tmdb
     from app.core.config import settings
 
@@ -37,7 +38,7 @@ def create_app() -> FastAPI:
         lifespan=lifespan
     )
 
-    origins = ["http://localhost:3000","http://192.168.31.2:3000"]
+    origins = ["*"]
 
     app.add_middleware(
         CORSMiddleware,
@@ -57,4 +58,4 @@ app = create_app()
 if __name__ == "__main__":
     import uvicorn
     # 推荐将 log_config 交由 setup_logging 管理；如果需要可传 None
-    uvicorn.run("app.main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=False)

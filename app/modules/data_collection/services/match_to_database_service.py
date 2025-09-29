@@ -41,6 +41,10 @@ class MatchToDatabaseService(IMatchToDatabase):
                 movie_data_source.category=lazy(movie.category)
             if movie.pic:
                 movie_data_source.pic=lazy(movie.pic)
+            if movie.original_title:
+                movie_data_source.original_title=lazy(movie.original_title)
+            if movie.pubdate:
+                movie_data_source.pubdate=lazy(movie.pubdate)
 
             movie_data_source.episodes_info=lazy(movie.episodes_info)
         else:

@@ -22,10 +22,11 @@ from app.database.models import (
     MovieCloudInfo,
     TMDBInfos,
     MovieType,
-    TVCategory,
     MovieCategory,
 )
 from app.database.movie_repository import movie_repository
+from app.modules.data_collection.flow import search_from_douban
+from app.modules.data_collection.schemas.douban_schemas import DoubanSearchItem
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -179,122 +180,126 @@ def _action_ok(detail: str) -> Dict[str, Any]:
     return {"ok": True, "detail": detail}
 
 
-@router.get("", response_model=List[MovieResponse])
-async def list_movies(
-    movie_type: Optional[MovieType] = Query(None, description="按 movie_type 过滤"),
-    category: Optional[str] = Query(None, description="按 category 过滤"),
-    year: Optional[str] = Query(None, description="按 year 过滤"),
-    sort_by: Literal["update_time", "create_time", "year"] = Query(
-        "update_time", description="排序字段：update_time/create_time/year"
-    ),
-    sort_order: Literal["asc", "desc"] = Query("desc", description="排序方向：asc 或 desc"),
-    limit: int = Query(50, ge=1, le=500),
-    offset: int = Query(0, ge=0),
-):
-    """
-    列表：支持按 movie_type / category / year 过滤，支持按 create_time/update_time/year/title 排序，并支持 offset/limit 分页。
-    默认：按 update_time 倒序（最新的在前）。
-    """
-    filters = {}
-    if movie_type is not None:
-        filters["movie_type"] = movie_type
-    if category is not None:
-        filters["category"] = category
-    if year is not None:
-        filters["year"] = year
-
-    q = Movie.find(filters)
-
-    # 构建 sort 规则
-    direction = -1 if sort_order == "desc" else 1
-    q = q.sort([(sort_by, direction)])  # Beanie / Motor 应接受类似 pymongo 的 sort 规范
-
-    docs = await q.skip(offset).limit(limit).to_list()
-    return [_doc_to_response(d) for d in docs]
-@router.get("/today", response_model=List[MovieResponse])
+# @router.get("", response_model=List[MovieResponse])
+# async def list_movies(
+#     movie_type: Optional[MovieType] = Query(None, description="按 movie_type 过滤"),
+#     category: Optional[str] = Query(None, description="按 category 过滤"),
+#     year: Optional[str] = Query(None, description="按 year 过滤"),
+#     sort_by: Literal["update_time", "create_time", "year"] = Query(
+#         "update_time", description="排序字段：update_time/create_time/year"
+#     ),
+#     sort_order: Literal["asc", "desc"] = Query("desc", description="排序方向：asc 或 desc"),
+#     limit: int = Query(50, ge=1, le=500),
+#     offset: int = Query(0, ge=0),
+# ):
+#     """
+#     列表：支持按 movie_type / category / year 过滤，支持按 create_time/update_time/year/title 排序，并支持 offset/limit 分页。
+#     默认：按 update_time 倒序（最新的在前）。
+#     """
+#     filters = {}
+#     if movie_type is not None:
+#         filters["movie_type"] = movie_type
+#     if category is not None:
+#         filters["category"] = category
+#     if year is not None:
+#         filters["year"] = year
+#
+#     q = Movie.find(filters)
+#
+#     # 构建 sort 规则
+#     direction = -1 if sort_order == "desc" else 1
+#     q = q.sort([(sort_by, direction)])  # Beanie / Motor 应接受类似 pymongo 的 sort 规范
+#
+#     docs = await q.skip(offset).limit(limit).to_list()
+#     return [_doc_to_response(d) for d in docs]
+@router.get("/today", response_model=List[Movie])
 async def today_movies():
     docs=await movie_repository.find_movies_with_episode_today()
 
 
-    return [_doc_to_response(d) for d in docs]
+    return docs
 
+@router.get("/douban_search", response_model=List[DoubanSearchItem])
+async def search_douban(title:str):
+    r = await search_from_douban(title)
+    return r
 
-
-
-@router.get("/{douban_id}", response_model=MovieResponse, name="get_movie")
-async def get_movie(douban_id: str = Path(..., description="Movie 的 douban_id（唯一）")):
-    doc = await Movie.find_one({"douban_id": douban_id})
-    if not doc:
-        raise HTTPException(status_code=404, detail="not found")
-    return _doc_to_response(doc)
-
-
-# PATCH: 部分更新（严格禁止 douban_id 出现在 payload）
-@router.patch("/{douban_id}", response_model=ActionResponse)
-async def patch_movie(
-    douban_id: str = Path(..., description="Movie 的 douban_id（唯一）"),
-    body: MoviePatch = Body(...),
-    request: Request = None,
-):
-    raw = await request.json()
-    if "douban_id" in raw:
-        raise HTTPException(status_code=400, detail="douban_id is immutable and cannot be changed")
-
-    doc = await Movie.find_one({"douban_id": douban_id})
-    if not doc:
-        raise HTTPException(status_code=404, detail="not found")
-
-    # 使用 Pydantic v2 的 model_fields_set 检测哪些字段出现在 payload 中
-    provided = getattr(body, "model_fields_set", set())
-
-    if "title" in provided:
-        doc.title = body.title
-
-    if "subtitle" in provided:
-        doc.subtitle = body.subtitle
-
-    if "season" in provided:
-        doc.season = body.season
-
-    if "total_episodes" in provided:
-        doc.total_episodes = body.total_episodes
-
-    if "tmdb_infos" in provided and body.tmdb_infos is not None:
-        # 如果客户端显式传 null -> body.tmdb_infos is None
-        doc.tmdb_infos = TMDBInfos(**body.tmdb_infos.model_dump())
-
-    if "cloud_infos" in provided:
-        # cloud_infos 是列表，每个元素是 Pydantic 模型或 None
-        if body.cloud_infos is None:
-            ...
-        else:
-            # 逐项转换为你在 DB 中期望的对象（这里用 MovieCloudInfo 构造）
-            doc.cloud_infos = [MovieCloudInfo(**c.model_dump()) for c in body.cloud_infos]
-
-    if "episodes_info" in provided:
-        if body.episodes_info is None:
-            ...
-        else:
-            doc.episodes_info = [EpisodesInfo(**e.model_dump()) for e in body.episodes_info]
-    if "share_links" in provided:
-        if body.share_links is None:
-            ...
-        else:
-            doc.share_links = body.share_links
-
-    # 更新 update_time（可选，根据你的需求）
-    import pytz
-
-    doc.update_time = datetime.now(pytz.timezone("Asia/Shanghai"))
-
-    await doc.save()
-    return _action_ok("updated")
-
-
-@router.delete("/{douban_id}", response_model=ActionResponse)
-async def delete_movie(douban_id: str = Path(..., description="Movie 的 douban_id（唯一）")):
-    doc = await Movie.find_one({"douban_id": douban_id})
-    if not doc:
-        raise HTTPException(status_code=404, detail="not found")
-    await doc.delete()
-    return _action_ok("deleted")
+#
+#
+# @router.get("/{douban_id}", response_model=MovieResponse, name="get_movie")
+# async def get_movie(douban_id: str = Path(..., description="Movie 的 douban_id（唯一）")):
+#     doc = await Movie.find_one({"douban_id": douban_id})
+#     if not doc:
+#         raise HTTPException(status_code=404, detail="not found")
+#     return _doc_to_response(doc)
+#
+#
+# # PATCH: 部分更新（严格禁止 douban_id 出现在 payload）
+# @router.patch("/{douban_id}", response_model=ActionResponse)
+# async def patch_movie(
+#     douban_id: str = Path(..., description="Movie 的 douban_id（唯一）"),
+#     body: MoviePatch = Body(...),
+#     request: Request = None,
+# ):
+#     raw = await request.json()
+#     if "douban_id" in raw:
+#         raise HTTPException(status_code=400, detail="douban_id is immutable and cannot be changed")
+#
+#     doc = await Movie.find_one({"douban_id": douban_id})
+#     if not doc:
+#         raise HTTPException(status_code=404, detail="not found")
+#
+#     # 使用 Pydantic v2 的 model_fields_set 检测哪些字段出现在 payload 中
+#     provided = getattr(body, "model_fields_set", set())
+#
+#     if "title" in provided:
+#         doc.title = body.title
+#
+#     if "subtitle" in provided:
+#         doc.subtitle = body.subtitle
+#
+#     if "season" in provided:
+#         doc.season = body.season
+#
+#     if "total_episodes" in provided:
+#         doc.total_episodes = body.total_episodes
+#
+#     if "tmdb_infos" in provided and body.tmdb_infos is not None:
+#         # 如果客户端显式传 null -> body.tmdb_infos is None
+#         doc.tmdb_infos = TMDBInfos(**body.tmdb_infos.model_dump())
+#
+#     if "cloud_infos" in provided:
+#         # cloud_infos 是列表，每个元素是 Pydantic 模型或 None
+#         if body.cloud_infos is None:
+#             ...
+#         else:
+#             # 逐项转换为你在 DB 中期望的对象（这里用 MovieCloudInfo 构造）
+#             doc.cloud_infos = [MovieCloudInfo(**c.model_dump()) for c in body.cloud_infos]
+#
+#     if "episodes_info" in provided:
+#         if body.episodes_info is None:
+#             ...
+#         else:
+#             doc.episodes_info = [EpisodesInfo(**e.model_dump()) for e in body.episodes_info]
+#     if "share_links" in provided:
+#         if body.share_links is None:
+#             ...
+#         else:
+#             doc.share_links = body.share_links
+#
+#     # 更新 update_time（可选，根据你的需求）
+#     import pytz
+#
+#     doc.update_time = datetime.now(pytz.timezone("Asia/Shanghai"))
+#
+#     await doc.save()
+#     return _action_ok("updated")
+#
+#
+# @router.delete("/{douban_id}", response_model=ActionResponse)
+# async def delete_movie(douban_id: str = Path(..., description="Movie 的 douban_id（唯一）")):
+#     doc = await Movie.find_one({"douban_id": douban_id})
+#     if not doc:
+#         raise HTTPException(status_code=404, detail="not found")
+#     await doc.delete()
+#     return _action_ok("deleted")

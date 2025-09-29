@@ -43,6 +43,7 @@ class DoubanDetailResponse(BaseModel):
     card_subtitle: str
     intro:str
     countries: List[str]
+    pubdate:List[str]
 
 class DoubanDetailLazyResponse(BaseModel):
     id: Lazy[str]=lazy(None)
@@ -55,6 +56,7 @@ class DoubanDetailLazyResponse(BaseModel):
     card_subtitle: Lazy[str]=lazy(None)
     intro: Lazy[str]=lazy(None)
     countries: Lazy[List[str]]=lazy(None)
+    pubdate:  Lazy[List[str]]=lazy(None)
 class DoubanSearchItem(BaseModel):
     douban_id: str
     title:str

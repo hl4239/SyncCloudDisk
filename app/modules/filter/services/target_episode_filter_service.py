@@ -50,7 +50,7 @@ class TargetEpisodeFilter(ITargetEpisodeFilter):
             logger.debug(f"[{movie.title}] 无最新剧集信息，跳过")
             return None
         latest = latest_info.episode_number
-        season_needed = getattr(movie, "season", None)
+        season_needed = movie.get_season_number()
 
         groups = {}  # key -> [files]
         container_map = {}  # key -> container

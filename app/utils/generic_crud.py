@@ -1,7 +1,13 @@
 # file: generic_crud_with_filters.py
-from typing import Optional, List, Any, Type, Dict, get_type_hints
+# [最终、完整版] 支持插件化、参数化、动态UI Schema的通用查询框架
+
+from typing import Optional, List, Any, Type, Dict, Union, get_type_hints, Callable
 from typing_extensions import Annotated, get_origin, get_args
 from dataclasses import dataclass
+import pydantic
+import inspect
+from enum import Enum
+from datetime import date
 
 from fastapi import APIRouter, FastAPI, Depends, HTTPException, Query
 from pydantic import BaseModel, create_model
@@ -9,308 +15,329 @@ from bson import ObjectId
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import Document, init_beanie, PydanticObjectId
 
-import asyncio
 
-# -------------------------
-# Filter 注解定义（用于 Annotated）
-# -------------------------
+# ----------------------------------------------------
+# 1. 核心数据结构和辅助函数
+# ----------------------------------------------------
+
 @dataclass
 class Filter:
-    """
-    指定某字段允许的查询操作。
-    usage:
-      from typing_extensions import Annotated
-      name: Annotated[str, Filter(ops=["eq","contains"])]
-    可选操作（实现的）: eq, lt, lte, gt, gte, in, contains
-    """
     ops: List[str] = None
 
     def __post_init__(self):
         if self.ops is None:
-            self.ops = ["eq", "lt", "lte", "gt", "gte", "in", "contains"]
+            self.ops = ["eq", "lt", "lte", "gt", "gte", "in", "contains", "ne", "exists"]
 
 
-# -------------------------
-# Helper: 根据 Document 构造 Filter Pydantic Model（用于依赖注入、从 query params 创建实例）
-# -------------------------
-def build_filter_model(doc_model: Type[Document]) -> Type[BaseModel]:
-    """
-    Inspect doc_model's type hints (include Annotated extras),
-    create a dynamic Pydantic model with optional fields like:
-      {field}__eq, {field}__lt, {field}__in, ...
-    Return a BaseModel subclass suitable for Depends() in FastAPI endpoint.
-    """
-    hints = get_type_hints(doc_model, include_extras=True)
-    model_fields: Dict[str, tuple] = {}
-
-    for field_name, hint in hints.items():
-        # detect Annotated[<type>, Filter(...)]
-        origin = get_origin(hint)
-        base_type = None
-        filter_spec = None
-
-        if origin is Annotated:
-            args = get_args(hint)
-            base_type = args[0]
-            # search extras for Filter instance
-            for extra in args[1:]:
-                if isinstance(extra, Filter):
-                    filter_spec = extra
-                    break
-
-        # 若未用 Annotated 指定 Filter，则跳过（默认不作为 filter）
-        if filter_spec is None:
-            continue
-
-        # 为每个 op 创建一个可选的字段
-        for op in filter_spec.ops:
-            field_key = f"{field_name}__{op}"
-            # 默认把 'in' 类型设为 List[base_type]
-            if op == "in":
-                # pydantic 需要 typing.List[...]（这里简单使用 List[base_type]）
-                field_type = Optional[List[base_type]]  # e.g. Optional[List[int]]
-                default = None
-            else:
-                field_type = Optional[base_type]
-                default = None
-
-            # create_model expects tuple (type, default)
-            model_fields[field_key] = (field_type, default)
-
-    # always add pagination/sort fields
-    model_fields.setdefault("limit", (Optional[int], 50))
-    model_fields.setdefault("skip", (Optional[int], 0))
-    model_fields.setdefault("sort_by", (Optional[str], None))  # e.g. "age" or "-created_at"
-
-    FilterModel = create_model(f"{doc_model.__name__}FilterModel", **model_fields)  # type: ignore
-    return FilterModel
-
-
-# -------------------------
-# Helper: 将 FilterModel 实例转换为 Mongo filter dict
-# -------------------------
 def convert_value_to_bson(field_type: Any, value: Any):
-    """如果需要把字符串 id 转为 ObjectId 等，做轻量转换。"""
-    # 当 field_type 指向 PydanticObjectId / ObjectId 时，把字符串转为 ObjectId
-    if field_type in (PydanticObjectId, ObjectId):
-        if isinstance(value, list):
-            return [ObjectId(v) if not isinstance(v, ObjectId) else v for v in value]
+    if field_type in (PydanticObjectId, ObjectId) and value is not None:
+        if isinstance(value, list): return [ObjectId(v) for v in value if not isinstance(v, ObjectId)]
         return ObjectId(value) if not isinstance(value, ObjectId) else value
-    # otherwise return as-is (could add more conversions)
     return value
 
 
-def build_mongo_filter_from_model(doc_model: Type[Document], filter_model: BaseModel) -> Dict:
+# ----------------------------------------------------
+# 2. 动态 UI Schema 生成器
+# ----------------------------------------------------
+# ----------------------------------------------------
+# 2. 动态 UI Schema 生成器 (已修复)
+# ----------------------------------------------------
+def generate_filter_schema(
+        doc_model: Type[Document],
+        custom_query_builders: Optional[Dict[str, Callable]] = None
+) -> List[Dict[str, Any]]:
     """
-    规则：
-      - 对于 field__eq -> {field: value}
-      - field__lt -> {field: {"$lt": value}}, etc.
-      - field__in -> {field: {"$in": value_list}}
-      - field__contains -> {field: {"$regex": value, "$options": "i"}}
+    [完整实现] 为前端动态生成一个描述性的、可用的筛选器 Schema。
     """
-    mongo_filter: Dict[str, Any] = {}
-    hints = get_type_hints(doc_model, include_extras=True)
+    schema = []
 
-    # map operator to mongo op
-    op_map = {
-        "lt": "$lt",
-        "lte": "$lte",
-        "gt": "$gt",
-        "gte": "$gte",
-        "in": "$in",
-    }
+    def map_type(t: Any) -> str:
+        origin = get_origin(t)
+        if origin is Union:
+            inner_type = next((arg for arg in get_args(t) if arg is not type(None)), None)
+            if inner_type: t = inner_type
+        if inspect.isclass(t) and issubclass(t, Enum): return "enum"
+        if t is int or t is float: return "integer"
+        if t is bool: return "boolean"
+        if t is date: return "date"
+        if t is str: return "string"
+        if inspect.isclass(t) and issubclass(t, pydantic.BaseModel): return "object"
+        return "string"
 
-    for key, value in filter_model.__dict__.items():
-        if value is None:
-            continue
-        if key in ("limit", "skip", "sort_by"):
-            continue
-        if "__" not in key:
-            continue
-        field, op = key.split("__", 1)
-        # get field's base type for conversions if available
-        hint = hints.get(field, None)
-        base_type = None
-        if hint is not None:
+    op_labels = {"eq": "等于", "ne": "不等于", "gt": "大于", "gte": "大于等于", "lt": "小于", "lte": "小于等于",
+                 "in": "在...之中", "contains": "包含", "exists": "是否存在"}
+
+    # a. 递归扫描模型字段
+    def _build_schema_recursive(model_cls: Type, prefix: str = "", label_prefix: str = ""):
+        hints = get_type_hints(model_cls, include_extras=True)
+        for field_name, hint in hints.items():
+            origin, args = get_origin(hint), get_args(hint)
+            base_type = next((arg for arg in args if arg is not type(None)), hint) if origin is Union else hint
+            filter_spec, current_type = None, base_type
+            if get_origin(base_type) is Annotated:
+                annotated_args = get_args(base_type)
+                current_type = annotated_args[0]
+                if get_origin(current_type) is Union:
+                    current_type = next((t for t in get_args(current_type) if t is not type(None)), None)
+                for extra in annotated_args[1:]:
+                    if isinstance(extra, Filter): filter_spec = extra; break
+            if filter_spec:
+                field_prefix = f"{prefix}{field_name}"
+                human_label_base = f"{label_prefix}{field_name.replace('_', ' ').title()}"
+                for op in filter_spec.ops:
+                    item_type = "boolean" if op == "exists" else map_type(current_type)
+                    item = {"name": f"{field_prefix}__{op}", "field": field_name,
+                            "label": f"{human_label_base} {op_labels.get(op, op)}", "type": item_type, "operator": op,
+                            "options": None}
+                    if item_type == "enum" and inspect.isclass(current_type) and issubclass(current_type, Enum):
+                        item["options"] = [e.value for e in current_type]
+                    schema.append(item)
+            actual_type = get_args(current_type)[0] if get_origin(current_type) is Union else current_type
+            if actual_type and inspect.isclass(actual_type) and issubclass(actual_type, pydantic.BaseModel):
+                _build_schema_recursive(actual_type, prefix=f"{prefix}{field_name}__",
+                                        label_prefix=f"{label_prefix}{field_name.replace('_', ' ').title()} -> ")
+
+    _build_schema_recursive(doc_model)
+
+    # --- [修复] ---
+    # b. 为所有已注册的自定义查询生成 Schema 条目
+    if custom_query_builders:
+        for query_name, builder_func in custom_query_builders.items():
+            label = query_name.replace('_', ' ').title()
+            try:
+                sig = inspect.signature(builder_func)
+                if len(sig.parameters) == 0:
+                    # 标志查询 (e.g., today_episodes)
+                    schema.append({"name": query_name, "field": query_name, "label": label, "type": "boolean",
+                                   "operator": "custom_flag", "options": None})
+                else:
+                    # 参数化查询 (e.g., episodes_on_date)
+                    first_param = next(iter(sig.parameters.values()))
+                    param_type = first_param.annotation
+                    schema.append(
+                        {"name": query_name, "field": query_name, "label": label, "type": map_type(param_type),
+                         "operator": "custom_param", "options": None})
+            except (ValueError, TypeError):
+                continue
+
+    return sorted(schema, key=lambda x: x['label'])
+
+
+# ----------------------------------------------------
+# 3. 动态 Pydantic Filter 模型构建器
+# ----------------------------------------------------
+def build_filter_model(doc_model: Type[Document], custom_query_builders: Optional[Dict[str, Callable]] = None) -> Type[
+    BaseModel]:
+    model_fields: Dict[str, tuple] = {}
+
+    def _build_fields_recursive(model_cls: Type, prefix: str = ""):
+        hints = get_type_hints(model_cls, include_extras=True)
+        for field_name, hint in hints.items():
             origin = get_origin(hint)
-            if origin is Annotated:
-                base_type = get_args(hint)[0]
-            else:
-                base_type = hint
+            args = get_args(hint)
+            base_type = next((arg for arg in args if arg is not type(None)), hint) if origin is Union else hint
+            filter_spec = None
+            current_type = base_type
+            if get_origin(base_type) is Annotated:
+                annotated_args = get_args(base_type)
+                current_type = annotated_args[0]
+                if get_origin(current_type) is Union and type(None) in get_args(current_type):
+                    current_type = next((t for t in get_args(current_type) if t is not type(None)), None)
+                for extra in annotated_args[1:]:
+                    if isinstance(extra, Filter): filter_spec = extra; break
+            if filter_spec:
+                field_prefix = f"{prefix}{field_name}"
+                for op in filter_spec.ops:
+                    field_key = f"{field_prefix}__{op}"
+                    if op == "in":
+                        field_type = Optional[List[current_type]]
+                    elif op == "exists":
+                        field_type = Optional[bool]
+                    elif op in ["eq", "ne"]:
+                        field_type = Optional[Union[current_type, str]]
+                    else:
+                        field_type = Optional[current_type]
+                    model_fields[field_key] = (field_type, None)
+            actual_type = get_args(current_type)[0] if get_origin(current_type) is Union and type(None) in get_args(
+                current_type) else current_type
+            if actual_type and inspect.isclass(actual_type) and issubclass(actual_type, pydantic.BaseModel):
+                _build_fields_recursive(actual_type, prefix=f"{prefix}{field_name}__")
 
-        converted = convert_value_to_bson(base_type, value)
+    _build_fields_recursive(doc_model)
+    if custom_query_builders:
+        for query_name, builder_func in custom_query_builders.items():
+            try:
+                sig = inspect.signature(builder_func)
+                if len(sig.parameters) == 0:
+                    field_type = Optional[bool]
+                else:
+                    first_param = next(iter(sig.parameters.values()))
+                    param_type = first_param.annotation
+                    field_type = Optional[param_type if param_type != inspect.Parameter.empty else Any]
+            except (ValueError, TypeError):
+                field_type = Optional[Any]
+            model_fields[query_name] = (field_type, None)
+    model_fields.setdefault("limit", (Optional[int], 50))
+    model_fields.setdefault("skip", (Optional[int], 0))
+    model_fields.setdefault("sort_by", (Optional[str], None))
+    return create_model(f"{doc_model.__name__}FilterModel", **model_fields)
 
-        if op == "eq":
-            # if there is already an operator dict for this field, merge carefully
-            if isinstance(mongo_filter.get(field), dict):
-                # set equality - override any previous eq
-                mongo_filter[field]["$eq"] = converted
-            else:
-                mongo_filter[field] = converted
+
+# ----------------------------------------------------
+# 4. MongoDB 查询构建器
+# ----------------------------------------------------
+def build_mongo_filter_from_model(doc_model: Type[Document], filter_model: BaseModel) -> Dict[str, Any]:
+    mongo_filter: Dict[str, Any] = {}
+    op_map = {"lt": "$lt", "lte": "$lte", "gt": "$gt", "gte": "$gte", "in": "$in", "ne": "$ne"}
+    for key, value in filter_model.dict(exclude_none=True).items():
+        if key in ("limit", "skip", "sort_by") or "__" not in key: continue
+        field_path, op = key.rsplit("__", 1)
+        mongo_field = field_path.replace("__", ".")
+        processed_value = None if isinstance(value, str) and value.lower() == 'null' else value
+        hints = get_type_hints(doc_model, include_extras=True)
+        base_type = hints.get(field_path.split('__')[0], Any)
+        converted = convert_value_to_bson(base_type, processed_value)
+        if op == "exists":
+            is_true = str(converted).lower() in ['true', '1', 'yes']
+            mongo_filter[mongo_field] = {"$exists": True, "$ne": None} if is_true else {"$eq": None}
+        elif op == "eq":
+            mongo_filter[mongo_field] = converted
         elif op == "contains":
-            # use case-insensitive regex
-            mongo_filter.setdefault(field, {})
-            # if user passed list (unlikely), join with '|'
-            pattern = converted if not isinstance(converted, list) else "|".join(map(str, converted))
-            mongo_filter[field].update({"$regex": pattern, "$options": "i"})
+            mongo_filter[mongo_field] = {
+                "$regex": processed_value if not isinstance(processed_value, list) else "|".join(
+                    map(str, processed_value)), "$options": "i"}
         elif op in op_map:
-            mongo_filter.setdefault(field, {})
-            mongo_filter[field].update({op_map[op]: converted})
-        else:
-            # unknown op -> ignore or raise
-            raise ValueError(f"unknown filter op: {op}")
-
+            mongo_filter.setdefault(mongo_field, {})
+            mongo_filter[mongo_field].update({op_map[op]: converted})
     return mongo_filter
 
 
-# -------------------------
-# Generic CRUD Router Factory
-# -------------------------
+# ----------------------------------------------------
+# 5. 可扩展的通用仓储层 (Repository)
+# ----------------------------------------------------
+class GenericRepository:
+    def __init__(self, model: Type[Document], id_field: str = "_id",
+                 custom_query_builders: Optional[Dict[str, Callable]] = None):
+        self.model = model
+        self.id_field = id_field
+        self.custom_query_builders = custom_query_builders or {}
+        self.FilterModel = build_filter_model(self.model, self.custom_query_builders)
+
+    async def find(self, filters: Dict[str, Any], limit: int = 50, skip: int = 0, sort_by: Optional[str] = None) -> \
+    List[Document]:
+        and_clauses = []
+        custom_params = {}
+        generic_params = {}
+        for key, value in filters.items():
+            if key in self.custom_query_builders:
+                custom_params[key] = value
+            else:
+                generic_params[key] = value
+        if generic_params:
+            generic_filter_model = self.FilterModel(**generic_params)
+            generic_mongo_filter = build_mongo_filter_from_model(self.model, generic_filter_model)
+            if generic_mongo_filter: and_clauses.append(generic_mongo_filter)
+        for key, value in custom_params.items():
+            builder_func = self.custom_query_builders[key]
+            sig = inspect.signature(builder_func)
+            custom_mongo_filter = None
+            if len(sig.parameters) == 0:
+                if value is True: custom_mongo_filter = builder_func()
+            else:
+                if value is not None: custom_mongo_filter = builder_func(value)
+            if custom_mongo_filter: and_clauses.append(custom_mongo_filter)
+        final_mongo_filter = {"$and": and_clauses} if len(and_clauses) > 1 else (and_clauses[0] if and_clauses else {})
+        coll = self.model.get_pymongo_collection()
+        cursor = coll.find(final_mongo_filter).skip(skip).limit(limit)
+        if sort_by:
+            direction = -1 if sort_by.startswith("-") else 1
+            field = sort_by.lstrip('-')
+            cursor = cursor.sort(field, direction)
+        docs = await cursor.to_list(length=limit)
+        return [self.model.parse_obj(d) for d in docs]
+
+    def _parse_id_value(self, raw_value: Any):
+        hints = get_type_hints(self.model, include_extras=True)
+        hint = hints.get(self.id_field, None)
+        base_type = get_args(hint)[0] if get_origin(hint) is Annotated else hint if hint else Any
+        return convert_value_to_bson(base_type, raw_value)
+
+    async def create(self, payload: dict) -> Document:
+        coll = self.model.get_pymongo_collection()
+        if self.id_field in payload:
+            try:
+                payload[self.id_field] = self._parse_id_value(payload[self.id_field])
+            except Exception:
+                pass
+        res = await coll.insert_one(payload)
+        doc = await coll.find_one({"_id": res.inserted_id})
+        return self.model.parse_obj(doc)
+
+    async def get_by_id(self, item_id: Any) -> Optional[Document]:
+        coll = self.model.get_pymongo_collection()
+        parsed_id = self._parse_id_value(item_id)
+        doc = await coll.find_one({self.id_field: parsed_id})
+        return self.model.parse_obj(doc) if doc else None
+
+    async def update(self, item_id: Any, payload: dict) -> Optional[Document]:
+        coll = self.model.get_pymongo_collection()
+        parsed_id = self._parse_id_value(item_id)
+        res = await coll.update_one({self.id_field: parsed_id}, {"$set": payload})
+        if res.matched_count == 0: return None
+        return await self.get_by_id(item_id)
+
+    async def delete(self, item_id: Any) -> bool:
+        coll = self.model.get_pymongo_collection()
+        parsed_id = self._parse_id_value(item_id)
+        res = await coll.delete_one({self.id_field: parsed_id})
+        return res.deleted_count > 0
+
+
+# ----------------------------------------------------
+# 6. 可扩展的通用 API 路由层 (Router)
+# ----------------------------------------------------
 class GenericCRUDRouter:
-    def __init__(self, model: Type[Document], prefix: Optional[str] = None, tags: Optional[List[str]] = None):
+    def __init__(self, model: Type[Document], prefix: Optional[str] = None, tags: Optional[List[str]] = None,
+                 id_field: str = "_id", custom_query_builders: Optional[Dict[str, Callable]] = None):
         self.model = model
         self.router = APIRouter(prefix=prefix or f"/{model.__name__.lower()}s", tags=tags or [model.__name__])
-        self.FilterModel = build_filter_model(model)
-
-        # mount routes (create, get, update, delete)
+        self.repository = GenericRepository(model, id_field=id_field, custom_query_builders=custom_query_builders)
+        self.FilterModel = self.repository.FilterModel
+        self.router.get("/", response_model=List[model])(self.list_many())
+        self.router.get("/filters", response_model=List[Dict[str, Any]], summary="获取可用的筛选器 Schema")(
+            self.get_filter_schema)
         self.router.post("/", response_model=model)(self.create_one)
         self.router.get("/{item_id}", response_model=model)(self.get_one)
         self.router.patch("/{item_id}", response_model=model)(self.update_one)
         self.router.delete("/{item_id}")(self.delete_one)
 
-        # register list route properly with concrete FilterModel via Depends()
-        filter_cls = self.FilterModel
+    def list_many(self):
+        repo = self.repository
 
-        def make_list_endpoint():
-            async def list_endpoint(
-                filters: filter_cls = Depends(),
-                limit: int = Query(50, ge=1, le=1000),
-                skip: int = Query(0, ge=0),
-                sort_by: Optional[str] = Query(None)
-            ):
-                # call the instance method (use bound self)
-                return await self.list_many(filters=filters, limit=limit, skip=skip, sort_by=sort_by)
-            return list_endpoint
+        async def endpoint(filters: repo.FilterModel = Depends()):
+            filter_dict = filters.dict(exclude_none=True)
+            return await repo.find(filters=filter_dict, limit=filter_dict.get('limit', 50),
+                                   skip=filter_dict.get('skip', 0), sort_by=filter_dict.get('sort_by'))
 
-        self.router.get("/", response_model=List[model])(make_list_endpoint())
+        return endpoint
 
+    async def get_filter_schema(self):
+        return generate_filter_schema(self.model, self.repository.custom_query_builders)
 
-    # --- route handlers ---
     async def create_one(self, payload: dict):
-        """
-        payload 会由 FastAPI 自动校验为 dict（如果你想更严格可以使用 model as request body）
-        这里采用底层 collection 来插入，然后返回 model.parse_obj(result)
-        """
-        print('cenima')
-        coll = self.model.get_pymongo_collection()
-        # convert PydanticObjectId / nested changes if needed
-        res = await coll.insert_one(payload)
-        doc = await coll.find_one({"_id": res.inserted_id})
-        return self.model.parse_obj(doc)
+        return await self.repository.create(payload)
 
     async def get_one(self, item_id: str):
-        coll = self.model.get_pymongo_collection()
-        try:
-            _id = ObjectId(item_id)
-        except Exception:
-            raise HTTPException(status_code=400, detail="invalid id")
-        doc = await coll.find_one({"_id": _id})
-        if not doc:
-            raise HTTPException(status_code=404, detail="not found")
-        return self.model.parse_obj(doc)
-
-    async def list_many(self, filters: BaseModel = Depends(), limit: int = Query(50, ge=1, le=1000), skip: int = Query(0, ge=0), sort_by: Optional[str] = Query(None)):
-        # NOTE: FastAPI 依赖注入会把我们的 FilterModel 放到 `filters`（需要在路由定义里明确）
-        # but due to how we register route above we must adapt signature in registration (see __init__).
-        # For clarity, we will rebind proper signature later. For now assume filters is FilterModel instance.
-        # Convert:
-        if isinstance(filters, BaseModel):
-            filter_model = filters
-        else:
-            # fallback
-            filter_model = self.FilterModel()
-
-        mongo_filter = build_mongo_filter_from_model(self.model, filter_model)
-        coll = self.model.get_pymongo_collection()
-        cursor = coll.find(mongo_filter).skip(skip).limit(limit)
-
-        if sort_by:
-            # simple support "-field" for desc
-            if sort_by.startswith("-"):
-                cursor = cursor.sort(sort_by[1:], -1)
-            else:
-                cursor = cursor.sort(sort_by, 1)
-
-        docs = await cursor.to_list(length=limit)
-        # parse to model instances
-        return [self.model.parse_obj(d) for d in docs]
+        doc = await self.repository.get_by_id(item_id)
+        if not doc: raise HTTPException(status_code=404, detail="Not found")
+        return doc
 
     async def update_one(self, item_id: str, payload: dict):
-        coll = self.model.get_pymongo_collection()
-        try:
-            _id = ObjectId(item_id)
-        except Exception:
-            raise HTTPException(status_code=400, detail="invalid id")
-        res = await coll.update_one({"_id": _id}, {"$set": payload})
-        if res.matched_count == 0:
-            raise HTTPException(status_code=404, detail="not found")
-        doc = await coll.find_one({"_id": _id})
-        return self.model.parse_obj(doc)
+        updated_doc = await self.repository.update(item_id, payload)
+        if not updated_doc: raise HTTPException(status_code=404, detail="Not found")
+        return updated_doc
 
     async def delete_one(self, item_id: str):
-        coll = self.model.get_pymongo_collection()
-        try:
-            _id = ObjectId(item_id)
-        except Exception:
-            raise HTTPException(status_code=400, detail="invalid id")
-        res = await coll.delete_one({"_id": _id})
-        if res.deleted_count == 0:
-            raise HTTPException(status_code=404, detail="not found")
+        success = await self.repository.delete(item_id)
+        if not success: raise HTTPException(status_code=404, detail="Not found")
         return {"deleted": True, "id": item_id}
-
-
-# -------------------------
-# Usage Example
-# -------------------------
-# Example Beanie Document model that uses Annotated + Filter
-from typing import List
-class User(Document):
-    # name 支持 eq 和 contains
-    name: Annotated[str, Filter(ops=["eq", "contains"])]
-    # age 支持 eq, gt, lt
-    age: Annotated[Optional[int], Filter(ops=["eq", "gt", "lt"])]
-    tags: Annotated[Optional[List[str]], Filter(ops=["in"])]
-
-    class Settings:
-        name = "users"  # mongo collection name
-
-# Build FastAPI app and include router
-def create_app(mongo_uri: str = "mongodb://localhost:27017", db_name: str = "testdb"):
-    app = FastAPI(title="Generic CRUD with Filter Annotations")
-
-    @app.on_event("startup")
-    async def startup():
-        client = AsyncIOMotorClient(mongo_uri)
-        # init_beanie requires a motor client or database
-        await init_beanie(database=client[db_name], document_models=[User])
-
-    # build router
-    router = GenericCRUDRouter(User, prefix="/users").router
-
-    # IMPORTANT: rebind list_many route signature so that FastAPI injects FilterModel via Depends()
-    # Because we created the route earlier in __init__, we need to override the path operation
-    # with a new function that has the right signature (filters: FilterModel = Depends()).
-    filter_model = build_filter_model(User)
-
-    async def user_list_endpoint(filters: filter_model = Depends(), limit: int = Query(50, ge=1, le=1000), skip: int = Query(0, ge=0), sort_by: Optional[str] = Query(None)):
-        return await GenericCRUDRouter(User).list_many(filters=filters, limit=limit, skip=skip, sort_by=sort_by)
-
-    # override GET /
-    router.routes = [r for r in router.routes if not (r.path == "/users" and "get" in r.methods)]
-    router.get("/", response_model=List[User])(user_list_endpoint)
-
-    app.include_router(router)
-    return app
-
-# run example (uvicorn) would be external; for quick test:
-# app = create_app()

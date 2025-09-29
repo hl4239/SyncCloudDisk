@@ -245,18 +245,18 @@ class RegexStandardizer(IStandardizer):
         # - 或者文件后缀是媒体且文件名含剧集线索 -> file:episode
         # - 否则，如果是媒体扩展但无法识别为剧集，则归入 file:other（可能是电影/合集）
         # - 其他文件 -> file:other
-        if item.episode_number is not None or item.season_number is not None or item.is_special_episode_name:
+        if item.episode_number is not None or item.is_special_episode_name:
             item.resource_type = ResourceType.FILE_EPISODE
         else:
-            # 如果文件是媒体扩展并且文件名含数字或 "part"/"cd" 之类，仍视为 episode 型资源（宽松策略）
-            if is_media_ext:
-                if re.search(r'\bpart\s*\d+|\bcd\s*\d+|\bdisc\s*\d+|\b卷\b|\b集\b', lowered, re.I) or re.search(r'\d{1,3}', lowered):
-                    # 虽然电影名也可能包含数字，但为了网盘刮削优先保守标记为媒体资源
-                    item.resource_type = ResourceType.FILE_EPISODE
-                else:
-                    # 无明显剧集线索，但为媒体文件 -> 仍视为媒体资源（方便人工/后续判断）
-                    item.resource_type = ResourceType.FILE_EPISODE
-            else:
+            # # 如果文件是媒体扩展并且文件名含数字或 "part"/"cd" 之类，仍视为 episode 型资源（宽松策略）
+            # if is_media_ext:
+            #     if re.search(r'\bpart\s*\d+|\bcd\s*\d+|\bdisc\s*\d+|\b卷\b|\b集\b', lowered, re.I) or re.search(r'\d{1,3}', lowered):
+            #         # 虽然电影名也可能包含数字，但为了网盘刮削优先保守标记为媒体资源
+            #         item.resource_type = ResourceType.FILE_EPISODE
+            #     else:
+            #         # 无明显剧集线索，但为媒体文件 -> 仍视为媒体资源（方便人工/后续判断）
+            #         item.resource_type = ResourceType.FILE_EPISODE
+            # else:
                 item.resource_type = ResourceType.FILE_OTHER
 
         return item
@@ -276,7 +276,7 @@ regex_standardizer = RegexStandardizer()
 if __name__ == '__main__':
     async def demo():
         samples = [
-            StandardizedResult(original_name="F.S.H.2025.S01E03.2160p.DV.WEB-DL.H265.10bit.DDP5.1.mp4", is_folder=False),
+            StandardizedResult(original_name="Confidence.Queen.S01E01v2.mp4", is_folder=False),
             StandardizedResult(original_name="Season 02", is_folder=True),
             StandardizedResult(original_name="1080p", is_folder=True),
             StandardizedResult(original_name="Random Documents", is_folder=True),

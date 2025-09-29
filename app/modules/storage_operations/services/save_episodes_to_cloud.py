@@ -50,7 +50,7 @@ class SaveEpisodesToCloud(ISaveEpisodesToCloud):
 
         logger.info(f" Saving {len(to_save_share_files)} episodes to {cloud_info.pancloud_name} {base_path_}")
         try:
-            await operator.save_file(share_files=to_save_share_files, parse=parse, path=base_path_)
+            await operator.save_file(share_files=to_save_share_files, parse=parse, pdir_file=pdir_file,ensure_shared_file_exist=True,wait_timeout=10,poll_interval=1)
             result = True
             logger.info(f"✅ Saved {len(to_save_share_files)} episodes to {cloud_info.pancloud_name} {base_path_}")
         except Exception as e:
@@ -64,7 +64,7 @@ class SaveEpisodesToCloud(ISaveEpisodesToCloud):
 
         # 更新 cloud_info
         latest_episode_number = max(
-            [(await i.standardized).episode_number for i in ls_dir_result]) if ls_dir_result else None
+            [(await i.standardized).episode_number for i in await pdir_file.children]) if await pdir_file.children else None
         share_link=None
 
         cloud_info.last_save_link = parse.link.url
@@ -81,7 +81,6 @@ class SaveEpisodesToCloud(ISaveEpisodesToCloud):
     ):
         """后台执行的重命名任务"""
         try:
-            await asyncio.sleep(5)  # 等待云盘同步完成
             ls_files = await operator.ls_dir(pdir_file=pdir_file)
             to_save_share_file_maps = {i.name: i for i in to_save_share_files}
 

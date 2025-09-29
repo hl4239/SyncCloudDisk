@@ -5,7 +5,7 @@ from typing import Union, List, override
 from watchfiles import awatch
 
 from app.core.logging_config import setup_logging
-from app.database.models import TVCategory, MovieCategory, Movie, MovieType
+from app.database.models import  MovieCategory, Movie, MovieType
 from app.modules.data_collection.clients.douban_client import get_douban_client, DoubanClient
 from app.modules.data_collection.interfaces.mapper_interface import IMapper
 from app.modules.data_collection.interfaces.movie_base_provider_interface import IMovieBaseProvider
@@ -36,7 +36,6 @@ class DoubanMovieBaseProviderService(IMovieBaseProvider):
 
             for i in result['subjects']['items']:
                 if i['layout']=='subject':
-                    print(i)
                     movie_type=douban_mapper_service_1.get_movie_type( i['target_type'])
                     title=i['target']['title']
                     year=i['target']['year']
@@ -68,12 +67,13 @@ class DoubanMovieBaseProviderService(IMovieBaseProvider):
                                    card_subtitle=lazy_result.card_subtitle,
                                    countries=lazy_result.countries,
                                    intro=lazy_result.intro,
-                                   original_title=lazy_result.original_title,)
+                                   original_title=lazy_result.original_title,
+                                   pubdate=lazy_result.pubdate,)
         return[self.mapper.map_to_movie_data_source(l)]
 
 
     @override
-    async def get_hot_movies(self, categories: Union[List[TVCategory] | List[MovieCategory]], count: int = 10) -> List[MovieDataSourceResult]:
+    async def get_hot_movies(self, categories: List[MovieCategory], count: int = 10) -> List[MovieDataSourceResult]:
 
         tasks=[]
         for category in categories:
@@ -98,8 +98,10 @@ async def get_douban_movie_base_provider_service():
 
 async def main():
     setup_logging()
+
     d=await get_douban_movie_base_provider_service()
-    r=  await d.get_movie_by_douban_id('36331163',MovieType.TV)
+    s = await d.search('科斯缇娜酒店')
+    r=  await d.get_movie_by_douban_id(s[0].douban_id,s[0].movie_type   )
     r0=r[0]
     print(
         await r0.douban_id,
@@ -111,7 +113,8 @@ async def main():
         await r0.category,
         await r0.movie_type,
         await r0.total_episodes,
-        await r0.original_title
+        await r0.original_title,
+        await r0.pubdate,
     )
 
 

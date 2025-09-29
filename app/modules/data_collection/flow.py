@@ -8,7 +8,7 @@ import tmdbsimple
 from app.core.config import settings
 from app.core.logging_config import setup_logging
 from app.database.database import init_db
-from app.database.models import TVCategory, MovieType
+from app.database.models import MovieType, MovieCategory
 from app.modules.data_collection.interfaces.episodes_air_date_provider_interface import IEpisodesAirDateProvider
 from app.modules.data_collection.interfaces.episodes_air_time_provider_interface import IEpisodesAirTimeProvider
 from app.modules.data_collection.interfaces.episodes_infos_provider_interface import IEpisodesInfosProvider
@@ -33,7 +33,7 @@ from app.modules.data_collection.services.tmdb_episodes_provider_service import 
 
 logger=getLogger(__name__)
 # @task(cache_policy=NO_CACHE)# @task(cache_policy=NO_CACHE)  # 或者 @task(cache_key_fn=task_input_hash)
-async def get_hot(categories:List[TVCategory],count: int ,movie_base_provider_service:IMovieBaseProvider)->List[MovieDataSourceResult]:
+async def get_hot(categories:List[MovieCategory],count: int ,movie_base_provider_service:IMovieBaseProvider)->List[MovieDataSourceResult]:
         result=await movie_base_provider_service.get_hot_movies(categories,count)
         return result
 # @task
@@ -67,7 +67,7 @@ async def set_episodes_infos(movie_date_results:List[MovieDataSourceResult],epis
     result=await episodes_info_provider.set_episodes_infos(movie_date_results)
     return result
 # @flow
-async def data_collection_get_hot_flow(categories:List[TVCategory],count:int):
+async def data_collection_get_hot_flow(categories:List[MovieCategory],count:int):
         hot_resp= await get_hot(categories=categories,count=count,movie_base_provider_service=await get_douban_movie_base_provider_service())
 
         match_resp= await match_to_database(movie_data_results=hot_resp,match_to_database_service=match_to_database_service)
@@ -115,7 +115,7 @@ async def get_movies_by_douban_id(params:List[Tuple[str, MovieType]]):
                                            episodes_air_time_provider=ai_copilot_episodes_air_time_provider)
 
     return set_air_time_resp
-async def search(key):
+async def search_from_douban(key):
     """
     从豆瓣搜索
     :param key:
@@ -129,7 +129,7 @@ async def main():
     await init_db()
     tmdbsimple.API_KEY = settings.TMDB_API_KEY
 
-    await data_collection_get_hot_flow(categories=[TVCategory.CHINA],count=1)
+    await data_collection_get_hot_flow(categories=[MovieCategory.CHINA],count=1)
 
 if __name__ == '__main__':
     asyncio.run(main())

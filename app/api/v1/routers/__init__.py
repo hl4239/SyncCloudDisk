@@ -2,6 +2,7 @@
 from fastapi import APIRouter
 
 from app.database.models import SystemConfig, Movie
+from app.database.movie_repository import MOVIE_CUSTOM_QUERIES
 from app.utils.generic_crud import GenericCRUDRouter
 from .tasks import router as tasks_router
 from .workflows import router as workflows_router
@@ -19,6 +20,6 @@ router.include_router(tasks_router, prefix="/tasks", tags=["tasks"])
 router .include_router(workflows_router,prefix="/workflows", tags=["workflows"])
 router.include_router(scheduler_router, prefix="/scheduler", tags=["scheduler"])
 router.include_router(pancloud_router, prefix="/panclouds", tags=["panclouds"])
-# router.include_router(movies_router, prefix="/movies", tags=["movies"])
-router.include_router(GenericCRUDRouter(Movie).router)
+router.include_router(movies_router, prefix="/movies", tags=["movies"])
+router.include_router(GenericCRUDRouter(Movie,id_field='douban_id',custom_query_builders=MOVIE_CUSTOM_QUERIES).router)
 router.include_router(GenericCRUDRouter(SystemConfig).router)

@@ -1,19 +1,12 @@
-# 实现
-import asyncio
 import json
+import logging
 import re
 from typing import Optional, List
 
-from agents import Agent, ModelSettings, Runner
-from agents.extensions.models.litellm_model import LitellmModel
-from litellm.llms.openai.openai import OpenAIConfig
-
-from app.core.logging_config import get_logger
-from app.database.database import init_db
-from app.database.models import OpenAISource, SystemConfig
+from app.database.models import SystemConfig
 from app.services.interfaces.open_ai_interface import IOpenAIService
 
-logger=get_logger(__name__)
+logger=logging.getLogger(__name__)
 class OpenAIService(IOpenAIService):
     def __init__(self):
         """
@@ -21,10 +14,13 @@ class OpenAIService(IOpenAIService):
         """
     @classmethod
     def _get_agent(cls,instructions,model,key,base_url,extra_body,tools,output_type):
+        from agents import ModelSettings
+        from agents import Agent
+        from agents.extensions.models.litellm_model import LitellmModel
+
         model_settings = ModelSettings(
                 extra_body=extra_body,
             ) if extra_body else None
-        print(instructions,model,key,base_url,extra_body,tools,output_type)
         return Agent(
             name='Assistant',
             instructions=instructions,
@@ -46,7 +42,7 @@ class OpenAIService(IOpenAIService):
             tools: Optional[List] = None,
             output_type: Optional[type] = None,
 
-    ) -> Optional[Agent]:
+    ) :
         system_config = await SystemConfig.find_one()
         if name is None:
 
@@ -86,12 +82,17 @@ class OpenAIService(IOpenAIService):
 open_ai_service=OpenAIService()
 
 async def main():
+    from app.database.database import init_db
+    from asyncio import Runner
+
     await init_db()
     agent=await open_ai_service.get_agent(instructions='你好')
-    result = await Runner.run(agent,
-                              input=f'你好,你是？')
-    print(result.final_output)
+    # result = await Runner.run(agent,
+    #                           input=f'你好,你是？')
+    # print(result.final_output)
     # r= open_ai_service.format_to_json('')
-
+    ...
 if __name__ == '__main__':
+    import asyncio
+
     asyncio.run(main())

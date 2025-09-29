@@ -45,7 +45,7 @@ class RegexTargetLinkFilter(ITargetLinkFilter):
 
         for pattern in patterns:
             if pattern.search(link_title):
-                logger.debug(
+                logger.info(
                     f'匹配成功: '
                     f'link_title="{link_title}" '
                     f'movie_title_season="{movie_title_season}" '
@@ -53,7 +53,7 @@ class RegexTargetLinkFilter(ITargetLinkFilter):
                 )
                 return True
 
-        logger.debug(
+        logger.warning(
             f'未匹配: '
             f'link_title="{link_title}" '
             f'movie_title_season="{movie_title_season}" '

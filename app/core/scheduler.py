@@ -334,7 +334,7 @@ class CronScheduler:
         async with self._lock:
             # 更新 jobs map
             self._jobs[job_id] = doc
-            # 更新 heap entry： push 新条目，lazy 删除旧的
+            # 更新 heap entry： push 新条目，lazy 删除旧的（但标记 heap_map 为最新）
             if doc.next_run_at:
                 he = _HeapEntry(next_run_ts=self._doc_next_ts(doc), job_id=job_id)
                 heapq.heappush(self._heap, he)
@@ -355,8 +355,11 @@ class CronScheduler:
             while self._running:
                 # 1) 从堆读取最早的任务并计算等待时间（短临界区）
                 async with self._lock:
-                    # lazy 清理 heap（移除在内存中不存在的 job）
-                    while self._heap and self._heap[0].job_id not in self._jobs:
+                    # lazy 清理 heap：移除指向已删除 job 的条目，或被覆盖（非最新）的 stale 条目
+                    while self._heap and (
+                        self._heap[0].job_id not in self._jobs
+                        or self._heap_map.get(self._heap[0].job_id) is not self._heap[0]
+                    ):
                         heapq.heappop(self._heap)
 
                     if not self._heap:
@@ -367,20 +370,26 @@ class CronScheduler:
                         pass
                     else:
                         next_entry = self._heap[0]
-                        job_doc = self._jobs.get(next_entry.job_id)
-                        if not job_doc or not job_doc.enabled:
-                            # 弹出并继续循环
+                        # 再次判断：如果堆顶已经不是最新 entry（可能在上面循环后被外部更新），跳过
+                        if self._heap_map.get(next_entry.job_id) is not next_entry:
+                            # stale entry（被替换）——弹出并循环
                             heapq.heappop(self._heap)
-                            if next_entry.job_id in self._heap_map:
-                                del self._heap_map[next_entry.job_id]
                             waiter = None
                         else:
-                            next_ts = next_entry.next_run_ts
-                            now_ts = time.time()
-                            wait_seconds = max(0.0, next_ts - now_ts)
-                            self._wakeup.clear()
-                            waiter = self._wakeup.wait()
-                            # will wait for either timeout or wakeup
+                            job_doc = self._jobs.get(next_entry.job_id)
+                            if not job_doc or not job_doc.enabled:
+                                # 弹出并在 map 中只在匹配时删除（避免误删新 entry）
+                                heapq.heappop(self._heap)
+                                if self._heap_map.get(next_entry.job_id) is next_entry:
+                                    del self._heap_map[next_entry.job_id]
+                                waiter = None
+                            else:
+                                next_ts = next_entry.next_run_ts
+                                now_ts = time.time()
+                                wait_seconds = max(0.0, next_ts - now_ts)
+                                self._wakeup.clear()
+                                waiter = self._wakeup.wait()
+                                # will wait for either timeout or wakeup
 
                 # 2) 在锁外执行等待操作（避免阻塞其他 API）
                 if 'wait_seconds' in locals() and waiter is not None:
@@ -408,13 +417,18 @@ class CronScheduler:
                     now_ts = time.time()
                     while self._heap and self._heap[0].next_run_ts <= now_ts + 1e-6:
                         he = heapq.heappop(self._heap)
+                        # 跳过不是最新的 stale entry
+                        if self._heap_map.get(he.job_id) is not he:
+                            continue
                         doc = self._jobs.get(he.job_id)
                         if not doc or not doc.enabled:
-                            if he.job_id in self._heap_map:
+                            # 仅在 heap_map 指向当前 entry 时才删除 map
+                            if self._heap_map.get(he.job_id) is he:
                                 del self._heap_map[he.job_id]
                             continue
                         due_docs.append(doc)
-                        if he.job_id in self._heap_map:
+                        # 仅在 heap_map 指向当前 entry 时才删除 map
+                        if self._heap_map.get(he.job_id) is he:
                             del self._heap_map[he.job_id]
 
                 # 4) 在锁外并发调度所有到期任务（避免持锁）
@@ -579,7 +593,79 @@ class CronScheduler:
         if nxt.tzinfo is None:
             nxt = tz.localize(nxt)
         return nxt
+    async def get_status(self, limit: int = 5) -> Dict[str, Any]:
+        """
+        返回调度器内存中当前状态快照（不会进行 DB I/O）。
+        返回 dict 结构，字段与 API 的 SchedulerStatusResponse 一致：
+          {
+            "running": bool,
+            "jobs_count": int,
+            "heap_size": int,
+            "bg_task_active": bool,
+            "next_run": Optional[{"job_id","task_name","next_run_at","next_run_at_local"}],
+            "upcoming": [ ... same items ... ],
+            "tz": str
+          }
+        注意：
+        - 该方法在内部使用 self._lock 保证一致性快照（不会进行 await 的 DB I/O）。
+        - 只将 heap_map 中仍然指向该 entry 的视为有效（与调度循环一致）。
+        """
+        from datetime import datetime, timezone  # local import to avoid circulars if necessary
+        # prepare
+        upcoming_list = []
+        next_run_info = None
+        tz_name = self.default_tz or "UTC"
+        try:
+            tz_obj = pytz.timezone(tz_name)
+        except Exception:
+            tz_obj = pytz.timezone("UTC")
+            tz_name = "UTC"
 
+        async with self._lock:
+            running = bool(self._running)
+            jobs_count = len(self._jobs)
+            heap_size = len(self._heap)
+            bg_task_active = bool(self._bg_task and not self._bg_task.done())
+
+            # collect valid entries: those whose heap_map still points to the same entry, and job exists+enabled
+            valid_entries = []
+            for he in list(self._heap):
+                mapped = self._heap_map.get(he.job_id)
+                if mapped is not he:
+                    # stale or replaced
+                    continue
+                job_doc = self._jobs.get(he.job_id)
+                if not job_doc or not getattr(job_doc, "enabled", False):
+                    continue
+                valid_entries.append((he.next_run_ts, he.job_id, getattr(job_doc, "task_name", None)))
+
+            # sort and slice
+            valid_entries.sort(key=lambda x: x[0])
+            sliced = valid_entries[:max(0, int(limit))]
+
+            for ts, job_id, task_name in sliced:
+                dt_utc = datetime.fromtimestamp(ts, tz=timezone.utc)
+                dt_local = dt_utc.astimezone(tz_obj)
+                item = {
+                    "job_id": job_id,
+                    "task_name": task_name,
+                    "next_run_at": dt_utc,
+                    "next_run_at_local": dt_local,
+                }
+                upcoming_list.append(item)
+
+            if upcoming_list:
+                next_run_info = upcoming_list[0]
+
+        return {
+            "running": running,
+            "jobs_count": jobs_count,
+            "heap_size": heap_size,
+            "bg_task_active": bg_task_active,
+            "next_run": next_run_info,
+            "upcoming": upcoming_list,
+            "tz": tz_name,
+        }
 
 # 单例（默认时区 Asia/Shanghai）
 scheduler = CronScheduler()

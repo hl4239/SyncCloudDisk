@@ -7,6 +7,7 @@ from typing import Any, Dict, Optional, List
 from collections import deque
 from datetime import datetime
 import pytz
+import contextvars  # 新增
 
 class TaskStatus(str, Enum):
     PENDING = "PENDING"
@@ -15,6 +16,9 @@ class TaskStatus(str, Enum):
     FAILED = "FAILED"
     CANCELLED = "CANCELLED"
 
+# 用于在协程上下文中保存当前 task id
+_TASK_CONTEXT: contextvars.ContextVar[Optional[str]] = contextvars.ContextVar("_task_context", default=None)
+logger=logging.getLogger(__name__)
 class _TaskRecord:
     def __init__(self, id: str, name: Optional[str], params: Dict[str, Any], tz):
         self.id = id
@@ -94,7 +98,26 @@ class TaskManager:
                 except Exception:
                     self.handleError(record)
 
+        # Filter: 只允许当前 contextvar 中 task_id 与 rec.id 相同的记录通过
+        class _TaskContextFilter(logging.Filter):
+            def __init__(self, task_id: str):
+                super().__init__()
+                self._task_id = task_id
+
+            def filter(self, record: logging.LogRecord) -> bool:
+                try:
+                    current = _TASK_CONTEXT.get()
+                    # 如果 record 本身携带显式属性 task_id（某些地方可能会用 extra={'task_id': ...}），也允许
+                    record_task_id = getattr(record, "task_id", None)
+                    if record_task_id is not None:
+                        return record_task_id == self._task_id
+                    return current == self._task_id
+                except Exception:
+                    return False
+
         handler = TaskLogHandler(rec, loop=loop)
+        task_filter = _TaskContextFilter(rec.id)
+        handler.addFilter(task_filter)
 
         # decide which loggers to attach to
         attached = []  # list of (logger, original_level)
@@ -106,10 +129,9 @@ class TaskManager:
 
         try:
             if not capture_names:
+                # attach to root but with context filter: 只有当 _TASK_CONTEXT == rec.id 时才会被捕获
                 root_logger = logging.getLogger()
-                # save original level to restore later
                 attached.append((root_logger, root_logger.level))
-                # ensure logger level allows debug/info to flow
                 try:
                     root_logger.setLevel(min(root_logger.level if root_logger.level else 0, logging.DEBUG))
                 except Exception:
@@ -119,7 +141,6 @@ class TaskManager:
                 for name in capture_names:
                     lg = logging.getLogger(name)
                     attached.append((lg, lg.level))
-                    # temporarily lower logger level so INFO/DEBUG aren't filtered
                     try:
                         lg.setLevel(min(lg.level if lg.level else 0, logging.DEBUG))
                     except Exception:
@@ -134,50 +155,63 @@ class TaskManager:
             rec.started_at = datetime.now(rec.tz)
         rec.append_log("Task started (log handler attached)")
 
-        # also emit a test log through root to quickly verify handler captures
+        # also emit a test log through first attached logger
         try:
-            # write a small test message to the first attached logger
             if attached:
                 test_logger = attached[0][0]
-                # prefer using module logger name for clear trace
                 test_logger.info(f"[task {rec.id}] log handler attached for capture")
         except Exception:
             pass
 
+        # 在任务协程上下文里设置 contextvar，这样 handler 的 filter 能知道当前是哪个任务
+        token = None
         try:
-            def progress_cb(p: float):
-                if loop:
-                    # schedule updating progress safely on the loop
-                    loop.call_soon_threadsafe(asyncio.create_task, self._set_progress(rec.id, p))
-                else:
-                    asyncio.create_task(self._set_progress(rec.id, p))
+            token = _TASK_CONTEXT.set(rec.id)
 
-            def log_cb(s: str):
-                if loop:
-                    loop.call_soon_threadsafe(rec.append_log, s)
-                else:
-                    rec.append_log(s)
+            try:
+                def progress_cb(p: float):
+                    if loop:
+                        loop.call_soon_threadsafe(asyncio.create_task, self._set_progress(rec.id, p))
+                    else:
+                        asyncio.create_task(self._set_progress(rec.id, p))
 
-            result = await coro_fn(rec.params, progress_callback=progress_cb, log_callback=log_cb)
+                def log_cb(s: str):
+                    # 允许用户直接通过回调写入日志（不依赖 logging 模块）
+                    if loop:
+                        loop.call_soon_threadsafe(rec.append_log, s)
+                    else:
+                        rec.append_log(s)
 
-            async with rec._lock:
-                rec.result = result
-                rec.status = TaskStatus.COMPLETED
-                rec.progress = 100.0
-                rec.finished_at = datetime.now(rec.tz)
-            rec.append_log("Task completed successfully")
-        except asyncio.CancelledError:
-            async with rec._lock:
-                rec.status = TaskStatus.CANCELLED
-                rec.finished_at = datetime.now(rec.tz)
-            rec.append_log("Task was cancelled")
-        except Exception as e:
-            async with rec._lock:
-                rec.status = TaskStatus.FAILED
-                rec.error = f"{type(e).__name__}: {e}"
-                rec.finished_at = datetime.now(rec.tz)
-            rec.append_log(f"Task failed: {type(e).__name__}: {e}")
+                # 调用注册的任务函数（由 registry 提供的 wrapper），它在当前上下文中运行，
+                # 所有在此上下文中产生日志的记录（使用标准 logging）会被 handler 捕获
+                result = await coro_fn(rec.params, progress_callback=progress_cb, log_callback=log_cb)
+
+                async with rec._lock:
+                    rec.result = result
+                    rec.status = TaskStatus.COMPLETED
+                    rec.progress = 100.0
+                    rec.finished_at = datetime.now(rec.tz)
+                rec.append_log("Task completed successfully")
+            except asyncio.CancelledError:
+                async with rec._lock:
+                    rec.status = TaskStatus.CANCELLED
+                    rec.finished_at = datetime.now(rec.tz)
+                rec.append_log("Task was cancelled")
+            except Exception as e:
+                async with rec._lock:
+                    rec.status = TaskStatus.FAILED
+                    rec.error = f"{type(e).__name__}: {e}"
+                    rec.finished_at = datetime.now(rec.tz)
+                logger.error(f"Task failed: {type(e).__name__}: {e}",exc_info=e)
+                rec.append_log(f"Task failed: {type(e).__name__}: {e}")
         finally:
+            # 恢复 contextvar
+            try:
+                if token is not None:
+                    _TASK_CONTEXT.reset(token)
+            except Exception:
+                pass
+
             # cleanup handlers and restore original levels
             try:
                 for lg, original_level in attached:
@@ -186,7 +220,6 @@ class TaskManager:
                     except Exception:
                         pass
                     try:
-                        # restore original level (if was not None)
                         if original_level is not None:
                             lg.setLevel(original_level)
                     except Exception:

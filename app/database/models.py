@@ -6,12 +6,12 @@ from typing import List, Optional, Union, Dict, Any, Annotated
 
 import pydantic
 import pytz
-from beanie import Document, Indexed, Link
 from pydantic import Field, model_validator, BaseModel, field_validator, computed_field, field_serializer, validator
 
 from app.core.config import settings
 from app.utils.date_to_weekday import weekday_cn
 from app.utils.generic_crud import Filter
+from beanie import Document, Indexed, Link
 
 
 # --- 数据模型定义 ---
@@ -52,19 +52,15 @@ class MovieCloudInfo(pydantic.BaseModel):
                 self.last_save_time = self.last_save_time.replace(tzinfo=timezone.utc)
             self.last_save_time = self.last_save_time.astimezone(pytz.timezone("Asia/Shanghai"))
         return self
-class TVCategory(str, Enum):
+class MovieCategory(str, Enum):
     CHINA="China"
     JAPAN="Japan"
     KOREA="Korea"
     EUROPE="Europe"
     ANIMATION="Animation"
     OTHER="Other"
-class MovieCategory(str, Enum):
-    ALL="All"
-class MovieStatus(Enum):
-    UPCOMING = "upcoming"  # 未开播
-    ONGOING = "ongoing"  # 更新中
-    FINISHED = "finished"  # 已完结
+
+
 class EpisodesInfo(pydantic.BaseModel):
     episode_number: int
     # TMDB 原始数据
@@ -110,7 +106,9 @@ class EpisodesInfo(pydantic.BaseModel):
         # 如果没有提供 air_time，默认 00:00
         air_time_obj = self.air_time_obj or time(0, 0)
         tzinfo = pytz.timezone("Asia/Shanghai")
-        return datetime.combine(self.air_date, air_time_obj, tzinfo=tzinfo)
+        r=datetime.combine(self.air_date, air_time_obj, tzinfo=tzinfo)
+        print(r)
+        return  r
 
     @computed_field
     @property
@@ -125,8 +123,8 @@ class EpisodesInfo(pydantic.BaseModel):
         self.air_time = time_obj.isoformat()
 
 class TMDBInfos(pydantic.BaseModel):
-    id:Optional[int]=Field(default=None)
-    season_number:Optional[int]=Field(default=None)
+    id:Annotated[Optional[int], Filter(ops=["exists"])]=Field(default=None)
+    season_number:Annotated[Optional[int], Filter(ops=["exists"])]=Field(default=None)
 
     not_ensure:bool=Field(default=False,description='抓取结果不确定，需要人工抓取')
 class CloudShareLink(BaseModel):
@@ -161,13 +159,13 @@ class Movie(Document):
         description="豆瓣影视id"
     )
     title: Optional[str] = Field(default=None)
-    title_season:Annotated[str, Filter(ops=["eq", "contains"])] = Field(description='title和season一起')
+    title_season:Annotated[str, Filter(ops=["contains"])] = Field(description='title和season一起')
     original_title:Optional[str]=Field(default=None,description='原名，比如tmdb中可能只能用韩剧的韩语原名在哪查询到')
     subtitle: Optional[list[str]] = Field(default=None, description='子标题')
     pic:Optional[str] = Field(default=None,description='图片地址')
-    description: Optional[str] = Field(default=None)
-    year: Optional[str]=Field(default=None)
-    category:Annotated[Union[TVCategory, MovieCategory],Filter(ops=["eq"])] =Field(default=None)
+    description: Annotated[str, Filter(ops=["contains"])]= Field(default=None)
+    year: Annotated[str, Filter(ops=["eq"])]=Field(default=None)
+    category:Annotated[MovieCategory,Filter(ops=["eq"])] =Field(default=None)
     movie_type: Annotated[ MovieType,Filter(ops=["eq"])] = Field( description='影视类型电影或电视')
     season: Optional[str] = Field(default=None, description='描述影视第几季, e.g., "1", "第一季"')
     total_episodes:Optional[str]=Field(default=None,description='描述影视总剧集数')
@@ -178,7 +176,7 @@ class Movie(Document):
     metadata_providers:Optional[List[MetaDataProvider]]=Field(default_factory=list,description='元数据提供者的信息')
     create_time:Annotated[Optional[datetime],Filter(ops=["eq","gt","lt"])] =Field(default=None,description='创建时间')
     update_time:Annotated[Optional[datetime],Filter(ops=["eq","gt","lt"])]=Field(default=None,description='更新时间')
-
+    pubdate:Annotated[Optional[date],Filter(ops=["eq","gt","lt"])]=Field(default=None,description='更新时间')
     @model_validator(mode='after')
     def convert_datetimes(self):
         """在模型验证后转换时间字段"""
@@ -192,9 +190,11 @@ class Movie(Document):
                 self.update_time = self.update_time.replace(tzinfo=timezone.utc)
             self.update_time = self.update_time.astimezone(pytz.timezone("Asia/Shanghai"))
 
+
         return self
 
-
+    def is_tmdb_infos_avaliable(self):
+        return self.tmdb_infos is not None and self.tmdb_infos.id is not None and self.tmdb_infos.season_number is not None
 
     def generate_path(self, ):
         return  Path(settings.CLOUD_ROOT) / self.movie_type.value /  self.category /  self.year /  self.title_season

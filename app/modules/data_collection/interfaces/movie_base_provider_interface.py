@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Union
 
-from app.database.models import TVCategory, Movie, MovieCategory, MovieType
+from app.database.models import  Movie, MovieCategory, MovieType
 from app.modules.data_collection.schemas.douban_schemas import DoubanDetailResponse
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
 
@@ -12,7 +12,7 @@ class IMovieBaseProvider(ABC):
     """
 
     @abstractmethod
-    async def get_hot_movies(self,category:Union[List[TVCategory]|List[MovieCategory]] ,count:int=10) -> List[MovieDataSourceResult]:
+    async def get_hot_movies(self,category:List[MovieCategory] ,count:int=10) -> List[MovieDataSourceResult]:
         """
         根据tv_category获取热门资源
         :param count:

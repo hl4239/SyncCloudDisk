@@ -3,7 +3,7 @@ from typing import Union, Tuple, Optional, List, override
 
 from pydantic import BaseModel
 
-from app.database.models import Movie, MovieType, MovieCategory, TVCategory
+from app.database.models import Movie, MovieType, MovieCategory
 from app.modules.data_collection.interfaces.mapper_interface import IMapper
 from app.modules.data_collection.schemas.douban_schemas import DoubanTVResponse, DoubanTVItem
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
@@ -29,25 +29,23 @@ class DoubanMapperService(IMapper):
         countries = parts[1].split()
         return countries
 
-    def _get_movie_category(self,douban_item:DoubanTVItem)->Union[MovieCategory, TVCategory]:
+    def _get_movie_category(self,douban_item:DoubanTVItem)->MovieCategory:
         movie_type=self._get_movie_type(douban_item)
         card_subtitle = douban_item.card_subtitle
         countries = self.extract_countries(card_subtitle)
         first_country = countries[0]
-        if movie_type==MovieType.TV:
-            if any(kw ==first_country for kw in ['中国','中国大陆','大陆']):
-                return TVCategory.CHINA
-            elif any(kw ==first_country for kw in ['英国','美国']):
-                return TVCategory.EUROPE
-            elif any(kw ==first_country for kw in ['韩国']):
-                return TVCategory.KOREA
-            elif any(kw ==first_country for kw in ['日本']):
-                return TVCategory.JAPAN
-            else:return TVCategory.OTHER
-        elif movie_type==MovieType.MOVIE:
-            return MovieCategory.ALL
-        else:
-            return TVCategory.OTHER
+
+        if any(kw ==first_country for kw in ['中国','中国大陆','大陆']):
+            return MovieCategory.CHINA
+        elif any(kw ==first_country for kw in ['英国','美国']):
+            return MovieCategory.EUROPE
+        elif any(kw ==first_country for kw in ['韩国']):
+            return MovieCategory.KOREA
+        elif any(kw ==first_country for kw in ['日本']):
+            return MovieCategory.JAPAN
+        else:return MovieCategory.OTHER
+
+
 
 
 
@@ -131,7 +129,6 @@ class DoubanMapperService(IMapper):
         movie_data_source.movie_type = lazy(tv_type)
         movie_data_source.title_season = lazy(title_season)
         movie_data_source.category = lazy(tv_category)
-        movie_data_source.current_episodes = lazy(current_episodes)
         movie_data_source.total_episodes = lazy(total_episodes)
 
         return movie_data_source

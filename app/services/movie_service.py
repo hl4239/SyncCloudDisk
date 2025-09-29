@@ -133,21 +133,7 @@ class MovieService(IMovieService):
             return int(match_all.group(1))
 
         return None
-    @classmethod
-    def get_episodes_later(cls, *episodes: str) -> Optional[str]:
-        """
-        从多个剧集信息字符串中提取最新剧集对应的参数。
-        返回对应的原始字符串；如果解析失败返回 None。
-        """
-        latest: tuple[int, str] | None = None
 
-        for ep in episodes:
-            number = cls.extract_episode_number(ep)
-            if number is not None:
-                if latest is None or number > latest[0]:
-                    latest = (number, ep)
-
-        return latest[1] if latest else None
     async  def combin_to_movies(self,movie_data_sources:List[MovieDataSourceResult])->List[Movie]:
         """
         将movie_data_source与数据库的movie进行合并成最新的一个movie
@@ -174,7 +160,8 @@ class MovieService(IMovieService):
                     pic=await movie_data_source.pic,
                     original_title=await movie_data_source.original_title,
                     create_time=datetime.datetime.now(pytz.timezone("Asia/Shanghai")),
-                    update_time=datetime.datetime.now(pytz.timezone("Asia/Shanghai"))
+                    update_time=datetime.datetime.now(pytz.timezone("Asia/Shanghai")),
+                    pubdate=await movie_data_source.pubdate,
                 )
             else:
                 is_update=False
@@ -222,6 +209,9 @@ class MovieService(IMovieService):
                     movie.movie_type = await movie_data_source.movie_type
                     is_update = True
 
+                if not movie.pubdate:
+                    movie.pubdate = await movie_data_source.pubdate
+                    is_update = True
 
                 orig_epi=movie.episodes_info
 
