@@ -25,6 +25,12 @@ class CloudType(str, Enum):
     QUARK = "Quark"
     BAIDU="Baidu"
     UNKNOWN="Unknown"
+    @staticmethod
+    def get_link_type(link_str:str):
+        if 'quark' in link_str:
+            return CloudType.QUARK
+        return CloudType.UNKNOWN
+
 class PanCloud(Document):
     name: Optional[str] = Indexed(
         str, default=None, unique=True, description="唯一标识，创建时由用户手动输入"
@@ -107,7 +113,6 @@ class EpisodesInfo(pydantic.BaseModel):
         air_time_obj = self.air_time_obj or time(0, 0)
         tzinfo = pytz.timezone("Asia/Shanghai")
         r=datetime.combine(self.air_date, air_time_obj, tzinfo=tzinfo)
-        print(r)
         return  r
 
     @computed_field
@@ -144,6 +149,8 @@ class CloudShareLink(BaseModel):
         if 'quark' in self.url:
             return CloudType.QUARK
         return CloudType.UNKNOWN
+
+
 
 class MetaDataProviderEnum (str, Enum):
     RENREN = "人人视频"

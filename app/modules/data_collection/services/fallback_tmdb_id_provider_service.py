@@ -18,14 +18,17 @@ class FallbackTMDBIDProviderService(ITMDBIDProvider):
         self.b_tmdb_id_provider_service = b_tmdb_id_provider_service
 
     async def get_tmdb_id(self, movie_data_source: MovieDataSourceResult) -> Tuple[int, int]:
-
+        logger.debug(f"正在执行a_tmdb_id_provider")
         r= await self.a_tmdb_id_provider_service.get_tmdb_id(movie_data_source)
         if not r:
+            logger.warning(f"未从a_tmdb_id_provider获取到tmdb信息，正在执行b")
             r=await self.b_tmdb_id_provider_service.get_tmdb_id(movie_data_source)
         if r:
+            logger.info(f'从tmdb_info_provider获取到{r}')
             tmdb_id=r[0]
             season_number=r[1]
         else:
+            logger.warning(f"未从b_tmdb_id_provider获取到tmdb信息，将返回tmdb_info.id tmdb_info.season_number 为None")
             tmdb_id=None
             season_number=None
         return tmdb_id,season_number

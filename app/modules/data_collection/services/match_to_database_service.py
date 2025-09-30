@@ -18,7 +18,7 @@ class MatchToDatabaseService(IMatchToDatabase):
             movie_data_source.movie_info = lazy(movie)
             if movie.title:
                 movie_data_source.title=lazy(movie.title)
-            if movie.tmdb_infos:
+            if movie.tmdb_infos and movie.tmdb_infos.id and movie.tmdb_infos.season_number :
                 movie_data_source.tmdb_infos=lazy(movie.tmdb_infos)
 
             if movie.total_episodes :

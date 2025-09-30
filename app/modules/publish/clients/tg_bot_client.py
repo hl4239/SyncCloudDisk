@@ -19,7 +19,7 @@ class TgBotClient(BaseAioClient):
             }
 
         r= await self.request(method="POST",path=f'https://api.telegram.org/bot{self.bot_token}/sendMessage',json=data)
-        print(r)
+        return r
     async def send_photo_description(self,pic_url,text):
         data = {
             "chat_id": self.chat_id,
@@ -30,7 +30,7 @@ class TgBotClient(BaseAioClient):
         r = await self.request(method="POST",
                                path=f'https://api.telegram.org/bot{self.bot_token}/sendPhoto',
                                json=data)
-        print(r)
+        return r
 
 tg_bot_client=TgBotClient(chat_id="@pancloudshare",bot_token="8425430691:AAEX0KeL6OU0hL9KNasy51IrzYopiLoQhkw")
 

@@ -16,20 +16,15 @@ class ITMDBIDProvider(ABC):
         ...
 
     async def get_tmdb_infos(self,movie_data_source:MovieDataSourceResult)->TMDBInfos:
-        tmdb_infos = await movie_data_source.tmdb_infos
-        if tmdb_infos:
-            if tmdb_infos.id:
-                return tmdb_infos
-        else:
-            tmdb_infos = TMDBInfos()
+
+        tmdb_infos = TMDBInfos()
         tmdb_infos.id,tmdb_infos.season_number = await self.get_tmdb_id(movie_data_source)
         return tmdb_infos
 
     async def set_id(self, movie_data_sources: List[MovieDataSourceResult]) -> List[MovieDataSourceResult]:
         for movie_data_source in movie_data_sources:
-            cloned_model = copy.deepcopy(movie_data_source)
-            logger.debug(f'cloned_model={cloned_model.title_season}')
-            movie_data_source.tmdb_infos = lazy(lambda c=cloned_model: self.get_tmdb_infos(c))
+
+            movie_data_source.tmdb_infos = lazy(lambda c=movie_data_source: self.get_tmdb_infos(c))
 
         return movie_data_sources
 

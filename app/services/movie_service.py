@@ -133,6 +133,12 @@ class MovieService(IMovieService):
             return int(match_all.group(1))
 
         return None
+    @staticmethod
+    def generate_episode_progress_str(latest_episode_number:int,total_episode_number:int):
+        if latest_episode_number==total_episode_number:
+            return f'{latest_episode_number}集全'
+        else:return f'更新至{latest_episode_number}集'
+
 
     async  def combin_to_movies(self,movie_data_sources:List[MovieDataSourceResult])->List[Movie]:
         """
@@ -218,7 +224,7 @@ class MovieService(IMovieService):
                 movie.episodes_info=await movie_data_source.episodes_info
                 if orig_epi!=movie.episodes_info:
                     is_update=True
-                if movie.tmdb_infos is None:
+                if not movie.tmdb_infos or not movie.tmdb_infos.id or not movie.tmdb_infos.season_number :
                     is_update = True
                     movie.tmdb_infos = await movie_data_source.tmdb_infos
                 if is_update:
