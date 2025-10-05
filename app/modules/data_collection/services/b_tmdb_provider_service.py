@@ -20,6 +20,7 @@ class BTMDBIDProviderService(ITMDBIDProvider):
     @staticmethod
     async def _fetch_tmdb_id(title:str,season:str,movie_type:MovieType)->Optional[Tuple[int,int]]:
         """
+        只适用电视剧，电影在详细界面中没有季信息（包含在了title中）
         根据标题、season查找电视剧
         当season未第xx季时，如果存在多个相同的title则转人工干预，否则对第一个结果寻找相同的season
         当season为特殊名时，对比所有相同的title直到找到相同的season
@@ -42,12 +43,7 @@ class BTMDBIDProviderService(ITMDBIDProvider):
                 include_adult=False
             )
 
-        if movie_type == MovieType.MOVIE:
-            response = search.movie(
-                query=title,
-                language='zh-CN',
-                include_adult=False
-            )
+
 
         if not search.results or( search.results[0]['name']!=title and search.results[0]['original_name']!=title):
             logger.warning(f'未搜索到任何内容或与搜索结果title不同，参数：title={title},season={season}  搜索结果：{search.results}')
@@ -100,7 +96,8 @@ class BTMDBIDProviderService(ITMDBIDProvider):
         """
         r=await self._fetch_tmdb_id(await movie_data_source.title,MovieService.douban_season_to_tmdb_season(await movie_data_source.season),await movie_data_source.movie_type)
         if not r:
-            r=await self._fetch_tmdb_id(await movie_data_source.original_title,MovieService.douban_season_to_tmdb_season(await movie_data_source.season),await movie_data_source.movie_type)
+            if await movie_data_source.original_title:
+                r=await self._fetch_tmdb_id(await movie_data_source.original_title,MovieService.douban_season_to_tmdb_season(await movie_data_source.season),await movie_data_source.movie_type)
         return r
 
 

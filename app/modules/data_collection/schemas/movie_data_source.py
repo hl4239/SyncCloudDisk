@@ -1,6 +1,6 @@
 from datetime import date
 
-from pydantic import BaseModel, computed_field
+from pydantic import BaseModel, computed_field, Field
 
 from app.database.models import MovieCategory, MovieType, TMDBInfos, Movie, MovieCloudInfo, \
     EpisodesInfo
@@ -9,22 +9,23 @@ from app.utils.lazy_load import Lazy, lazy
 
 
 class MovieDataSourceResult(BaseModel):
-    douban_id:Lazy[str]=lazy(None)
-    original_title:Lazy[str]=lazy(None)
-    title: Lazy[str]=lazy(None)
-    title_season: Lazy[str]=lazy(None)
-    subtitle: Lazy[str]=lazy(None)
-    pic: Lazy[str]=lazy(None)
-    description: Lazy[str]=lazy(None)
-    year: Lazy[str]=lazy(None)
-    category: Lazy[MovieCategory]=lazy(None)
-    movie_type: Lazy[MovieType]=lazy(None)
-    season:Lazy[str]=lazy(None)
-    total_episodes: Lazy[str]=lazy(None)
-    tmdb_infos:Lazy[TMDBInfos]=lazy(None)
-    episodes_info:Lazy[list[EpisodesInfo]]=lazy(None)
-    pubdate: Lazy[date]=lazy(None)
-    movie_info:Lazy[Movie]=lazy(None)
+    douban_id: Lazy[str] = Field(default_factory=lambda: lazy(None))
+    original_title_season: Lazy[str] = Field(default_factory=lambda: lazy(None))
+    original_title: Lazy[str] = Field(default_factory=lambda: lazy(None))
+    title: Lazy[str] = Field(default_factory=lambda: lazy(None))
+    title_season: Lazy[str] = Field(default_factory=lambda: lazy(None))
+    subtitle: Lazy[str] = Field(default_factory=lambda: lazy(None))
+    pic: Lazy[str] = Field(default_factory=lambda: lazy(None))
+    description: Lazy[str] = Field(default_factory=lambda: lazy(None))
+    year: Lazy[str] = Field(default_factory=lambda: lazy(None))
+    category: Lazy[MovieCategory] = Field(default_factory=lambda: lazy(None))
+    movie_type: Lazy[MovieType] = Field(default_factory=lambda: lazy(None))
+    season: Lazy[str] = Field(default_factory=lambda: lazy(None))
+    total_episodes: Lazy[str] = Field(default_factory=lambda: lazy(None))
+    tmdb_infos: Lazy[TMDBInfos] = Field(default_factory=lambda: lazy(None))
+    episodes_info: Lazy[list[EpisodesInfo]] = Field(default_factory=lambda: lazy(None))
+    pubdate: Lazy[date] = Field(default_factory=lambda: lazy(None))
+    movie_info: Lazy[Movie] = Field(default_factory=lambda: lazy(None))
 
 
 

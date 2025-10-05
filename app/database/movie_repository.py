@@ -3,12 +3,10 @@ from datetime import date, datetime, time, timedelta, timezone
 from typing import Any, Optional, List, Dict, Callable
 from zoneinfo import ZoneInfo
 
-from beanie import PydanticObjectId
 from beanie.odm.operators.update.general import Set
 
 from app.database.database import init_db
-from app.database.models import Movie, MovieType
-from app.utils.cache import async_ttl_cache
+from app.database.models import Movie
 from app.utils.generic_crud import GenericRepository
 # ----------------------------------------------------
 # 1. 将自定义查询构建器定义为独立的、可测试的函数

@@ -12,7 +12,7 @@ from app.utils.lazy_load import Lazy, lazy
 
 
 class LinkScrapeResult(BaseModel):
-    quark_links: Optional[Lazy[AsyncCachedIterator[CloudShareLink]]] = Field(default=lazy(None),description='')
+    quark_links: Optional[Lazy[AsyncCachedIterator[CloudShareLink]]] = Field(default_factory=lambda: lazy(None),description='')
     movie:Optional[Movie]=Field(None,description='')
 
 async def main():

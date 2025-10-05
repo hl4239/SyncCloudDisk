@@ -10,6 +10,7 @@ from app.database.models import Movie, EpisodesInfo
 from app.database.movie_repository import movie_repository, MovieRepository
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
 from app.services.interfaces.movie_services_interface import IMovieService
+from app.utils.lazy_load import Lazy
 
 
 class MovieService(IMovieService):
@@ -91,12 +92,13 @@ class MovieService(IMovieService):
 
 
     @classmethod
-    def create_episodes_info(cls,total_episodes)->List[EpisodesInfo]:
+    async  def create_episodes_info(cls,total_episodes:Lazy[str])->List[EpisodesInfo]:
         """
         支持total为str或者int
         :param total_episodes:
         :return:
         """
+        total_episodes  =await total_episodes
         if not total_episodes:
             return []
         if isinstance(total_episodes,str):
@@ -165,6 +167,7 @@ class MovieService(IMovieService):
                    episodes_info=await movie_data_source.episodes_info,
                     pic=await movie_data_source.pic,
                     original_title=await movie_data_source.original_title,
+                    original_title_season=await movie_data_source.original_title_season,
                     create_time=datetime.datetime.now(pytz.timezone("Asia/Shanghai")),
                     update_time=datetime.datetime.now(pytz.timezone("Asia/Shanghai")),
                     pubdate=await movie_data_source.pubdate,
@@ -183,8 +186,12 @@ class MovieService(IMovieService):
                 if not movie.description:
                     movie.description=await movie_data_source.description
                     is_update = True
-                if not  movie.original_title:
+                if   movie.original_title_season is None:
+                    movie.original_title_season=await movie_data_source.original_title_season
+
+                if movie.original_title is None:
                     movie.original_title=await movie_data_source.original_title
+
 
                 if not movie.title:
                     movie.title = await movie_data_source.title
@@ -224,14 +231,13 @@ class MovieService(IMovieService):
                 movie.episodes_info=await movie_data_source.episodes_info
                 if orig_epi!=movie.episodes_info:
                     is_update=True
-                if not movie.tmdb_infos or not movie.tmdb_infos.id or not movie.tmdb_infos.season_number :
+                if not movie.tmdb_infos or not movie.tmdb_infos.id or  movie.tmdb_infos.season_number is None :
                     is_update = True
                     movie.tmdb_infos = await movie_data_source.tmdb_infos
                 if is_update:
                     movie.update_time=datetime.datetime.now(pytz.timezone("Asia/Shanghai"))
 
             movies.append(movie)
-        print(movies)
         return movies
 
 

@@ -131,7 +131,6 @@ class TMDBInfos(pydantic.BaseModel):
     id:Annotated[Optional[int], Filter(ops=["exists"])]=Field(default=None)
     season_number:Annotated[Optional[int], Filter(ops=["exists"])]=Field(default=None)
 
-    not_ensure:bool=Field(default=False,description='抓取结果不确定，需要人工抓取')
 class CloudShareLink(BaseModel):
     """
     用于在链接爬虫模块内部表示一个被抓取到的网盘资源链接。
@@ -152,6 +151,7 @@ class CloudShareLink(BaseModel):
 
 
 
+
 class MetaDataProviderEnum (str, Enum):
     RENREN = "人人视频"
 
@@ -159,6 +159,36 @@ class MetaDataProvider(BaseModel):
     provider: MetaDataProviderEnum=Field(default=None)
     title: Optional[str] = Field(default=None)
     id:Optional[str]=Field(default=None)
+    year:Optional[str]=Field(default=None)
+    movie_type:Optional[MovieType]=Field(default=None)
+
+class PlatformEnum(str, Enum):
+    TG="Telegram"
+
+class PlatformInfo(BaseModel):
+    account:Optional[str]=Field(default=None)
+    platform:Optional[str]=Field(default=None)
+    channel_name:Optional[str]=Field(default=None)
+    enable:bool=Field(default=True)
+
+
+class PublishToPlatformInfo(BaseModel):
+    publish_time:Optional[datetime]=Field(default=None)
+    message_id:Optional[str]=Field(default=None)
+    account:Optional[str]=Field(default=None)
+    platform:Optional[PlatformEnum]=Field(default=None)
+    episode_number:Optional[int]=Field(default=None)
+    success:bool=Field(default=False)
+
+    @model_validator(mode='after')
+    def convert_datetimes(self):
+        """在模型验证后转换时间字段"""
+        if self.publish_time:
+            if self.publish_time.tzinfo is None:
+                self.publish_time = self.publish_time.replace(tzinfo=timezone.utc)
+            self.publish_time = self.publish_time.astimezone(pytz.timezone("Asia/Shanghai"))
+        return self
+
 
 class Movie(Document):
     # 1. 首先，定义 unique_key 字段
@@ -167,7 +197,8 @@ class Movie(Document):
     )
     title: Optional[str] = Field(default=None)
     title_season:Annotated[str, Filter(ops=["contains"])] = Field(description='title和season一起')
-    original_title:Optional[str]=Field(default=None,description='原名，比如tmdb中可能只能用韩剧的韩语原名在哪查询到')
+    original_title_season:Optional[str]=Field(default=None,description='原名，比如tmdb中可能只能用韩剧的韩语原名在哪查询到')
+    original_title:Optional[str]=Field(default=None,description='原始名的标题，不含季')
     subtitle: Optional[list[str]] = Field(default=None, description='子标题')
     pic:Optional[str] = Field(default=None,description='图片地址')
     description: Annotated[str, Filter(ops=["contains"])]= Field(default=None)
@@ -177,13 +208,16 @@ class Movie(Document):
     season: Optional[str] = Field(default=None, description='描述影视第几季, e.g., "1", "第一季"')
     total_episodes:Optional[str]=Field(default=None,description='描述影视总剧集数')
     cloud_infos: Optional[list[MovieCloudInfo]] = Field(default_factory=list, description='网盘信息')
-    tmdb_infos:Optional[TMDBInfos]=Field(default=TMDBInfos(not_ensure=True))
+    tmdb_infos:Optional[TMDBInfos]=Field(default=None)
     episodes_info:Optional[list[EpisodesInfo]]=Field(default_factory=list,description='剧集信息')
     share_links:Optional[List[str]]=Field(default_factory=list,description='追踪的网盘分享链接')
     metadata_providers:Optional[List[MetaDataProvider]]=Field(default_factory=list,description='元数据提供者的信息')
     create_time:Annotated[Optional[datetime],Filter(ops=["eq","gt","lt"])] =Field(default=None,description='创建时间')
     update_time:Annotated[Optional[datetime],Filter(ops=["eq","gt","lt"])]=Field(default=None,description='更新时间')
-    pubdate:Annotated[Optional[date],Filter(ops=["eq","gt","lt"])]=Field(default=None,description='更新时间')
+    pubdate:Annotated[Optional[date],Filter(ops=["eq","gte","lte"])]=Field(default=None,description='更新时间')
+
+    publish_to_platform_infos:Optional[List[PublishToPlatformInfo]]=Field(default_factory=list,description='发布至平台的信息')
+
     @model_validator(mode='after')
     def convert_datetimes(self):
         """在模型验证后转换时间字段"""
@@ -237,6 +271,25 @@ class Movie(Document):
             return []
         now = datetime.now(pytz.timezone("Asia/Shanghai"))
         return [i for i in episodes if i.air_date==now.date()]
+
+    def is_clouds_synced_latest(self):
+        """
+        所有网盘是否都更新到最新
+        :return:
+        """
+
+        l_ei=self.get_latest_episode_info()
+        if not l_ei:
+            return False
+        latest_episodes_number=l_ei.episode_number
+
+        if not self.cloud_infos:
+            return False
+        for i in self.cloud_infos:
+            if i.latest_episode_number is None or  i.latest_episode_number<latest_episodes_number:
+                return False
+        return True
+
 
 
 
@@ -313,7 +366,7 @@ class SystemConfig(Document):
 
     split_title_season_patterns:List[SplitTitleSeasonRegular]=Field(default_factory=list)
 
-
+    platform_infos:Optional[List[PlatformInfo]] = Field(default_factory=list)
 
 
     class Settings:

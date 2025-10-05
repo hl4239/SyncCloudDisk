@@ -5,11 +5,12 @@ from typing import List
 
 from agents import Runner
 
-from app.database.models import EpisodesInfo
+from app.database.models import EpisodesInfo, MovieType
 from app.modules.data_collection.interfaces.episodes_air_date_provider_interface import IEpisodesAirDateProvider
 from app.modules.data_collection.interfaces.episodes_air_time_provider_interface import IEpisodesAirTimeProvider
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
 from app.modules.data_collection.services.tmdb_air_date_provider_service import tmdb_air_date_provider
+from app.services.movie_service import movie_service
 from app.services.open_ai_service import OpenAIService, open_ai_service
 from app.utils.cache import async_ttl_cache
 from app.utils.lazy_load import lazy
@@ -53,11 +54,19 @@ class AICopilotEpisodesInfoProvider(IEpisodesAirDateProvider,IEpisodesAirTimePro
 
 
     async def get_air_time(self, movie_data_source: MovieDataSourceResult) -> List[EpisodesInfo]:
+        if await movie_data_source.movie_type == MovieType.MOVIE:
+            return []
+
         episodes_info=await movie_data_source.episodes_info
         title_season=await movie_data_source.title_season
 
         if not episodes_info:
             logger.warning(f"title_season={title_season} No episodes info found 无法使用ai_copilot来补充air_time")
+            return episodes_info
+        if movie_service.is_air_time_full(episodes_info) or  movie_service.is_finale(episodes_info):
+            logger.info(f'{title_season}无需填充air_time')
+            return episodes_info
+
         agent = await self._get_ai_agent_air_time()
         description=await movie_data_source.description
         result = await Runner.run(agent, input=f'title_season={title_season} description={description} episodes_info_list={[e for e in episodes_info if e]}' )

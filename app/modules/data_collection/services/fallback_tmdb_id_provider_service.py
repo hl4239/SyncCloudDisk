@@ -21,8 +21,9 @@ class FallbackTMDBIDProviderService(ITMDBIDProvider):
         logger.debug(f"正在执行a_tmdb_id_provider")
         r= await self.a_tmdb_id_provider_service.get_tmdb_id(movie_data_source)
         if not r:
-            logger.warning(f"未从a_tmdb_id_provider获取到tmdb信息，正在执行b")
-            r=await self.b_tmdb_id_provider_service.get_tmdb_id(movie_data_source)
+            logger.warning(f"未从a_tmdb_id_provider获取到tmdb信息")
+            if await movie_data_source.movie_type==MovieType.TV:
+                r=await self.b_tmdb_id_provider_service.get_tmdb_id(movie_data_source)
         if r:
             logger.info(f'从tmdb_info_provider获取到{r}')
             tmdb_id=r[0]

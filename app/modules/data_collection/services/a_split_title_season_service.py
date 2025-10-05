@@ -5,9 +5,10 @@ from typing import List,  Tuple, Optional
 
 from app.core.logging_config import setup_logging
 from app.database.database import init_db
-from app.database.models import SplitTitleSeasonRegular
+from app.database.models import SplitTitleSeasonRegular, SystemConfig
 from app.modules.data_collection.interfaces.split_title_season_interface import ISplitTitleSeasonInterface
 from app.utils.cache import async_ttl_cache
+from app.utils.lazy_load import Lazy, lazy
 
 logger=getLogger(__name__)
 class ASplitTitleSeasonService(ISplitTitleSeasonInterface):
@@ -39,24 +40,24 @@ class ASplitTitleSeasonService(ISplitTitleSeasonInterface):
         :param title_season:
         :return:
         """
-        regex_rules=[r.regular for r in await SplitTitleSeasonRegular.find_all().to_list()]
+        regex_rules=[r.regular for r in (await SystemConfig.find_one()).split_title_season_patterns]
 
-        title,season=cls._split_title_season_1(title_season, regex_rules)
+        title,season=cls._split_title_season_1( title_season, regex_rules)
         return title,season
-    async def get_title(self,title_season:str,title_seasons:Tuple[str])->str:
-        title,_=await self._split_title_season(title_season)
+    async def get_title(self,title_season:Lazy[str],title_seasons:List[Lazy[str]])->str:
+        title,_=await self._split_title_season(await title_season)
         return title
 
-    async def get_season(self,title_season:str,title_seasons:Tuple[str])->str:
-        _,season=await self._split_title_season(title_season)
+    async def get_season(self,title_season:Lazy[str],title_seasons:List[Lazy[str]])->str:
+        _,season=await self._split_title_season(await title_season)
         return season
 a_split_title_season_service=ASplitTitleSeasonService()
 async def main():
     setup_logging()
     await init_db()
     a=ASplitTitleSeasonService()
-    title=await a.get_title(title_season='你好 第1季',title_seasons=('1','2'))
-    season=await a.get_season(title_season='你好 第1季',title_seasons=('1','2'))
+    title=await a.get_title(title_season=lazy('你好 第1季'),title_seasons=[lazy('1'),lazy('2'),lazy('3'),lazy('4')])
+    season=await a.get_season(title_season=lazy('你好 第1季'),title_seasons=[lazy('1'),lazy('2'),lazy('3'),lazy('4')])
     logger.debug(title)
     logger.debug(season)
 if __name__ == '__main__':

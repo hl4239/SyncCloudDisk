@@ -1,7 +1,7 @@
 import asyncio
 import json
 import re
-from typing import Tuple
+from typing import Tuple, List
 
 from agents import Runner
 
@@ -11,6 +11,7 @@ from app.modules.data_collection.interfaces.split_title_season_interface import 
 from app.services.interfaces.open_ai_interface import IOpenAIService
 from app.services.open_ai_service import OpenAIService, open_ai_service
 from app.utils.cache import async_ttl_cache
+from app.utils.lazy_load import Lazy, lazy
 
 logger=get_logger(__name__)
 class BSplitTitleSeasonService(ISplitTitleSeasonInterface):
@@ -25,7 +26,7 @@ class BSplitTitleSeasonService(ISplitTitleSeasonInterface):
         [
             {
               "title_season":"字符串类型，必需字段，代表输入的title_season"
-              "title":"字符串类型，必需字段，代表提取后的title,如果你没有提取到，则返回空字符串"
+              "title":"字符串类型，必需字段，代表提取后的title,如果你没有提取到，则返回原始title_season"
               "season": "字符串类型，必需字段，代表提取后的season,如果你没有提取到，则返回空字符串"
             },
         ]
@@ -33,8 +34,8 @@ class BSplitTitleSeasonService(ISplitTitleSeasonInterface):
         return await self.open_ai_service.get_agent(instructions=instruction)
 
     # 缓存60秒，因为会批量title_season一次性交给ai生成后缓存60秒
-    @async_ttl_cache(ttl=60)
-    async def _split_title_season_1(self,title_seasons:Tuple[str,...]):
+    @async_ttl_cache(ttl=600)
+    async def _split_title_season_1(self,title_seasons:List[str]):
         agent=await self._get_ai_agent()
         for i in range(3):
             try:
@@ -47,7 +48,7 @@ class BSplitTitleSeasonService(ISplitTitleSeasonInterface):
         return []
 
 
-    async def _split_title_season(self,target_title_season:str,title_seasons:Tuple[str,...]):
+    async def _split_title_season(self,target_title_season:str,title_seasons:List[str]):
 
         json_results=await self._split_title_season_1(title_seasons)
         for json_result in json_results:
@@ -64,12 +65,14 @@ class BSplitTitleSeasonService(ISplitTitleSeasonInterface):
                 raise KeyError(f'ai分割title_seasons={title_seasons}响应格式错误，exception={e}')
         raise Exception(f'未在ai的响应结果中匹配到title_season={target_title_season}')
 
-    async def get_title(self, target_title_season: str, title_seasons: Tuple[str,...]) -> str:
-        title,_=await self._split_title_season(target_title_season,title_seasons)
+    async def get_title(self, target_title_season: Lazy[str], title_seasons: List[Lazy[str]]) -> str:
+        title_seasons=[await i for i in title_seasons]
+        title,_=await self._split_title_season(await target_title_season,title_seasons)
         return title
 
-    async def get_season(self, target_title_season: str, title_seasons: Tuple[str,...]) -> str:
-        _,season = await self._split_title_season(target_title_season, title_seasons)
+    async def get_season(self, target_title_season: Lazy[str], title_seasons: List[Lazy[str]]) -> str:
+        title_seasons = [await i for i in title_seasons]
+        _,season = await self._split_title_season(await target_title_season, title_seasons)
         return season
 
 async def main():
@@ -77,8 +80,8 @@ async def main():
     setup_logging()
     open_ai_service=OpenAIService()
     b_=BSplitTitleSeasonService(open_ai_service=open_ai_service)
-    title=  await b_.get_title(target_title_season='重启之极海听雷2',title_seasons=('你好','重启之极海听雷2','凡人修仙传：重返天南',))
-    season= await b_.get_season(target_title_season='重启之极海听雷2',title_seasons=('你好','重启之极海听雷2','凡人修仙传：重返天南',))
+    title=  await b_.get_title(target_title_season=lazy('重启之极海听雷2'),title_seasons=[lazy('你好'),lazy('重启之极海听雷2'),lazy('凡人修仙传：重返天南'),])
+    season= await b_.get_season(target_title_season=lazy('重启之极海听雷2'),title_seasons=[lazy('你好'),lazy('重启之极海听雷2'),lazy('凡人修仙传：重返天南'),]                  )
     print(title,season)
 b_split_title_season_service=BSplitTitleSeasonService(open_ai_service)
 if __name__ == '__main__':

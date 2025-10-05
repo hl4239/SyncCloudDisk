@@ -2,7 +2,7 @@
 # prefect_flow_async.py
 import asyncio
 import logging
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from typing import List
 
 import pytz
@@ -16,8 +16,8 @@ from app.core.task_registry import registry
 from app.database.database import init_db
 from app.database.models import Movie, MovieCategory, CloudShareLink, MovieType, MetaDataProvider
 from app.database.movie_repository import movie_repository
-from app.modules.data_collection.flow import data_collection_get_hot_flow,\
-    get_movies_by_douban_id, search_from_douban
+from app.modules.data_collection.flow import get_douban_hot_movie_data_sources,\
+    registry_movie_data_sources, search_from_douban
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
 from app.modules.filter.flow import title_and_episode_filter_flow, full_episode_filter_flow
 from app.modules.filter.schemas import TargetEpisodeFilterResult
@@ -26,17 +26,11 @@ from app.modules.link_parse.schemas import LinkParseResult, PrepareParseLinks
 from app.modules.link_scraping.flow import link_scrape_flow_search
 from app.modules.link_scraping.schemes.link import LinkScrapeResult
 from app.modules.new_movie_metadata_collector.services.ren_ren_provider_service import renren_new_movie_provider_service
+from app.modules.publish.services.share_link_publish import share_link_publish_service
 from app.modules.storage_operations.flow import save_to_cloud_flow
 from app.services.movie_service import movie_service
 logger=logging.getLogger(__name__)
 
-# @task
-async def collect_data_hot(categories:List[MovieCategory],count=1)->List[MovieDataSourceResult]:
-    return await data_collection_get_hot_flow(categories,count)
-
-# @task
-async def adapt_to_movies(movie_data_source:List[MovieDataSourceResult])->List[Movie]:
-    ...
 # @task
 async def link_scraping(movies:List[Movie],count:int)->List[LinkScrapeResult]:
     results= await link_scrape_flow_search(movies,count)
@@ -70,33 +64,41 @@ async def save_new_movies_metadata_to_database(new_movies:List[MetaDataProvider]
             r=  await Movie.find_one(Movie.title_season==new_movie.title)
         if not r:
             search_r = await search_from_douban(new_movie.title)
-            douban_id = search_r[0].douban_id
-            movie_type = search_r[0].movie_type
+            t_tup=(new_movie.title,new_movie.year,new_movie.movie_type)
+            for i in search_r:
+
+                s=(i.title,i.year,i.movie_type)
+                if t_tup==s:
+                    douban_id=i.douban_id
+                    movie_type=i.movie_type
 
         else:
             douban_id=r.douban_id
             movie_type=r.movie_type
+        if douban_id is None or movie_type is None:
+            logger.info(f'未能从豆瓣中搜索到：{new_movie}')
+            continue
         total.append({
             'douban_id':douban_id,
             'movie_type':movie_type,
             'provider': new_movie,
         })
 
-    movies_source=await get_movies_by_douban_id(params=[(i['douban_id'],i['movie_type'])for i in total])
-    movies=await combin_to_movies(movies_source)
-    douban_id_maps={
-        i['douban_id']:i['provider'] for i in total
-    }
-    for movie in movies:
-        _is_find = False
-        for p in movie.metadata_providers:
-            if p.provider==douban_id_maps[movie.douban_id].provider :
-                p=douban_id_maps[movie.douban_id]
-                _is_find=True
-                break
-        if not _is_find :
-            movie.metadata_providers.append(douban_id_maps[movie.douban_id])
-    await save_to_database(movies)
+    movies_source=await registry_movie_data_sources([(i['douban_id'],i['movie_type'])for i in total])
+    # movies=await combin_to_movies(movies_source)
+    # douban_id_maps={
+    #     i['douban_id']:i['provider'] for i in total
+    # }
+    # for movie in movies:
+    #     _is_find = False
+    #     for p in movie.metadata_providers:
+    #         if p.provider==douban_id_maps[movie.douban_id].provider :
+    #             p=douban_id_maps[movie.douban_id]
+    #             _is_find=True
+    #             break
+    #     if not _is_find :
+    #         movie.metadata_providers.append(douban_id_maps[movie.douban_id])
+    # await save_to_database(movies)
     return movies
 
 async def sync_movies_to_cloud(movies:List[Movie], scrape_count:int,skip_not_latest_episode:bool,is_force:bool)->List[Movie]:
@@ -123,7 +125,9 @@ class HotCollectParams(BaseModel):
     count:int=Field(default=5,description='每个category采集个数')
 @registry.register(name="豆瓣热门影视采集", params_model=HotCollectParams)
 async def flow1(params: HotCollectParams, progress_callback, log_callback):
-    movie_data_source_results=  await collect_data_hot(params.categories,count=params.count)
+    movie_data_source_results=  await get_douban_hot_movie_data_sources(params.categories,count=params.count)
+
+
     logger.info(f'采集到{len(movie_data_source_results)}个影视')
     movies=await combin_to_movies(movie_data_source_results)
     await save_to_database(movies)
@@ -234,7 +238,7 @@ async def get_by_douban_ids(params:P3,progress_callback, log_callback):
         s_=douban_info.split('-')
 
         d_tuples.append((s_[0],MovieType(s_[1])))
-    r=await get_movies_by_douban_id(d_tuples)
+    r=await registry_movie_data_sources(d_tuples)
     progress_callback(30)
     movies = await combin_to_movies(r)
     progress_callback(50)
@@ -246,6 +250,26 @@ async def get_by_douban_ids(params:P3,progress_callback, log_callback):
         return [
             movie.title_season for movie in movies
         ]
+    else:
+        logger.info(f'开始同步{[i.title_season for i in movies]}')
+        progress_callback(20)
+        to_save_movies = [i for i in movies if i.is_tmdb_infos_avaliable()]
+        not_save_movies = [i for i in movies if not i.is_tmdb_infos_avaliable()]
+        logger.warning(f'这些movie由于tmdb_info为空无法同步：{not_save_movies}')
+        progress_callback(70)
+        scrape_result = await link_scraping(to_save_movies, count=params.scrape_count)
+        progress_callback(80)
+
+        link_parse_results = await link_parse([PrepareParseLinks(scrape_quark_links=i.quark_links, links=[
+            CloudShareLink(url=j, title=i.movie.title_season) for j in i.movie.share_links], movie=i.movie) for i in
+                                               scrape_result])
+
+        filter_result = await title_and_episode_filter_flow(link_parse_results, params.skip_not_latest_episode)
+
+        result = await save_to_cloud(filter_result)
+        await save_to_database(result)
+        progress_callback(100)
+        return result
 
 
 
@@ -261,6 +285,50 @@ async def get_today_new_movie_metadata(params:P4,progress_callback, log_callback
     return [[m.title_season for m in movies]]
 
 
+class P6(BaseModel):
+    air_days:int=Field(default=7,description='只推送上映时间多少天内的movie')
+    is_delete_old_message:bool=Field(default=True,description='是否删除旧消息')
+
+@registry.register(name='将所有网盘已更新到最新进度的movie推送到平台',params_model=P6)
+async def p6(params:P6,progress_callback, log_callback):
+    air_date1=datetime.now(pytz.timezone("Asia/Shanghai")).date()
+    air_date2=(air_date1-timedelta(days=params.air_days))
+    movies=await movie_repository.find(
+        filters={
+            'pubdate__gte':air_date2,
+            'pubdate__lte':air_date1,
+        }
+    )
+
+
+    target_movies=[]
+    for movie in movies:
+        if movie.is_clouds_synced_latest():
+            target_movies.append(movie)
+    logger.info(f'将{[i.title_season for i in target_movies]}发布至平台')
+    result_movies=  await share_link_publish_service.publish(target_movies,is_delete_old=params.is_delete_old_message)
+    return {
+        i.title_season:i.publish_to_platform_infos
+        for i in result_movies
+    }
+
+class P7(BaseModel):
+    douban_ids:List[str]=Field(default_factory=list,description='douban id')
+    is_delete_old_message:bool=Field(default=True,description='是否删除旧消息')
+
+@registry.register(name='将指定的movie推送到平台',params_model=P7)
+async def p7(params:P7,progress_callback, log_callback):
+    print(params)
+    f_movies = await Movie.find(In(Movie.douban_id, params.douban_ids)).to_list()
+
+
+    target_movies=[]
+    for movie in f_movies:
+        if len([i for i in movie.cloud_infos if i.share_link]):
+            target_movies.append(movie)
+    logger.info(f'将存在share_link的{target_movies}发布至平台')
+    await share_link_publish_service.publish(target_movies,is_delete_old=params.is_delete_old_message)
+
 
 
 
@@ -271,8 +339,11 @@ async def main():
     setup_logging()
     tmdbsimple.API_KEY = settings.TMDB_API_KEY
 
-    result=    await get_today_new_movie_metadata(None,None,None)
-    await  save_new_movies_metadata_to_database(result)
-    print(result)
+    # await task_manager.task_manager.create_task('豆瓣热门影视采集',HotCollectParams(categories=[MovieCategory.CHINA],count=10).model_dump(),registry.get('豆瓣热门影视采集').fn)
+    # await task_manager.task_manager.create_task('豆瓣热门影视采集', HotCollectParams(categories=[MovieCategory.CHINA],
+    #                                                                                  count=10).model_dump(),
+    #                                             registry.get('豆瓣热门影视采集').fn)
+    await p6(P6(),None,None)
+
 if __name__ == '__main__':
     asyncio.run(main())

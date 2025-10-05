@@ -15,11 +15,14 @@ class ITMDBIDProvider(ABC):
     async def get_tmdb_id(self, movie_data_source: MovieDataSourceResult) -> Tuple[int,int]:
         ...
 
-    async def get_tmdb_infos(self,movie_data_source:MovieDataSourceResult)->TMDBInfos:
+    async def get_tmdb_infos(self,movie_data_source:MovieDataSourceResult)->TMDBInfos|None:
 
         tmdb_infos = TMDBInfos()
-        tmdb_infos.id,tmdb_infos.season_number = await self.get_tmdb_id(movie_data_source)
-        return tmdb_infos
+        id_,season= await self.get_tmdb_id(movie_data_source)
+        # 电影可以不存在season
+        if id_ or season :
+            return TMDBInfos(id=id_,season_number=season)
+        return TMDBInfos()
 
     async def set_id(self, movie_data_sources: List[MovieDataSourceResult]) -> List[MovieDataSourceResult]:
         for movie_data_source in movie_data_sources:

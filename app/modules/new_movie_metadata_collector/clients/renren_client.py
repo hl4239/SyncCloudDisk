@@ -99,11 +99,23 @@ class RenRenClient(BaseAioClient):
             'Host': 'api.rrmj.plus',
             'Cookie': 'HWWAFSESTIME=1758953968889; HWWAFSESID=d59b7827443eb57a06'
         }
-        text=await self.fetch_text(method="get", path=f"https://api.rrmj.plus/m-station/schedule/play/date/query?playShowDate={target_date.strftime("%Y-%m-%d")}&page=1&rows=20", headers= headers)
+        page=1
+        page_size=10
+        text=await self.fetch_text(method="get", path=f"https://api.rrmj.plus/m-station/schedule/play/date/query?playShowDate={target_date.strftime("%Y-%m-%d")}&page={page}&rows={page_size}", headers= headers)
         try:
 
             r=  self.decrypt_data(text,await self.get_decrypt_secret())
-            return r
+            result_data=[]
+            result_data.extend(r['data']['content'])
+            total=r['data']['total']
+            for i in range((total//page_size)):
+                page+=1
+                text = await self.fetch_text(method="get",
+                                             path=f"https://api.rrmj.plus/m-station/schedule/play/date/query?playShowDate={target_date.strftime("%Y-%m-%d")}&page={page}&rows={page_size}",
+                                             headers=headers)
+                r = self.decrypt_data(text,await self.get_decrypt_secret())
+                result_data.extend(r['data']['content'])
+            return result_data
         except Exception as e:
             logger.error(f'renren client error: {e}',exc_info=True)
         return None

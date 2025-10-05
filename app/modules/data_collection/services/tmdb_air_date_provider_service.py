@@ -1,14 +1,14 @@
 import asyncio
 import logging
-from typing import List, Tuple
+from typing import List
 
 from app.core.config import settings
 from app.core.logging_config import setup_logging
 from app.database.database import init_db
-from app.database.models import EpisodesInfo
+from app.database.models import EpisodesInfo, MovieType
 from app.modules.data_collection.interfaces.episodes_air_date_provider_interface import IEpisodesAirDateProvider
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
-from app.utils.cache import async_ttl_cache
+from app.services.movie_service import movie_service
 import tmdbsimple as tmdb
 logger=logging.getLogger(__name__)
 class TMDBAirDateProviderService(IEpisodesAirDateProvider):
@@ -42,7 +42,16 @@ class TMDBAirDateProviderService(IEpisodesAirDateProvider):
         raise Exception('episodes not found')
 
     async def get_air_date(self, movie_data_source: MovieDataSourceResult) -> List[EpisodesInfo]:
+        if await movie_data_source.movie_type == MovieType.MOVIE:
+
+            return []
+        if movie_service.is_air_date_full(await movie_data_source.episodes_info):
+            logger.info('air date已经补满，无需再补充')
+            return await movie_data_source.episodes_info
         tmdb_infos =await movie_data_source.tmdb_infos
+        if not tmdb_infos:
+            logger.warning(f'tmdb_infos is empty,无法抓取tmdb信息')
+            return await movie_data_source.episodes_info
         tmdb_id=tmdb_infos.id
         season=tmdb_infos.season_number
         title_season=await movie_data_source.title_season

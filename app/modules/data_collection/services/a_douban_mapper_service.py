@@ -5,13 +5,12 @@ from typing import List, Tuple, Optional, Union
 from pydantic import BaseModel
 
 from app.database.models import Movie, MovieType,  MovieCategory
-from app.modules.data_collection.interfaces.mapper_interface import IMapper
 from app.modules.data_collection.schemas.douban_schemas import DoubanDetailResponse, DoubanDetailLazyResponse
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
 from app.utils.lazy_load import lazy, Lazy
 
 
-class DoubanMapperService1(IMapper):
+class DoubanMapperService1:
 
     def map_to_movie(self, original: BaseModel) -> Movie:
         pass

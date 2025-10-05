@@ -1,0 +1,2 @@
+# bug案例
+1. pydantic模型中尽量不要使用default=object或者xx=object给字段设默认值，因为这样所有的字段都会共享同一个object，比如使用lazy(None)为一个lazy字段初始化为None时实际则是全部共享同一个lazy对象，这样就导致在并发任务中如果deepcopy很大概率报_running_task不可赋值错误

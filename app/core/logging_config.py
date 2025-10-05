@@ -137,7 +137,9 @@ def setup_logging(
     logging.getLogger('LiteLLM').setLevel(logging.WARNING)
     logging.getLogger('h5py._conv').setLevel(logging.WARNING)
     logging.getLogger('app.core.abc_aio_client').setLevel(logging.WARNING)
-    logging.getLogger('')
+    logging.getLogger('openai.agents').setLevel(logging.WARNING)
+    logging.getLogger('telethon.network.mtprotosender').setLevel(logging.INFO)
+    logging.getLogger('telethon.extensions.messagepacker').setLevel(logging.WARNING)
 def get_logger(name: str) -> logging.Logger:
     return logging.getLogger(name)
 

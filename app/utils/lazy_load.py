@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import time
 import inspect
+from copy import deepcopy
 from typing import (
     Any, Awaitable, Callable, Generic, Optional, TypeVar, Union, overload, List
 )
@@ -240,7 +241,7 @@ class ExampleM(BaseModel):
 
 async def get_m():
     print("[provider] get_m() running")
-    await asyncio.sleep(0.15)
+    await asyncio.sleep(3)
     return ExampleM(title="good", title1="zxc")
 
 
@@ -254,8 +255,20 @@ async def main():
             lazy(lambda: get_description("B"), ttl=0),    # 不缓存（ttl=0）
         ],
     )
+    ll=lazy(None)
+    print(ll._provider==None)
+
+
 
     l = lazy(lambda: get_m())
+    l1=lazy(lambda :get_m())
+
+    async def ex():
+        await l
+    asyncio.create_task(ex)
+
+
+
     i = l.title     # Lazy
     i1 = l.title1   # Lazy
     print(i)        # Lazy(...) 的 repr

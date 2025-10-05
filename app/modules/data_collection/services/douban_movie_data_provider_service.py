@@ -7,21 +7,27 @@ from watchfiles import awatch
 from app.core.logging_config import setup_logging
 from app.database.models import  MovieCategory, Movie, MovieType
 from app.modules.data_collection.clients.douban_client import get_douban_client, DoubanClient
-from app.modules.data_collection.interfaces.mapper_interface import IMapper
-from app.modules.data_collection.interfaces.movie_base_provider_interface import IMovieBaseProvider
-from app.modules.data_collection.schemas.douban_schemas import DoubanDetailLazyResponse, DoubanSearchItem
+from app.modules.data_collection.schemas.douban_schemas import DoubanDetailLazyResponse, DoubanSearchItem, DoubanTVItem
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
-from app.utils.lazy_load import lazy
+from app.utils.lazy_load import lazy, Lazy
 from app.modules.data_collection.services.a_douban_mapper_service import douban_mapper_service_1
 
 logger=logging.getLogger(__name__)
-class DoubanMovieBaseProviderService(IMovieBaseProvider):
+class DoubanMovieBaseProviderService:
 
 
 
-    def __init__(self, douban_client:DoubanClient,mapper:IMapper):
+    def __init__(self, douban_client:DoubanClient):
         self.douban_client = douban_client
-        self.mapper = mapper
+    @staticmethod
+    def get_movie_type(douban_movie_type:str):
+        douban_type = douban_movie_type
+        if douban_type == 'tv':
+            return MovieType.TV
+        elif douban_type == 'movie':
+            return MovieType.MOVIE
+        else:
+            return MovieType.OTHER
 
     async def search(self,keyword:str,count=10):
         """
@@ -36,7 +42,7 @@ class DoubanMovieBaseProviderService(IMovieBaseProvider):
 
             for i in result['subjects']['items']:
                 if i['layout']=='subject':
-                    movie_type=douban_mapper_service_1.get_movie_type( i['target_type'])
+                    movie_type=self.get_movie_type( i['target_type'])
                     title=i['target']['title']
                     year=i['target']['year']
                     pic=i['target']['cover_url']
@@ -55,7 +61,7 @@ class DoubanMovieBaseProviderService(IMovieBaseProvider):
         logger.debug(f'抓取豆瓣影视详细信息：{douban_id} | {movie_type}结果： {r}')
         return r
 
-    async def get_movie_by_douban_id(self, douban_id: str,movie_type:MovieType) -> List[MovieDataSourceResult]:
+    def get_movie_by_douban_id(self, douban_id: str,movie_type:MovieType) :
         lazy_result=lazy(lambda :self.detail(douban_id,movie_type))
 
         l=DoubanDetailLazyResponse(id=lazy(douban_id),
@@ -69,11 +75,13 @@ class DoubanMovieBaseProviderService(IMovieBaseProvider):
                                    intro=lazy_result.intro,
                                    original_title=lazy_result.original_title,
                                    pubdate=lazy_result.pubdate,)
-        return[self.mapper.map_to_movie_data_source(l)]
+        return l
 
 
-    @override
-    async def get_hot_movies(self, categories: List[MovieCategory], count: int = 10) -> List[MovieDataSourceResult]:
+
+
+
+    async def get_hot_movies(self, categories: List[MovieCategory], count: int = 10) -> List[DoubanTVItem]:
 
         tasks=[]
         for category in categories:
@@ -85,37 +93,38 @@ class DoubanMovieBaseProviderService(IMovieBaseProvider):
         result=[]
         for r in resp:
             for i in r.subject_collection_items:
-                l=await self.get_movie_by_douban_id(i.id,self.mapper.get_movie_type(i.type))
-                result.extend(l)
+
+                result.append(i)
         return result
 _douban_movie_base_provider_service = None
 async def get_douban_movie_base_provider_service():
     global _douban_movie_base_provider_service
     if _douban_movie_base_provider_service is None:
         douban_client = await get_douban_client()
-        _douban_movie_base_provider_service=DoubanMovieBaseProviderService(douban_client=douban_client,mapper=douban_mapper_service_1)
+        _douban_movie_base_provider_service=DoubanMovieBaseProviderService(douban_client=douban_client)
     return _douban_movie_base_provider_service
 
 async def main():
     setup_logging()
-
+    # await
     d=await get_douban_movie_base_provider_service()
-    s = await d.search('科斯缇娜酒店')
-    r=  await d.get_movie_by_douban_id(s[0].douban_id,s[0].movie_type   )
-    r0=r[0]
-    print(
-        await r0.douban_id,
-        await r0.title_season,
-        await r0.subtitle,
-        await r0.pic,
-        await r0.description,
-        await r0.year,
-        await r0.category,
-        await r0.movie_type,
-        await r0.total_episodes,
-        await r0.original_title,
-        await r0.pubdate,
-    )
+    r= await d.detail('36877196',MovieType.TV)
+    # s = await d.search('科斯缇娜酒店')
+    # r=  await d.get_movie_by_douban_id(s[0].douban_id,s[0].movie_type   )
+    # r0=r[0]
+    # print(
+    #     await r0.douban_id,
+    #     await r0.title_season,
+    #     await r0.subtitle,
+    #     await r0.pic,
+    #     await r0.description,
+    #     await r0.year,
+    #     await r0.category,
+    #     await r0.movie_type,
+    #     await r0.total_episodes,
+    #     await r0.original_title_season,
+    #     await r0.pubdate,
+    # )
 
 
 if __name__ == '__main__':
