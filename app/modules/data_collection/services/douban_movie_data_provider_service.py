@@ -1,16 +1,13 @@
 import asyncio
 import logging
-from typing import Union, List, override
+from typing import List
 
-from watchfiles import awatch
 
 from app.core.logging_config import setup_logging
-from app.database.models import  MovieCategory, Movie, MovieType
+from app.database.models import  MovieCategory,MovieType
 from app.modules.data_collection.clients.douban_client import get_douban_client, DoubanClient
 from app.modules.data_collection.schemas.douban_schemas import DoubanDetailLazyResponse, DoubanSearchItem, DoubanTVItem
-from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
 from app.utils.lazy_load import lazy, Lazy
-from app.modules.data_collection.services.a_douban_mapper_service import douban_mapper_service_1
 
 logger=logging.getLogger(__name__)
 class DoubanMovieBaseProviderService:

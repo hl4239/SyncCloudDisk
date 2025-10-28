@@ -9,15 +9,23 @@ from app.modules.storage_operations.clients.quark_cloud_client import get_quark_
 from app.modules.storage_operations.interfaces.cloud_disk_operator_interface import ICloudDiskOperator
 from app.modules.storage_operations.schemas import CloudFile
 from app.utils.cache import async_ttl_cache
+from app.utils.lazy_load import lazy
 
 logger=logging.getLogger(__name__)
 class QuarkCloudOperator(ICloudDiskOperator):
+    async def delete_file(self, share_files: List[CloudFile]):
+        client = await self._get_client()
+        try:
+            r=  await client.delete([i.id for i in (share_files or []) if i.id])
+            return r
+        except Exception as e:
+            logger.warning(e, exc_info=True)
+            return False
+
     async def rename(self, share_file: ShareFile, new_name: str):
         client=await self._get_client()
         return await client.rename(share_file.id, new_name)
 
-    def __init__(self,pancloud_name):
-        self.pancloud_name = pancloud_name
     @async_ttl_cache
     async def  _get_pan_cloud(self):
         return await PanCloud.find_one(PanCloud.name == self.pancloud_name)
@@ -65,7 +73,7 @@ class QuarkCloudOperator(ICloudDiskOperator):
                 name=i["file_name"],
                 parent_id=i["pdir_fid"],
                 type=self.get_file_type(i["file_type"]),
-                children=None
+                children=lazy(None)
             )
             return cloud_file
         except Exception as e:
@@ -95,7 +103,7 @@ class QuarkCloudOperator(ICloudDiskOperator):
             logger.error(f'目录创建失败,path={path_str},name={self.pancloud_name},error={e}')
             return None
 
-    async def save_file_(self, share_files: List[ShareFile], parse: QuarkLinkParse, path: Path,pdir_file:CloudFile)->bool:
+    async def save_file_(self, share_files: List[ShareFile], parse: QuarkLinkParse, path: Path=None,pdir_file:CloudFile=None)->bool:
         if not share_files:
             return True
         if path:
@@ -137,8 +145,8 @@ async def main():
     await init_db()
     setup_logging()
     quark=QuarkCloudOperator("4295quark")
-    await quark.create_share_link(path=Path('/资源分享/TV/China/2025/芬芳喜事/芬芳喜事'))
-    # # r= await quark.ls_dir(Path('/资源分享/TvCategory.HOT_CN_DRAMA/2025/护宝寻踪'))
+    # await quark.create_share_link(path=Path('/资源分享/TV/China/2025/芬芳喜事/芬芳喜事'))
+    r= await quark.ls_dir(Path('/资源分享'))
     # #
     # # for i in r:
     # #     print(i.name,(await i.standardized).episode_number)

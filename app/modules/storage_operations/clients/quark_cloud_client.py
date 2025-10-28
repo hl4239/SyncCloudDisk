@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 import random
+import time
 from datetime import datetime
 from typing import Optional, Dict
 
@@ -9,7 +10,7 @@ from typing import Optional, Dict
 from app.core.abc_aio_client import BaseAioClient
 from app.core.logging_config import setup_logging
 from app.database.database import init_db
-from app.database.models import PanCloud, CloudType
+from app.database.models import PanCloud
 
 from app.utils.cache import async_ttl_cache
 from app.utils.tools import make_cookiejar
@@ -22,6 +23,8 @@ class QuarkCloudClient(BaseAioClient):
         self.headers = {}
         self.cookies_str = cookies_str
         self.pancloud_name=pancloud_name
+        self._last_request_time: float = 0.0
+        self._lock = asyncio.Lock()
         super().__init__()
         # 注册 context（仅注册，不创建 session）
         USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) quark-cloud-drive/3.14.2 Chrome/112.0.5615.165 Electron/24.1.3.8 Safari/537.36 Channel/pckk_other_ch"
@@ -64,12 +67,23 @@ class QuarkCloudClient(BaseAioClient):
                 return e
 
     async def request(self, method: str, url: str, *, params=None, data=None, json=None, headers=None,**kwargs):
-        # 合并默认 params 和调用时传入的 params
-        session=await self.get_session()
-        session.headers.update({"x-request-id": str(random.randint(10 ** 15, 10 ** 16 - 1)), })
 
-        # return await session.request(method, url, params=params, data=data, json=json, headers=headers)
-        return await super().request(method, url, params=params, data=data, json=json, headers=headers,as_type='resp', **kwargs)
+        # 限速逻辑
+        async with self._lock:
+            now = time.monotonic()
+            elapsed = now - self._last_request_time
+            min_interval = 1.0  # 最少间隔 1 秒
+
+            if elapsed < min_interval:
+                await asyncio.sleep(min_interval - elapsed)
+
+            self._last_request_time = time.monotonic()
+            # 合并默认 params 和调用时传入的 params
+            session=await self.get_session()
+            session.headers.update({"x-request-id": str(random.randint(10 ** 15, 10 ** 16 - 1)), })
+
+            # return await session.request(method, url, params=params, data=data, json=json, headers=headers)
+            return await super().request(method, url, params=params, data=data, json=json, headers=headers,as_type='resp', **kwargs)
 
 
 

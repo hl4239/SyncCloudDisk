@@ -1,7 +1,6 @@
 import asyncio
 import json
-import re
-from typing import Tuple, List
+from typing import  List
 
 from agents import Runner
 

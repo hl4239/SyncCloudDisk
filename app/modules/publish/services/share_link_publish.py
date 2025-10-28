@@ -18,6 +18,8 @@ class ShareLinkPublish:
     def cloud_type_to_CN(cloud_type:CloudType):
         if cloud_type == CloudType.QUARK:
             return '夸克🔗'
+        if cloud_type == CloudType.BAIDU:
+            return '百度'
         return '其它🔗'
 
     async def publish_to_tg(self,platform_info:PlatformInfo,movies:List[Movie],is_delete_old:bool=False,is_ignore_episodes_number:bool=False,):

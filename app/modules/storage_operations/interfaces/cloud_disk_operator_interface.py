@@ -6,15 +6,18 @@ from collections import Counter
 from pathlib import Path
 from typing import List, Optional
 
+from app.database.models import PanCloud, CloudType
 from app.modules.data_standard.schemas import StandardizedResult
 from app.modules.data_standard.services.regex_standardizer import regex_standardizer
 from app.modules.link_parse.schemas import ShareFile, LinkParse
 from app.modules.storage_operations.schemas import CloudFile
+
 from app.utils.lazy_load import lazy
 
 logger=logging.getLogger(__name__)
 class ICloudDiskOperator:
-
+    def __init__(self,pancloud_name):
+        self.pancloud_name = pancloud_name
 
     @abstractmethod
     async def ls_dir_(self,pdir_file:Optional[CloudFile]=None)->Optional[List[CloudFile]]:
@@ -41,8 +44,12 @@ class ICloudDiskOperator:
             return None
         if path :
             pdir_file=await self.get_dir(path)
+        if not pdir_file:
+            return None
         if not pdir_file.is_folder:
             raise Exception('无法ls非文件夹')
+
+
         pdir_file.standardized=lazy(lambda i=pdir_file.name:regex_standardizer.get_standardized_result(target_original= i.name,items= [StandardizedResult(original_name=i,is_folder=True)]))
 
 
@@ -144,4 +151,20 @@ class ICloudDiskOperator:
     async def create_share_link(self, path: Optional[Path] = None, files: Optional[List[CloudFile]] = None,password: str = None):
         ...
 
+    @abstractmethod
+    async def delete_file(self,cloud_files:List[CloudFile]):
+        ...
+
+
+    @staticmethod
+    async def create_cloud_operator(pancloud_name:str):
+        from app.modules.storage_operations.services.baidu_cloud_operator import BaiduCloudOperator
+        from app.modules.storage_operations.services.quark_cloud_operator import QuarkCloudOperator
+        pan_cloud = await PanCloud.find_one(PanCloud.name==pancloud_name)
+        operator = None
+        if pan_cloud.cloud_type == CloudType.QUARK:
+            operator =QuarkCloudOperator(pancloud_name)
+        elif pan_cloud.cloud_type==CloudType.BAIDU:
+            operator=BaiduCloudOperator(pancloud_name)
+        return operator
 

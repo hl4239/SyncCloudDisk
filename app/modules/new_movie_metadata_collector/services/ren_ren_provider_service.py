@@ -3,7 +3,6 @@ import logging
 from datetime import date
 from typing import List
 
-from pydantic import BaseModel
 
 from app.database.models import MetaDataProvider, MetaDataProviderEnum, MovieType
 from app.modules.new_movie_metadata_collector.clients.renren_client import RenRenClient, renren_client

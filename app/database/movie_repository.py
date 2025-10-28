@@ -198,7 +198,7 @@ class MovieRepository:
     async def find(
             self,
             filters: Dict[str, Any],
-            limit: int = 50,
+            limit: int = 99999999999,
             skip: int = 0,
             sort_by: Optional[str] = None
     ) -> List[Movie]:

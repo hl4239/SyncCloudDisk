@@ -1,27 +1,26 @@
 import asyncio
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List
 
 from app.database.models import Movie, PanCloud, CloudType, MovieCloudInfo
+from app.modules.data_standard.schemas import ResourceType
 from app.modules.filter.schemas import TargetEpisodeFilterResult, TargetEpisode
 from app.modules.link_parse.schemas import ShareFile, LinkParse
-from app.modules.storage_operations.clients.quark_cloud_client import get_quark_cloud_client
 from app.modules.storage_operations.interfaces.cloud_disk_operator_interface import ICloudDiskOperator
 from app.modules.storage_operations.schemas import CloudFile
 from app.modules.storage_operations.services.quark_cloud_operator import QuarkCloudOperator
 from app.utils.async_iterator import AsyncCachedIterator
-from app.utils.lazy_load import Lazy
+from app.modules.storage_operations.services.baidu_cloud_operator import BaiduCloudOperator
 
 
 class ISaveEpisodesToCloud(ABC):
     @abstractmethod
-    async def save_to_cloud(self, share_files: List[ShareFile], parse: LinkParse, cloud_info: MovieCloudInfo,
-                            base_path: Path, operator: ICloudDiskOperator):
+    async def save_to_cloud(self,target_episode_files_iter: AsyncCachedIterator[TargetEpisode],  cloud_info: MovieCloudInfo,
+                            operator: ICloudDiskOperator):
         ...
 
     async def _save(self,cloud_type:CloudType,target_episode_files: AsyncCachedIterator[TargetEpisode],movie:Movie):
-
         pan_clouds = await PanCloud.find_all().to_list()
         enable_pan_clouds = [i for i in pan_clouds if i.enable and i.cloud_type == cloud_type]
 
@@ -35,20 +34,32 @@ class ISaveEpisodesToCloud(ABC):
             if i.name in cloud_info_maps.keys():
                 t_cloud_infos.append(cloud_info_maps[i.name])
             else:
-                t= MovieCloudInfo(pancloud_name=i.name, pdir_name=movie.title_season)
+                t= MovieCloudInfo(pancloud_name=i.name, cloud_path=movie.generate_path())
                 t_cloud_infos.append(t)
                 cloud_infos.append(t)
         is_need_save=False
-        latest_episode_number=movie.get_latest_episode_info().episode_number
-        for i in t_cloud_infos:
-            if not i.latest_episode_number or i.latest_episode_number <latest_episode_number:
-                is_need_save=True
+        latest_episode_info=movie.get_latest_episode_info()
+        if latest_episode_info:
+            latest_episode_number=latest_episode_info.episode_number
+            for i in t_cloud_infos:
+                if not i.latest_episode_number or i.latest_episode_number <latest_episode_number:
+                    is_need_save=True
+        print(is_need_save,cloud_type.name,target_episode_files)
         if is_need_save:
             if cloud_type==CloudType.QUARK:
-                async for tt in  target_episode_files:
-                    tasks=[self.save_to_cloud(tt.share_files,tt.link_parse,cloud_info,base_path=movie.generate_path(),operator=QuarkCloudOperator(cloud_info.pancloud_name)) for cloud_info in t_cloud_infos]
-                    await asyncio.gather(*tasks)
-                    return
+                tasks = [
+                    self.save_to_cloud(target_episode_files, cloud_info,
+                                       operator=QuarkCloudOperator(cloud_info.pancloud_name)) for cloud_info in
+                    t_cloud_infos]
+                await asyncio.gather(*tasks)
+                return
+            if cloud_type==CloudType.BAIDU:
+                tasks = [
+                    self.save_to_cloud(target_episode_files, cloud_info,
+                                       operator=BaiduCloudOperator(cloud_info.pancloud_name)) for cloud_info in
+                    t_cloud_infos]
+                await asyncio.gather(*tasks)
+                return
 
     @classmethod
     async def pancloud_episode_filter(cls,pdir_file:CloudFile):
@@ -56,7 +67,7 @@ class ISaveEpisodesToCloud(ABC):
         if child:= await pdir_file.children:
             for i in child:
                 st=await i.standardized
-                if st.episode_number:
+                if st.resource_type==ResourceType.FILE_EPISODE or st.resource_type==ResourceType.FILE_RANGE:
                     result.append(i)
         return result
 
@@ -66,7 +77,9 @@ class ISaveEpisodesToCloud(ABC):
             movie=t.movie
 
 
-            await self._save(CloudType.QUARK,t.quark_result,t.movie)
+
+            tasks=[self._save(CloudType.QUARK,t.quark_result,t.movie),self._save(CloudType.BAIDU,t.baidu_result,t.movie)]
+            await asyncio.gather(*tasks)
             movies.append(t.movie)
         return movies
 

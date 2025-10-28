@@ -1,17 +1,14 @@
 import copy
 from abc import ABC, abstractmethod
-from logging import getLogger
 from typing import List
 
-from app.database.models import MovieType, EpisodesInfo
+from app.database.models import  EpisodesInfo
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
-from app.services.movie_service import movie_service
 from app.utils.lazy_load import lazy
 
 import asyncio
 import inspect
 import logging
-import time
 from typing import Any, Set
 
 logger = logging.getLogger(__name__)

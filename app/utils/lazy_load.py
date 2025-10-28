@@ -3,12 +3,10 @@ from __future__ import annotations
 import asyncio
 import time
 import inspect
-from copy import deepcopy
 from typing import (
     Any, Awaitable, Callable, Generic, Optional, TypeVar, Union, overload, List
 )
 
-from app.utils.cache import async_ttl_cache
 
 T = TypeVar("T")
 U = TypeVar("U")
@@ -261,11 +259,7 @@ async def main():
 
 
     l = lazy(lambda: get_m())
-    l1=lazy(lambda :get_m())
 
-    async def ex():
-        await l
-    asyncio.create_task(ex)
 
 
 
@@ -273,7 +267,9 @@ async def main():
     i1 = l.title1   # Lazy
     print(i)        # Lazy(...) 的 repr
     print(await i1) # await 会触发 provider
-
+    k1=await i1
+    k2=await i1
+    print(k1 is k2,'11111111111')
     print("First call (cached/permanent):")
     print(await m1.description)
     print(await m1.description)

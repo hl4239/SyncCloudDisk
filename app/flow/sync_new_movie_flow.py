@@ -2,7 +2,7 @@
 # prefect_flow_async.py
 import asyncio
 import logging
-from datetime import datetime, date, timedelta
+from datetime import datetime, timedelta
 from typing import List
 
 import pytz
@@ -19,7 +19,7 @@ from app.database.movie_repository import movie_repository
 from app.modules.data_collection.flow import get_douban_hot_movie_data_sources,\
     registry_movie_data_sources, search_from_douban
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
-from app.modules.filter.flow import title_and_episode_filter_flow, full_episode_filter_flow
+from app.modules.filter.flow import title_and_episode_filter_flow
 from app.modules.filter.schemas import TargetEpisodeFilterResult
 from app.modules.link_parse.flow import link_parse_flow_parses
 from app.modules.link_parse.schemas import LinkParseResult, PrepareParseLinks
@@ -27,7 +27,9 @@ from app.modules.link_scraping.flow import link_scrape_flow_search
 from app.modules.link_scraping.schemes.link import LinkScrapeResult
 from app.modules.new_movie_metadata_collector.services.ren_ren_provider_service import renren_new_movie_provider_service
 from app.modules.publish.services.share_link_publish import share_link_publish_service
+from app.modules.risk_detect.flow import detect_risk_share
 from app.modules.storage_operations.flow import save_to_cloud_flow
+from app.modules.storage_operations.services.handle_risk_file_service import handle_risk_file_service
 from app.services.movie_service import movie_service
 logger=logging.getLogger(__name__)
 
@@ -172,7 +174,7 @@ async def flow2(params:P1, progress_callback, log_callback):
     progress_callback(50)
 
 
-    link_parse_results=await link_parse([PrepareParseLinks(scrape_quark_links=i.quark_links,links=[CloudShareLink(url=j,title=i.movie.title_season)for j in i.movie.share_links],movie=i.movie) for i in scrape_result])
+    link_parse_results=await link_parse([PrepareParseLinks(scrape_quark_links=i.quark_links,scrape_baidu_links=i.baidu_links,links=[CloudShareLink(url=j,title=i.movie.title_season)for j in i.movie.share_links],movie=i.movie) for i in scrape_result])
 
     filter_result=await title_and_episode_filter_flow(link_parse_results,params.skip_not_latest_episode)
 
@@ -200,7 +202,7 @@ async def flow3(params:P5, progress_callback, log_callback):
     progress_callback(50)
 
 
-    link_parse_results=await link_parse([PrepareParseLinks(scrape_quark_links=i.quark_links,links=[CloudShareLink(url=j,title=i.movie.title_season)for j in i.movie.share_links],movie=i.movie) for i in scrape_result])
+    link_parse_results=await link_parse([PrepareParseLinks(scrape_quark_links=i.quark_links,scrape_baidu_links=i.baidu_links,links=[CloudShareLink(url=j,title=i.movie.title_season)for j in i.movie.share_links],movie=i.movie) for i in scrape_result])
 
     filter_result=await title_and_episode_filter_flow(link_parse_results,params.skip_not_latest_episode)
 
@@ -260,7 +262,7 @@ async def get_by_douban_ids(params:P3,progress_callback, log_callback):
         scrape_result = await link_scraping(to_save_movies, count=params.scrape_count)
         progress_callback(80)
 
-        link_parse_results = await link_parse([PrepareParseLinks(scrape_quark_links=i.quark_links, links=[
+        link_parse_results = await link_parse([PrepareParseLinks(scrape_quark_links=i.quark_links,scrape_baidu_links=i.baidu_links, links=[
             CloudShareLink(url=j, title=i.movie.title_season) for j in i.movie.share_links], movie=i.movie) for i in
                                                scrape_result])
 
@@ -299,7 +301,7 @@ async def p6(params:P6,progress_callback, log_callback):
             'pubdate__lte':air_date1,
         }
     )
-
+    print([i.title_season for i in movies])
 
     target_movies=[]
     for movie in movies:
@@ -329,6 +331,58 @@ async def p7(params:P7,progress_callback, log_callback):
     logger.info(f'将存在share_link的{target_movies}发布至平台')
     await share_link_publish_service.publish(target_movies,is_delete_old=params.is_delete_old_message)
 
+class P8(BaseModel):
+    air_days:int=Field(default=30,description='只检测上映时间多少天内的movie')
+    douban_ids:List[str]=Field(default=[],description='如果不为空则忽略air_days')
+    is_handle:bool=Field(default=True,description='处理风险文件(删除,混肴title_season,只保存torrent zip)')
+    is_detect:bool=Field(default=True,description='检测风险链接')
+@registry.register(name='检测与处理被和谐的分享链接',params_model=P8)
+async def f8(params:P8,progress_callback, log_callback):
+    if not params.douban_ids:
+        air_date1 = datetime.now(pytz.timezone("Asia/Shanghai")).date()
+        air_date2 = (air_date1 - timedelta(days=params.air_days))
+        movies = await movie_repository.find(
+            filters={
+                'pubdate__gte': air_date2,
+                'pubdate__lte': air_date1,
+            }
+        )
+    else:
+
+        movies=await Movie.find(In(Movie.douban_id, params.douban_ids)).to_list()
+    r=None
+    if params.is_detect:
+        r = await    detect_risk_share(movies)
+
+        r_movies=[i.movie for i in r]
+        await save_to_database(r_movies)
+        movies=r_movies
+    h_r=None
+    if params.is_handle:
+        h_r=  await handle_risk_file_service.handle(movies)
+
+        await save_to_database(movies)
+
+    return {
+        'detect_result':{
+            i.movie.title_season: [
+                j.share_link for j in i.risk_cloud_infos
+            ]
+
+            for i in (r or [])
+
+        },
+        'handle_result':{
+            i.movie.title_season: [
+                j.share_link for j in i.handle_cloud_infos
+            ]
+
+            for i in (h_r or [])
+
+        }
+
+    }
+
 
 
 
@@ -343,7 +397,9 @@ async def main():
     # await task_manager.task_manager.create_task('豆瓣热门影视采集', HotCollectParams(categories=[MovieCategory.CHINA],
     #                                                                                  count=10).model_dump(),
     #                                             registry.get('豆瓣热门影视采集').fn)
-    await p6(P6(),None,None)
-
+    r= await flow3(P5(douban_ids=['36645835'],skip_not_latest_episode=False,scrape_count=10),lambda i:...,lambda i:...)
+    # r=  await f8(P8(douban_ids=['36645835']),lambda i:...,lambda i:...)
+    print(r)
+    await asyncio.sleep(60)
 if __name__ == '__main__':
     asyncio.run(main())

@@ -1,14 +1,13 @@
 import asyncio
 import logging
 import re
-from typing import List
 
 from app.core.logging_config import setup_logging
 from app.database.database import init_db
 from app.database.models import Movie, MovieType
 from app.modules.filter.interfaces.target_link_filter_interface import ITargetLinkFilter
 from app.modules.link_parse.flow import link_parse_flow_parses
-from app.modules.link_parse.schemas import LinkParseResult, LinkParse, PrepareParseLinks
+from app.modules.link_parse.schemas import  LinkParse, PrepareParseLinks
 from app.modules.link_scraping.flow import link_scrape_flow_search
 from app.utils.async_iterator import AsyncCachedIterator
 
@@ -24,7 +23,10 @@ class RegexTargetLinkFilter(ITargetLinkFilter):
         r".*{title}.*1080p.*",        # 标题后面带 1080p
         r".*{title}.*S\d{{2}}E\d{{2}}" , # 标题后跟美剧 SxxExx 格式
         r".*《{title}》.*",
-        r".*「{title}」.*"
+        r".*「{title}」.*",
+        r".*[:：]{title}.*",
+        r".*{title}[(（]20\d{{2}}[）)]"
+
     ]
 
     @classmethod

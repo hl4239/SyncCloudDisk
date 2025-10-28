@@ -1,5 +1,4 @@
 import asyncio
-import json
 import logging
 import re
 from typing import Tuple, Optional
@@ -12,7 +11,6 @@ from app.modules.data_collection.schemas.movie_data_source import MovieDataSourc
 import tmdbsimple as tmdb
 
 from app.services.movie_service import MovieService
-from app.utils.cache import async_ttl_cache
 
 logger=logging.getLogger(__name__)
 class BTMDBIDProviderService(ITMDBIDProvider):
@@ -107,7 +105,7 @@ b_tmdb_provider_service=BTMDBIDProviderService()
 async def main():
     tmdb.API_KEY=settings.TMDB_API_KEY
     setup_logging()
-    id,season_number= await b_tmdb_provider_service._fetch_tmdb_id('북극성','第 1 季',MovieType.TV)
+    id,season_number= await b_tmdb_provider_service._fetch_tmdb_id('守护解放西','第 6 季',MovieType.TV)
     print(id,season_number)
 if __name__ == '__main__':
     asyncio.run(main())

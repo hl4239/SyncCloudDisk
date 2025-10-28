@@ -1,11 +1,10 @@
-import re
 from datetime import datetime
-from typing import List, Tuple, Optional, Union
+from typing import List
 
 from pydantic import BaseModel
 
 from app.database.models import Movie, MovieType,  MovieCategory
-from app.modules.data_collection.schemas.douban_schemas import DoubanDetailResponse, DoubanDetailLazyResponse
+from app.modules.data_collection.schemas.douban_schemas import DoubanDetailLazyResponse
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
 from app.utils.lazy_load import lazy, Lazy
 

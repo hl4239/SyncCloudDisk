@@ -9,11 +9,10 @@ import inspect
 from enum import Enum
 from datetime import date, datetime, time
 
-from fastapi import APIRouter, FastAPI, Depends, HTTPException, Query
+from fastapi import APIRouter,Depends, HTTPException
 from pydantic import BaseModel, create_model
 from bson import ObjectId
-from motor.motor_asyncio import AsyncIOMotorClient
-from beanie import Document, init_beanie, PydanticObjectId
+from beanie import Document, PydanticObjectId
 
 
 @dataclass

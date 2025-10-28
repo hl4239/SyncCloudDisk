@@ -1,4 +1,4 @@
-from typing import Tuple, List
+from typing import  List
 
 from app.core.logging_config import get_logger
 from app.modules.data_collection.interfaces.split_title_season_interface import ISplitTitleSeasonInterface

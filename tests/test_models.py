@@ -8,7 +8,7 @@ from beanie import PydanticObjectId
 
 from app.database.database import init_db_sync, init_db
 from app.database.models import EpisodesInfo, Movie, MovieType, TMDBInfos, PanCloud, CloudType, \
-    MovieCloudInfo, MovieCategory
+    MovieCloudInfo, MovieCategory, CloudShareLink
 from app.database.movie_repository import  movie_repository
 from app.services.movie_service import movie_service
 
@@ -82,16 +82,19 @@ async def test_movie():
     # movie = await Movie.find_one(Movie.douban_id == movie.douban_id)
     # print( movie)
     # movie.create_time= movie.create_time.astimezone(pytz.timezone("Asia/Shanghai"))
-    r=  await movie_repository.find( filters={
-
-            "has_shareable_movies": True,
-        },
-        )
-
-    print([i.title_season for i in r])
-    r = await movie_repository.find_movies_with_episode_today()
-
-    print([i.title_season for i in r])
+    air_date1 = datetime.datetime.now(pytz.timezone("Asia/Shanghai")).date()
+    air_date2 = (air_date1 - datetime.timedelta(days=1000))
+    movies = await movie_repository.find(
+        filters={
+            'pubdate__gte': air_date2,
+            'pubdate__lte': air_date1,
+        }
+    )
+    result={
+        i.title_season:i.pubdate.isoformat()
+        for i in movies
+    }
+    print(json.dumps(result,indent=4,ensure_ascii=False),len(result))
 @pytest.mark.asyncio
 async def test_pan_cloud():
     await init_db()
@@ -103,9 +106,16 @@ async def test_pan_cloud():
 @pytest.mark.asyncio
 async def test_movie1():
     await init_db()
-    r= r=  await movie_repository.find( filters={
+    r= await Movie.find_all().to_list()
+    r1=[]
+    for i in r:
+        for j in i.cloud_infos:
+            if j.cloud_path is None:
+                r1.append(i.title_season)
+                break
+    print(r1)
 
-            "title_season__contains": '许我耀眼',
-        },
-        )
-    print(r[0].get_latest_episode_info())
+
+def test_cloud_share_link():
+    r=CloudShareLink(url='https://pan.baidu.com/s/1JeLc6qEF-GKkoA9nXHA5Bg?pwd=2510')
+    print(r)

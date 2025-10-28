@@ -1,10 +1,9 @@
 import asyncio
 import atexit
 import logging
-from typing import Optional, Dict, Union
+from typing import Optional
 
 import aiohttp
-from pydantic import ValidationError
 
 from app.database.models import MovieCategory,  MovieType
 from app.modules.data_collection.schemas.douban_schemas import DoubanTVResponse, DoubanDetailResponse

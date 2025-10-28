@@ -1,9 +1,7 @@
-import copy
 from abc import ABC, abstractmethod
-from typing import List, Tuple
+from typing import List
 
 
-from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
 from app.utils.lazy_load import lazy, Lazy
 
 

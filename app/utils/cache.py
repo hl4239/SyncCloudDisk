@@ -4,7 +4,6 @@ import asyncio
 import threading
 from functools import wraps
 from typing import Any, Callable, Optional, Sequence, Union, Tuple, Dict
-from pydantic import BaseModel
 from dataclasses import is_dataclass, asdict
 from datetime import datetime, date, time as dtime
 from enum import Enum

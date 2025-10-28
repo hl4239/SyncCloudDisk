@@ -2,7 +2,7 @@ from typing import Optional, List
 
 from pydantic import BaseModel, Field, computed_field
 
-from app.database.models import Movie
+from app.database.models import MovieCloudInfo, Movie
 from app.modules.data_standard.schemas import StandardizedResult
 from app.modules.link_parse.schemas import FileType
 from app.utils.lazy_load import Lazy, lazy
@@ -18,7 +18,7 @@ class CloudFile(BaseModel):
     standardized:Lazy[StandardizedResult] =Field(default_factory=lambda: lazy(None),description='标准化后的')
     id: Optional[str] = Field(None, description="在网盘系统中的唯一ID")
     parent_id: Optional[str] = Field(None, )
-
+    path:Optional[str]=Field(None)
     # --- 文件夹专属字段 ---
     children: Optional[Lazy[List['CloudFile']]] = Field(default_factory=lambda: lazy(None), description="子条目列表 (仅文件夹拥有)")
 
@@ -30,4 +30,6 @@ class CloudFile(BaseModel):
     def is_folder(self) -> bool:
         return self.type==FileType.FOLDER
 
-
+class HandleRiskFileResult(BaseModel):
+    movie:Movie
+    handle_cloud_infos:List[MovieCloudInfo]

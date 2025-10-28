@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from datetime import date
 from typing import List
 
-from app.database.models import Movie, MetaDataProviderEnum, MetaDataProvider
+from app.database.models import  MetaDataProvider
 
 
 

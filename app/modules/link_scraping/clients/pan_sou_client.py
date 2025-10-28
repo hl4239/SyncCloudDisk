@@ -1,9 +1,8 @@
 import asyncio
 from typing import List
 
-import aiohttp
 
-from app.core.abc_aio_client import aio_client_manager, BaseAioClient
+from app.core.abc_aio_client import  BaseAioClient
 from app.database.models import CloudType
 
 
@@ -38,7 +37,7 @@ class PanSouClient(BaseAioClient):
 pan_sou_client = PanSouClient()
 async def main():
 
-    result=await pan_sou_client.search('赴山海',[CloudType.QUARK])
+    result=await pan_sou_client.search('赴山海',[CloudType.BAIDU])
     print(result)
 if __name__ == '__main__':
     asyncio.run(main())

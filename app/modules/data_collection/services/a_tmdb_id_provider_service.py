@@ -1,7 +1,6 @@
 import asyncio
-import copy
 import datetime
-from typing import List, Optional, Tuple
+from typing import  Optional, Tuple
 
 from charset_normalizer.md import getLogger
 

@@ -1,17 +1,23 @@
+import logging
+import re
 import uuid
-from datetime import time, datetime, date, timezone, timedelta
+from datetime import time, datetime, date, timezone
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional, Union, Dict, Any, Annotated
+from typing import List, Optional,  Dict, Any, Annotated
 
 import pydantic
 import pytz
-from pydantic import Field, model_validator, BaseModel, field_validator, computed_field, field_serializer, validator
+from pydantic import Field, model_validator, BaseModel, field_validator, computed_field
 
 from app.core.config import settings
 from app.utils.date_to_weekday import weekday_cn
 from app.utils.generic_crud import Filter
-from beanie import Document, Indexed, Link
+from beanie import Document, Indexed
+
+from app.utils.obfuscate import obfuscate_title_pro
+
+logger = logging.getLogger(__name__)
 
 
 # --- 数据模型定义 ---
@@ -47,9 +53,16 @@ class MovieCloudInfo(pydantic.BaseModel):
     last_save_time:Optional[datetime]=Field(None)
     last_save_link:Optional[str]=Field(None)
     last_save_success:bool=Field(default=False)
-    pdir_name:Optional[str]=Field(default=None,)
+    cloud_path:Optional[str]=Field(default=None,)
     latest_episode_number:Optional[int]=Field(default=None)
     share_link:Optional[str]=Field(default=None)
+    is_risk_share:bool=Field(default=False)
+    save_suffixes:Optional[List[str]]=Field(default=[
+            "mkv", "mp4", "avi", "mov", "m4v", "wmv", "flv",
+            "torrent", "srt", "ass", "sub", "mp3", "aac", "zip"
+        ],
+    description='转存时只收录列出的文件格式')
+
     @model_validator(mode='after')
     def convert_datetimes(self):
         """在模型验证后转换时间字段"""
@@ -147,7 +160,28 @@ class CloudShareLink(BaseModel):
     def type(self) -> CloudType:
         if 'quark' in self.url:
             return CloudType.QUARK
+        if 'baidu' in self.url:
+            return CloudType.BAIDU
         return CloudType.UNKNOWN
+        # 初始化后自动从URL中提取密码
+
+    @model_validator(mode="before")
+    @classmethod
+    def extract_password(cls, values):
+        url = values.get("url", "")
+        share_password = values.get("share_password")
+
+        # 只在未提供 share_password 时尝试提取
+        if not share_password and url:
+            # 常见格式示例：
+            # https://pan.baidu.com/s/xxxx?pwd=abcd
+            # https://pan.baidu.com/s/xxxx 密码:abcd
+            # https://pan.quark.cn/s/xxxx?pwd=1234
+            match = re.search(r"(?:pwd|密码|提取码)[=:： ]?([A-Za-z0-9]{3,6})", url)
+            if match:
+                values["share_password"] = match.group(1)
+
+        return values
 
 
 
@@ -237,8 +271,19 @@ class Movie(Document):
     def is_tmdb_infos_avaliable(self):
         return self.tmdb_infos is not None and self.tmdb_infos.id is not None and self.tmdb_infos.season_number is not None
 
-    def generate_path(self, ):
-        return  Path(settings.CLOUD_ROOT) / self.movie_type.value /  self.category /  self.year /  self.title_season
+    def generate_path(self, is_obfuscate=False):
+        try:
+
+            print(self.title_season)
+            if is_obfuscate:
+                title_season=obfuscate_title_pro(self.title_season, pinyin_ratio=0.3, decompose_ratio=0.3, keep_char_ratio=0.4,
+                                               separator='-')
+            else:
+                title_season=self.title_season
+        except Exception as e:
+            logger.error(self.title_season, exc_info=True)
+            raise e
+        return  (Path(settings.CLOUD_ROOT) / self.movie_type.value /  self.category /  self.year /  title_season).as_posix()
 
     def get_season_number(self):
         return self.tmdb_infos.season_number

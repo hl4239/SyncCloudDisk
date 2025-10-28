@@ -1,18 +1,18 @@
 import asyncio
-import json
+
 from logging import getLogger
-from typing import List, Tuple, Optional
+from typing import  Tuple, Optional
 
 
 
 from app.core.config import settings
 from app.core.logging_config import setup_logging
-from app.database.models import Movie, MovieType, TMDBInfos
+from app.database.models import MovieType, TMDBInfos
 import tmdbsimple as tmdb
 
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
 from app.services.movie_service import movie_service
-from app.utils.cache import async_ttl_cache
+
 from app.utils.lazy_load import lazy
 
 logger=getLogger(__name__)

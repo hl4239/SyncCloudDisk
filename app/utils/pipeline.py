@@ -1,7 +1,6 @@
 # pipeline_example.py
 import asyncio
 import inspect
-from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
 
 from app.utils.lazy_load import Lazy

@@ -2,12 +2,11 @@ from abc import ABC, abstractmethod
 from typing import List, Optional
 
 from app.modules.data_standard.schemas import StandardizedResult
-from app.modules.link_parse.schemas import LinkParseResult
 
 
 
 class IStandardizer(ABC):
-    @classmethod
+    @abstractmethod
     async def standardize(cls, items: List[StandardizedResult]) -> List[StandardizedResult]:
         ...
     @classmethod

@@ -5,9 +5,8 @@ from typing import List,  Tuple, Optional
 
 from app.core.logging_config import setup_logging
 from app.database.database import init_db
-from app.database.models import SplitTitleSeasonRegular, SystemConfig
+from app.database.models import  SystemConfig
 from app.modules.data_collection.interfaces.split_title_season_interface import ISplitTitleSeasonInterface
-from app.utils.cache import async_ttl_cache
 from app.utils.lazy_load import Lazy, lazy
 
 logger=getLogger(__name__)

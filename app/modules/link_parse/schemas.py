@@ -1,7 +1,6 @@
-from pydantic import BaseModel, Field, field_validator, ValidationInfo, model_validator, computed_field, ConfigDict
-from typing import List, Optional, Union, Callable, Any
+from pydantic import BaseModel, Field,  computed_field, ConfigDict
+from typing import List, Optional
 from enum import Enum
-from pathlib import Path
 
 from app.database.models import Movie, CloudType, CloudShareLink
 from app.modules.data_standard.schemas import StandardizedResult
@@ -27,9 +26,9 @@ class ShareFile(BaseModel):
     id: Optional[str] = Field(None, description="在网盘系统中的唯一ID")
     parent_id: Optional[str] = Field(None, )
     share_fid_token:Optional[str] = Field(None, )
+    path:Optional[str] = Field(None, description='绝对路径，包含该文件名')
     # --- 文件夹专属字段 ---
     children: Optional[Lazy[List['ShareFile']]] = Field(default_factory=lambda: lazy(None), description="子条目列表 (仅文件夹拥有)")
-
     # --- 文件专属字段 ---
     size_bytes: Optional[int] = Field(None, description="文件大小（字节）(仅文件拥有)")
 
@@ -40,6 +39,7 @@ class ShareFile(BaseModel):
 
 class PrepareParseLinks(BaseModel):
     scrape_quark_links: Optional[Lazy[AsyncCachedIterator[CloudShareLink]]]=Field(default_factory=lambda: lazy(None),description='从网络抓取的')
+    scrape_baidu_links: Optional[Lazy[AsyncCachedIterator[CloudShareLink]]]=Field(default_factory=lambda: lazy(None),description='从网络抓取的')
     links:Optional[list[CloudShareLink]]=Field(default=[],description='现有的')
     movie:Optional[Movie]=Field(None,description='')
 
@@ -58,8 +58,15 @@ class QuarkLinkParse(LinkParse):
     pdir_fid:Optional[str]=Field(None)
     stoken:Optional[str]=Field(None)
 
+class BaiduLinkParse(LinkParse):
+    uk: Optional[str] = Field(None)
+    share_id: Optional[str] = Field(None)
+    bdstoken: Optional[str] = Field(None)
+    sekey: Optional[str] = Field(None)
+
 class LinkParseResult(BaseModel):
     quark_parses:Optional[AsyncCachedIterator[QuarkLinkParse]]
+    baidu_parses:Optional[AsyncCachedIterator[BaiduLinkParse]]
     movie:Optional[Movie]
     model_config = ConfigDict(arbitrary_types_allowed=True)
 

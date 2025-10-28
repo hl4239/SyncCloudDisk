@@ -1,269 +1,229 @@
+# regex_standardizer.py (严格匹配并尊重初始值版本)
 import asyncio
 import logging
 import re
 from functools import lru_cache
-from typing import List
+from typing import List, Optional, Tuple
 
 from app.modules.data_standard.interfaces.standardizer_interface import IStandardizer
-from app.modules.data_standard.schemas import StandardizedResult, ResourceType
-from app.utils.cache import async_ttl_cache
+from app.modules.data_standard.schemas import StandardizedResult, ResourceType, QualityInfo
+
+
 
 logger = logging.getLogger(__name__)
 
 
-# -------------------------
-# RegexStandardizer（增强版：字符串规则 + 懒编译缓存）
-# -------------------------
 class RegexStandardizer(IStandardizer):
-    """
-    基于正则的标准化器并做资源类型分类（文件/文件夹）
-    规则以字符串列表保存，通过 _compiled_patterns 懒编译并缓存为 re.Pattern 列表。
-    """
+    # --- 1. 剧集/季/范围匹配规则 (收紧为严格模式) ---
+    # 移除了模糊的纯数字匹配，只保留具有明确标识符的模式
 
-    # 剧集文件名匹配规则（按优先级）——以字符串保存
+    _KNOWN_QUALITY_KEYWORDS = r'(?:4k|2160p|1440p|1080p|720p|bluray|remux|web-dl|webdl|x265|h265|x264|h264)'
     _patterns: List[str] = [
-        r"(?i)\bS(?P<season>\d{1,2})[ ._\-]*E(?P<episode>\d{1,4})\b",
+        # 高优先级 SxxExx 格式
         r'\bS(?P<season>\d{1,2})[ ._\-]*E(?P<episode>\d{1,4})\b',
-        r'Season[ _\-]?(?P<season>\d{1,2})[ _\-.]*(?:Ep|Episode)?[ _\-]?(?P<episode>\d{1,4})\b',
-        r'\bE(?P<episode>\d{1,4})\b',
+        r'Season[ ._\-]?(?P<season>\d{1,2})[ ._\-]*(?:Ep|Episode)?[ ._\-]?(?P<episode>\d{1,4})\b',
+        r'第\s*(?P<season>\d{1,2})\s*季\s*第\s*(?P<episode>\d{1,4})\s*[集话回話]',
+        # 带有明确标识符的集数
         r'\bEp[ ._\-]?(?P<episode>\d{1,4})\b',
-        r'第\s*(?P<episode>\d{1,4})\s*[集话回]',
-        r'^(?P<episode>\d{1,4})\.(?:mkv|mp4|torrent|avi|m4v)$',
-        r'\b(?P<episode>\d{1,4})\b',
-        r''
+        r'\b[Ee](?P<episode>\d{1,4})\b',
+        r'-\s*(?P<episode>\d{1,4})\s*(?:\[|\.)',  # Show - 01 [1080p] or Show - 01.mkv
+        r'第\s*(?P<episode>\d{1,4})\s*[集话回話]',
+
+        # --- 新增的智能模式 ---
+        r'\b(?P<episode>\d{1,4})\b\s*[-.丨_ ]\s*' + _KNOWN_QUALITY_KEYWORDS,
     ]
 
-    # 画质匹配（字符串）
-    _quality_patterns: List[str] = [
-        r'\b(2160p|1080p|720p|480p)\b',
-        r'\b(4k|8k|hd|fhd|uhd|bluray|bdrip|bdr)\b',
-        r'\b(web[-_. ]?dl|web[-_. ]?rip|webrip|webrar)\b',
+    # 范围和季文件夹的规则保持不变，因为它们本身具有较高的确定性
+    _range_patterns: List[str] = [
+        r'\bS(?P<season>\d{1,2})[ ._\-]*E(?P<start>\d{1,4})[ ._\-]*-[ ._\-]*E(?P<end>\d{1,4})\b',
+        r'第\s*(?P<start>\d{1,4})[ ._\-]*-[ ._\-]*\s*(?P<end>\d{1,4})\s*[集话回]',
+        r'(?P<start>\d{1,4})\s*[-_–—~～]\s*(?P<end>\d{1,4})\b',
+        r'(?P<count>\d{1,4})\s*集\s*全',
+        r'共\s*(?P<count>\d{1,4})\s*集',
     ]
 
-    # folder range patterns（支持多种连写，字符串形式）
-    _folder_range_patterns: List[str] = [
-        r'(?P<start>\d{1,4})\s*[-_–—]\s*(?P<end>\d{1,4})',
-        r'(?P<start>\d{1,4})\s*[~～]\s*(?P<end>\d{1,4})',
-        r'(?P<start>\d{1,4})\s*(?:to)\s*(?P<end>\d{1,4})',
-        r'(?P<start>\d{1,4})\s*(?:至|到)\s*(?P<end>\d{1,4})',
-        r'\(?\b(?P<start>\d{1,4})\s*[-_–—~～]\s*(?P<end>\d{1,4})\b\)?',
-    ]
-
-    # season folder keywords（字符串）
     _season_folder_patterns: List[str] = [
         r'Season[ _-]?\d{1,2}\b',
-        r'\bS\d{1,2}\b',
         r'第\s*\d{1,2}\s*季',
-        r'\bseason\b',  # 宽松匹配
     ]
 
-    # quality folder keywords (folder 名称中仅包含或以质量词为主)
-    _quality_folder_patterns: List[str] = [
-        r'^(?:2160p|1080p|720p|480p|4k|8k|hd|fhd|uhd|bluray|bdrip|web-dl|webrip|remux|hdr|dvdrip)\b',
-        r'\b(1080p|720p|4k|hd|bluray|web[-_. ]?dl|webrip|remux|hdr)\b',
+    _special_episode_patterns: List[str] = [
+        r'\b(?:番外|ova|sp|special|extra|特典|特辑|ncor|nced|pv|cm)\b'
     ]
 
-    # 媒体文件扩展名（用于区分文件类型）
-    _media_exts = {"mkv", "mp4", "avi", "mov", "m4v", "wmv", "flv", "mp3", "aac", "iso"}
+    # --- 2. 质量/元数据提取规则 (保持不变) ---
+    _QUALITY_REGEX_MAP: List[Tuple[str, str]] = [
+        ("resolution", r'\b(4k|2160p|1440p|1080p|720p|480p)\b|\b(\d{3,4}x\d{3,4})\b'),
+        ("fps", r'\b(\d{2,3}(?:\.\d{1,3})?)\s*(fps|hz|帧|帧率)\b'),
+        ("hdr", r'\b(hdr10\+|hdr10|dolby\s*vision|dolbyvision|dv|hdr)\b'),
+        ("source", r'\b(web-dl|webdl|webrip|bluray|blu-ray|bdrip|remux|hdtv|dvdrip|cam|ts)\b'),
+        ("codec", r'\b(x265|h265|hevc|x264|h264|avc|av1|vp9)\b'),
+        ("audio", r'\b(dts-hd\s*ma|dts-hd|dts|truehd|atmos|eac3|ac3|aac|flac|opus)\b'),
+        ("audio_channels", r'\b([579]\.1)\b'),
+        ("bitrate", r'\b(\d+(?:\.\d+)?(?:kbps|mbps))\b'),
+    ]
+
+
+    # --- 3. 规范化映射字典 (保持不变) ---
+    _SOURCE_MAP = {"web-dl": "WEB-DL", "webdl": "WEB-DL", "webrip": "WEBRIP", "bluray": "BLURAY", "blu-ray": "BLURAY",
+                   "bdrip": "BLURAY", "remux": "REMUX", "hdtv": "HDTV", "dvdrip": "DVDRIP", "cam": "CAM", "ts": "CAM"}
+    _CODEC_MAP = {"x265": "x265", "h265": "x265", "hevc": "x265", "x264": "x264", "h264": "x264", "avc": "x264",
+                  "av1": "AV1", "vp9": "VP9"}
+    _HDR_MAP = {"hdr10+": "HDR10+", "hdr10": "HDR10", "dolby vision": "DOLBY VISION", "dolbyvision": "DOLBY VISION",
+                "dv": "DOLBY VISION", "hdr": "HDR"}
+    _AUDIO_MAP = {"dts-hd ma": "DTS-HD MA", "dts-hd": "DTS-HD", "dts": "DTS", "truehd": "TrueHD", "atmos": "ATMOS",
+                  "eac3": "EAC3", "ac3": "AC3", "aac": "AAC", "flac": "FLAC", "opus": "OPUS"}
 
     @classmethod
     @lru_cache(maxsize=1)
     def _compiled_patterns(cls):
-        """
-        把字符串规则编译成 re.Pattern 列表并缓存（只编译一次）。
-        默认对大多数模式使用 re.I（忽略大小写），这能替代字符串中 (?i) 的写法。
-        """
-        flags = re.I  # 全局忽略大小写，通常适合媒体文件名匹配
-        try:
-            compiled = {
-                "patterns": [re.compile(p, flags) for p in cls._patterns],
-                "quality_patterns": [re.compile(p, flags) for p in cls._quality_patterns],
-                "folder_range_patterns": [re.compile(p, flags) for p in cls._folder_range_patterns],
-                "season_folder_patterns": [re.compile(p, flags) for p in cls._season_folder_patterns],
-                "quality_folder_patterns": [re.compile(p, flags) for p in cls._quality_folder_patterns],
-            }
-        except re.error as e:
-            # 防御性日志，理论上不会触发
-            logger.exception("Compile regex failed: %s", e)
-            # 回退到不编译的空结果，避免抛出
-            compiled = {
-                "patterns": [],
-                "quality_patterns": [],
-                "folder_range_patterns": [],
-                "season_folder_patterns": [],
-                "quality_folder_patterns": [],
-            }
-        return compiled
+        flags = re.I
+        return {
+            "patterns": [re.compile(p, flags) for p in cls._patterns],
+            "range_patterns": [re.compile(p, flags) for p in cls._range_patterns],
+            "season_folder_patterns": [re.compile(p, flags) for p in cls._season_folder_patterns],
+            "special_episode_patterns": [re.compile(p, flags) for p in cls._special_episode_patterns],
+            "quality_map": [(field, re.compile(pattern, flags)) for field, pattern in cls._QUALITY_REGEX_MAP],
+        }
+
+    @classmethod
+    def _extract_metadata(cls, text: str) -> Tuple[QualityInfo, str]:
+        # 此方法逻辑保持不变，因为它只负责提取和清理
+        qi = QualityInfo()
+        working_text = f" {text.lower()} "
+
+
+
+        for field, pattern in cls._compiled_patterns()["quality_map"]:
+            matches = list(pattern.finditer(working_text))
+            if not matches: continue
+            match = matches[0]
+            val = next((g for g in match.groups() if g is not None), None)
+            if not val: continue
+
+            working_text = working_text.replace(match.group(0), " ")
+            val_lower = val.replace(" ", "")
+            if field == "resolution":
+                if "x" in val_lower:
+                    try:
+                        w, h = map(int, val_lower.split('x'))
+                        if h >= 2160:
+                            qi.resolution = "4K"
+                        elif h >= 1440:
+                            qi.resolution = "1440P"
+                        elif h >= 1080:
+                            qi.resolution = "1080P"
+                        elif h >= 720:
+                            qi.resolution = "720P"
+                    except ValueError:
+                        pass
+                else:
+                    qi.resolution = "4K" if "4k" in val_lower or "2160" in val_lower else val_lower.upper()
+            elif field == "fps":
+                qi.fps = int(float(val))
+            elif field == "hdr":
+                qi.hdr = cls._HDR_MAP.get(val_lower, val_lower.upper())
+            elif field == "source":
+                qi.source = cls._SOURCE_MAP.get(val_lower, val_lower.upper())
+            elif field == "codec":
+                qi.codec = cls._CODEC_MAP.get(val_lower, val_lower.upper())
+            elif field == "audio":
+                qi.audio = cls._AUDIO_MAP.get(val_lower, val_lower.upper())
+            elif field == "audio_channels":
+                qi.audio_channels = val
+            elif field == "bitrate":
+                qi.bitrate = val
+
+        cleaned_text = re.sub(r'\s+', ' ', working_text).strip()
+        cleaned_text = re.sub(r'[\[\]\(\)]', ' ', cleaned_text).strip()
+        return qi, cleaned_text
 
     @classmethod
     def _standardize_one(cls, item: StandardizedResult) -> StandardizedResult:
-        name = (item.original_name or "").strip()
-        lowered = name.lower()
-
-        matched = False
-
-        # 获取已编译的 pattern 列表
+        original_name = (item.original_name or "").strip()
         compiled = cls._compiled_patterns()
-        patterns = compiled["patterns"]
-        quality_patterns = compiled["quality_patterns"]
-        folder_range_patterns = compiled["folder_range_patterns"]
-        season_folder_patterns = compiled["season_folder_patterns"]
-        quality_folder_patterns = compiled["quality_folder_patterns"]
 
-        # ---------- 文件夹处理 ----------
+        # 步骤 1: 提取元数据。总是执行以获得清理后的名称，但仅在 item.quality_info 为空时赋值
+        quality_info, cleaned_name = cls._extract_metadata(original_name)
+        if item.quality_info is None and any(quality_info.model_dump().values()):
+            item.quality_info = quality_info
+            item.quality = quality_info.as_string()
+
+        # 步骤 2: 判断资源类型（文件夹 vs 文件）
         if item.is_folder:
-            # 1) 优先判断范围文件夹
-            for fr_pat in folder_range_patterns:
-                fr = fr_pat.search(lowered)
-                if fr:
-                    try:
-                        start = int(fr.group("start"))
-                        end = int(fr.group("end"))
-                        if start > end:
-                            start, end = end, start
-                        item.folder_episode_start = start
-                        item.folder_episode_end = end
+            # 2.1 文件夹范围匹配 (仅在未设置时)
+            if item.episode_start is None:
+                for rp in compiled["range_patterns"]:
+                    if m := rp.search(original_name.lower()):
+                        gd = m.groupdict()
+                        if count := gd.get("count"):
+                            item.episode_start, item.episode_end = 1, int(count)
+                        elif start := gd.get("start"):
+                            item.episode_start, item.episode_end = int(start), int(gd["end"])
                         item.resource_type = ResourceType.FOLDER_RANGE
-                        matched = True
-                        break
-                    except (ValueError, IndexError):
-                        continue
-            if matched:
-                # 仍尝试抽取画质
-                if item.quality is None:
-                    for qpat in quality_patterns:
-                        qm = qpat.search(lowered)
-                        if qm:
-                            item.quality = qm.group(1).upper()
-                            break
-                return item
+                        return item
 
-            # 2) season 文件夹检测（例如 "Season 02", "第2季", "S02"）
-            for sp in season_folder_patterns:
-                if sp.search(lowered):
-                    item.resource_type = ResourceType.FOLDER_SEASON
-                    # 如果 Season 后面有数字，提取 season_number
-                    m = re.search(r'(?:season|s)\s*0*?(\d{1,2})', lowered, re.I)
-                    if not m:
-                        m = re.search(r'第\s*(\d{1,2})\s*季', lowered)
-                    if m:
-                        try:
+            # 2.2 季文件夹匹配 (仅在未设置时)
+            if item.season_number is None:
+                for sp in compiled["season_folder_patterns"]:
+                    if sp.search(original_name.lower()):
+                        item.resource_type = ResourceType.FOLDER_SEASON
+                        if m := re.search(r'(?:season|s)\s*0*?(\d{1,2})', original_name.lower()):
                             item.season_number = int(m.group(1))
-                        except Exception:
-                            pass
-                    # 同时检查是否包含范围（如 "Season 02 (01-24)"）
-                    for fr_pat in folder_range_patterns:
-                        fr = fr_pat.search(lowered)
-                        if fr:
-                            try:
-                                s = int(fr.group("start")); e = int(fr.group("end"))
-                                if s > e: s, e = e, s
-                                item.folder_episode_start = s
-                                item.folder_episode_end = e
-                            except Exception:
-                                pass
-                    # 画质尝试
-                    if item.quality is None:
-                        for qpat in quality_patterns:
-                            qm = qpat.search(lowered)
-                            if qm:
-                                item.quality = qm.group(1).upper()
-                                break
-                    return item
+                        return item
 
-            # 3) quality 文件夹检测（例如 "1080p", "WEB-DL", "BluRay"）
-            for qf in quality_folder_patterns:
-                if qf.search(lowered):
+            # 2.3 其他文件夹类型
+            if item.resource_type is None:
+                if item.quality_info and not cleaned_name.replace('.', '').strip():
                     item.resource_type = ResourceType.FOLDER_QUALITY
-                    # 抽取画质关键词
-                    for qpat in quality_patterns:
-                        qm = qpat.search(lowered)
-                        if qm:
-                            item.quality = qm.group(1).upper()
-                            break
-                    return item
-
-            # 4) 其他文件夹 -> folder:other
-            item.resource_type = ResourceType.FOLDER_OTHER
-            # 尝试检测是否 folder 名称本身就是合集（合集/全集）
-            if re.search(r'\b合集|全集|complete|合集\b', lowered, re.I):
-                # 仍可尝试找范围或单个数字
-                for fr_pat in folder_range_patterns:
-                    fr = fr_pat.search(lowered)
-                    if fr:
-                        try:
-                            s = int(fr.group("start")); e = int(fr.group("end"))
-                            if s > e: s, e = e, s
-                            item.folder_episode_start = s
-                            item.folder_episode_end = e
-                            item.resource_type = ResourceType.FOLDER_RANGE
-                            break
-                        except Exception:
-                            pass
+                else:
+                    item.resource_type = ResourceType.FOLDER_OTHER
             return item
 
         # ---------- 文件处理 ----------
-        # 先尝试从文件名抽取 season/episode（跟你原有逻辑一致）
-        for pat in patterns:
-            m = pat.search(lowered)
-            if not m:
-                continue
-            gd = m.groupdict()
-            ep_str = gd.get("episode")
-            if ep_str and item.episode_number is None:
-                try:
-                    item.episode_number = int(ep_str)
-                except ValueError:
-                    pass
-            sn_str = gd.get("season")
-            if sn_str and item.season_number is None:
-                try:
-                    item.season_number = int(sn_str)
-                except ValueError:
-                    pass
-            matched = True
-            break
+        # 步骤 3: 优先级：范围 -> 单集 -> 特殊集
 
-        # 画质提取（若尚未有 quality）
-        if item.quality is None:
-            for qpat in quality_patterns:
-                qm = qpat.search(lowered)
-                if qm:
-                    item.quality = qm.group(1).upper()
-                    break
+        # 3.1 文件内范围匹配 (仅在未设置时)
+        if item.episode_start is None:
+            for rp in compiled["range_patterns"]:
+                if m := rp.search(original_name.lower()):
+                    gd = m.groupdict()
+                    if start := gd.get("start"):
+                        item.episode_start, item.episode_end = int(start), int(gd["end"])
+                        item.episode_range_scope = "file"
+                        item.resource_type = ResourceType.FILE_RANGE
+                        if item.season_number is None and (season := gd.get("season")):
+                            item.season_number = int(season)
+                        return item  # 范围匹配成功，直接返回
 
-        # 判断文件扩展名是否为媒体扩展
-        suf = (item.suffix or "").lower()
-        is_media_ext = suf in cls._media_exts
+        # 3.2 单集解析 (仅在未设置时)
+        if item.episode_number is None:
+            for pat in compiled["patterns"]:
+                if m := pat.search(original_name):
+                    gd = m.groupdict()
+                    # 只要匹配到 episode，就认为成功，并填充所有可用的信息
+                    if ep_str := gd.get("episode"):
+                        item.episode_number = int(ep_str)
+                        if item.season_number is None and (sn_str := gd.get("season")):
+                            item.season_number = int(sn_str)
+                        break  # 找到第一个确定性的匹配就停止
 
-        # 特殊集检测（番外/OVA...）
-        if re.search(r'番外|ova|special|extra|特典|特辑', lowered, re.I):
-            item.is_special_episode_name = True
+        # 3.3 特殊集名识别 (仅在常规集数未被设置或找到时)
+        if item.episode_number is None and item.is_special_episode_name is not True:
+            is_special = any(pat.search(original_name.lower()) for pat in compiled["special_episode_patterns"])
+            if is_special:
+                item.is_special_episode_name = True
 
-        # 分类策略：
-        # - 如果解析出 episode/season -> file:episode
-        # - 或者文件后缀是媒体且文件名含剧集线索 -> file:episode
-        # - 否则，如果是媒体扩展但无法识别为剧集，则归入 file:other（可能是电影/合集）
-        # - 其他文件 -> file:other
-        if item.episode_number is not None or item.is_special_episode_name:
-            item.resource_type = ResourceType.FILE_EPISODE
-        else:
-            # # 如果文件是媒体扩展并且文件名含数字或 "part"/"cd" 之类，仍视为 episode 型资源（宽松策略）
-            # if is_media_ext:
-            #     if re.search(r'\bpart\s*\d+|\bcd\s*\d+|\bdisc\s*\d+|\b卷\b|\b集\b', lowered, re.I) or re.search(r'\d{1,3}', lowered):
-            #         # 虽然电影名也可能包含数字，但为了网盘刮削优先保守标记为媒体资源
-            #         item.resource_type = ResourceType.FILE_EPISODE
-            #     else:
-            #         # 无明显剧集线索，但为媒体文件 -> 仍视为媒体资源（方便人工/后续判断）
-            #         item.resource_type = ResourceType.FILE_EPISODE
-            # else:
+        # 步骤 4: 分配最终的资源类型 (仅在未设置时)
+        if item.resource_type is None:
+            if item.episode_number is not None or item.is_special_episode_name:
+                item.resource_type = ResourceType.FILE_EPISODE
+            else:
                 item.resource_type = ResourceType.FILE_OTHER
-
         return item
 
     @classmethod
     async def standardize(cls, items: List[StandardizedResult]) -> List[StandardizedResult]:
-        # 对每个条目调用 _standardize_one（同步）并返回
         return [cls._standardize_one(item) for item in items]
 
 
@@ -271,29 +231,75 @@ class RegexStandardizer(IStandardizer):
 regex_standardizer = RegexStandardizer()
 
 # -------------------------
-# Demo（用于本地测试）
+# Demo（测试尊重初始值和严格匹配）
 # -------------------------
 if __name__ == '__main__':
     async def demo():
-        samples = [
-            StandardizedResult(original_name="Confidence.Queen.S01E01v2.mp4", is_folder=False),
-            StandardizedResult(original_name="Season 02", is_folder=True),
-            StandardizedResult(original_name="1080p", is_folder=True),
-            StandardizedResult(original_name="Random Documents", is_folder=True),
-            StandardizedResult(original_name="S01E02.mkv"),
-            StandardizedResult(original_name="Some.Show.E03.1080p.WEB-DL.mkv"),
-            StandardizedResult(original_name="Movie Title (2020).mp4"),
-            StandardizedResult(original_name="readme.txt"),
-            StandardizedResult(original_name="合集 05至08", is_folder=True),
-            StandardizedResult(original_name="集数(01~12)", is_folder=True),
-            StandardizedResult(original_name="番外篇 - 角色访谈.mp4"),
-        ]
-        out = await regex_standardizer.standardize(samples)
-        for r in out:
-            print(
-                f"{r.original_name!r:35} | is_folder: {r.is_folder} | resource_type: {r.resource_type} | "
-                f"folder_range: {(r.folder_episode_start, r.folder_episode_end)} | season: {r.season_number} | "
-                f"episode: {r.episode_number} | quality: {r.quality} | special: {r.is_special_episode_name}"
-            )
+        # 1. 准备一个资源列表，包含不同后缀和质量
+        available_files: List[StandardizedResult] = [
+            # 第1集有 MKV 和 MP4 两个版本
+            StandardizedResult(original_name="Show.E01.1080p.mp4", episode_number=1,
+                               quality_info=QualityInfo(resolution="1080P")),
+            StandardizedResult(original_name="Show.E01.1080p.mkv", episode_number=1,
+                               quality_info=QualityInfo(resolution="1080P")),
 
+            # 范围文件 2-3，是 MP4
+            StandardizedResult(
+                original_name="Show.E02-E03.1080p.mp4",
+                episode_start=2, episode_end=3,
+                quality_info=QualityInfo(resolution="1080P")
+            ),
+            StandardizedResult(
+                original_name="Show.E02-E03.4K.mkv",
+                episode_start=2, episode_end=3,
+                quality_info=QualityInfo(resolution="4K")
+            ),
+
+            # 范围文件 4-5，是 MKV，但质量稍低
+            StandardizedResult(
+                original_name="Show.E04-E05.720p.mkv",
+                episode_start=4, episode_end=5,
+                quality_info=QualityInfo(resolution="720P")
+            ),
+            StandardizedResult(
+                original_name="Show.E04-E05.720p.mp4",
+                episode_start=4, episode_end=5,
+                quality_info=QualityInfo(resolution="720P")
+            ),
+
+            # 单独的第6集，是 AVI，我们不想要它
+            StandardizedResult(original_name="Show.E06.1080p.avi", episode_number=6,
+                               quality_info=QualityInfo(resolution="1080P")),
+        ]
+
+        # 2. 定义我们的需求和首选后缀
+        required = [1, 2, 3, 4, 5]
+        preferred = ['torrent']
+
+        # 3. 调用方法
+        optimal_selection = StandardizedResult.find_optimal_coverage(
+            results=available_files,
+            required_episodes=required,
+            preferred_suffixes=preferred
+        )
+
+        print(f"需求集数: {required}")
+        print(f"首选后缀: {preferred}")
+        print("-" * 70)
+        print(f"找到的最优文件组合 ({len(optimal_selection)} 个文件):")
+        for item in optimal_selection:
+            print(f"  - {item.original_name}")
+
+        # --- 期望的输出 ---
+        # 需求集数: [1, 2, 3, 4, 5]
+        # 首选后缀: ['mkv']
+        # ----------------------------------------------------------------------
+        # 找到的最优文件组合 (3 个文件):
+        #   - Show.E04-E05.720p.mkv     <-- 第一轮被选中，因为它有首选后缀'mkv'且覆盖2集，是所有mkv文件中覆盖最多的。
+        #   - Show.E01.1080p.mkv        <-- 第二轮被选中，因为它有首选后缀'mkv'且覆盖了剩下的第1集。
+        #   - Show.E02-E03.1080p.mp4    <-- 第三轮，mkv文件已无法满足剩下的2,3集需求，算法回退到选择非首选后缀的文件。
+    async def demo1():
+        r=StandardizedResult(original_name="01-02",is_folder=True)
+        rr= await regex_standardizer.standardize([r])
+        print(rr)
     asyncio.run(demo())

@@ -1,0 +1,17 @@
+services:
+  web:
+    build: .
+    container_name: SyncCloudDIsk
+    command: python main.py
+#    command: tail -f /dev/null
+    ports:
+      - "8010:8000"  # 映射：主机8000 -> 容器5000
+      - "8020:3000"
+    volumes:
+      - /vol1/1000/docker/SyncCloudDisk:/app   # 本地 app 目录挂载到容器 /app
+
+    environment:
+      - ENV=dev
+    env_file:
+      - .env
+

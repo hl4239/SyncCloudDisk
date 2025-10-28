@@ -1,10 +1,9 @@
 from datetime import date
 
-from pydantic import BaseModel, computed_field, Field
+from pydantic import BaseModel, Field
 
-from app.database.models import MovieCategory, MovieType, TMDBInfos, Movie, MovieCloudInfo, \
+from app.database.models import MovieCategory, MovieType, TMDBInfos, Movie, \
     EpisodesInfo
-from app.modules.data_collection.schemas.douban_schemas import DoubanDetailLazyResponse, DoubanDetailResponse
 from app.utils.lazy_load import Lazy, lazy
 
 

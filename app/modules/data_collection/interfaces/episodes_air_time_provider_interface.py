@@ -3,9 +3,8 @@ import logging
 from abc import abstractmethod, ABC
 from typing import List
 
-from app.database.models import EpisodesInfo, MovieType
+from app.database.models import EpisodesInfo
 from app.modules.data_collection.schemas.movie_data_source import MovieDataSourceResult
-from app.services.movie_service import movie_service
 from app.utils.lazy_load import lazy
 
 logger=logging.getLogger(__name__)

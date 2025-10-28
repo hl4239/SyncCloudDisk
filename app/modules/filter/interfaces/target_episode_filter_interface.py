@@ -3,10 +3,9 @@ from abc import ABC, abstractmethod
 from typing import List
 
 from app.database.models import Movie
-from app.modules.filter.schemas import TargetEpisode, TargetEpisodeFilterResult
+from app.modules.filter.schemas import      TargetEpisodeFilterResult
 from app.modules.link_parse.schemas import LinkParseResult, LinkParse
 from app.utils.async_iterator import AsyncCachedIterator
-from app.utils.lazy_load import lazy
 
 logger=logging.getLogger(__name__)
 class ITargetEpisodeFilter(ABC):
@@ -20,6 +19,7 @@ class ITargetEpisodeFilter(ABC):
             logger.debug(f'开始注册target_episode_filter: {link_scrape_result.movie.title_season}')
             target_link_result = TargetEpisodeFilterResult(quark_result=
                                                   AsyncCachedIterator( self.get_target_episode(link_scrape_result.movie,link_scrape_result.quark_parses)),
+                                                           baidu_result=AsyncCachedIterator( self.get_target_episode(link_scrape_result.movie,link_scrape_result.baidu_parses)),
                                                movie=link_scrape_result.movie)
 
             results.append(target_link_result)

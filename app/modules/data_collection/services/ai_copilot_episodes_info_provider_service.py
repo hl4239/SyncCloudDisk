@@ -1,5 +1,4 @@
 import asyncio
-import datetime
 import logging
 from typing import List
 
@@ -12,7 +11,6 @@ from app.modules.data_collection.schemas.movie_data_source import MovieDataSourc
 from app.modules.data_collection.services.tmdb_air_date_provider_service import tmdb_air_date_provider
 from app.services.movie_service import movie_service
 from app.services.open_ai_service import OpenAIService, open_ai_service
-from app.utils.cache import async_ttl_cache
 from app.utils.lazy_load import lazy
 
 logger=logging.getLogger(__name__)

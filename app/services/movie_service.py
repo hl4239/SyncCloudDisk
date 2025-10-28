@@ -33,6 +33,10 @@ class MovieService(IMovieService):
             except Exception:
                 # 转换失败，返回None
                 return None
+        try:
+            return f"第 {int(douban_season)} 季"
+        except Exception:
+            ...
         return douban_season
 
     @staticmethod
