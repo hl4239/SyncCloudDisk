@@ -1,7 +1,7 @@
 import datetime
 import re
 from datetime import date
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import cn2an
 import pytz
@@ -96,19 +96,28 @@ class MovieService(IMovieService):
 
 
     @classmethod
-    async  def create_episodes_info(cls,total_episodes:Lazy[str])->List[EpisodesInfo]:
+    async  def create_episodes_info(cls,total_episodes:Lazy[str],episodes_range:Optional[Tuple[int,int]] =None)->List[EpisodesInfo]:
         """
         支持total为str或者int
+        :param episodes_range:
         :param total_episodes:
         :return:
         """
-        total_episodes  =await total_episodes
-        if not total_episodes:
-            return []
-        if isinstance(total_episodes,str):
-            total_episodes =cls.extract_episode_number(total_episodes)
+        start=None
+        end=None
         episodes_infos=[]
-        for i in range(1,total_episodes+1):
+        if not episodes_range:
+            total_episodes  =await total_episodes
+            if not total_episodes:
+                return []
+            if isinstance(total_episodes,str):
+                total_episodes =cls.extract_episode_number(total_episodes)
+            start=1
+            end=total_episodes+1
+        else:
+            start=episodes_range[0]
+            end=episodes_range[1]
+        for i in range(start,end):
             episodes_info=EpisodesInfo(episode_number=i,)
             episodes_infos.append(episodes_info)
         return episodes_infos
@@ -149,6 +158,39 @@ class MovieService(IMovieService):
         if '动画'in genres:
             return True
         return False
+
+    @staticmethod
+    def is_continuation(aliases: List[str]) -> Tuple[bool, Optional[Tuple[int, int]]]:
+        """
+        从别名中匹配 “第xx集-第xx集” 或类似格式，判断是否为续集。
+        返回：
+            (True, (start, end))  表示匹配到范围
+            (False, None)         表示未匹配到
+        """
+
+        if not aliases:
+            return False, None
+
+        # 匹配模式集合（支持多种语言与写法）
+        patterns = [
+            # 第1集-第12集 / 第1-12集 / 第13～24话 等
+            r"第?\s*(\d+)\s*[集话]\s*[-～~至]\s*第?\s*(\d+)\s*[集话]?",
+            # EP01-EP12 / E01-E24 / Episode 1-12
+            r"(?:EP|E|Episode)?\s*(\d+)\s*[-～~至]\s*(?:EP|E|Episode)?\s*(\d+)",
+        ]
+
+        for alias in aliases:
+            text = alias.strip()
+            for pattern in patterns:
+                m = re.search(pattern, text, flags=re.IGNORECASE)
+                if m:
+                    try:
+                        start, end = int(m.group(1)), int(m.group(2))
+                        if start < end:  # 合理范围
+                            return True, (start, end)
+                    except ValueError:
+                        continue
+        return False, None
 
 
 
