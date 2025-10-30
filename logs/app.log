@@ -29673,6 +29673,8 @@ ConnectionResetError: [WinError 10054] 远程主机强迫关闭了一个现有�
 2025-10-28 13:45:16 [INFO] app.modules.filter.flow:35 - 潜能探案组 第二季 | https://pan.baidu.com/s/1_lrGRE7qY57APWAQsMTRSg?pwd=1111 作为备选（更新至 1/7）
 2025-10-28 13:45:16 [INFO] app.modules.filter.flow:45 - 潜能探案组 第二季分享链接遍历完成，无可用分享链接
 2025-10-28 13:45:16 [INFO] app.modules.storage_operations.services.save_episodes_to_cloud:43 - 未筛选到适合['mkv', 'mp4', 'avi', 'mov', 'm4v', 'wmv', 'flv', 'torrent', 'srt', 'ass', 'sub', 'mp3', 'aac', 'zip']的链接
+2025-10-30 20:05:06 [INFO] telethon.crypto.libssl:79 - Failed to load SSL library: <class 'OSError'> (no library called "ssl" found)
+2025-10-30 20:05:06 [INFO] telethon.crypto.aes:25 - cryptg module not installed and libssl not found, falling back to (slower) Python encryption
 2025-10-28 14:00:00 [INFO] app.core.scheduler:480 - Dispatching scheduled job 6f853106834c42dbb500a627c0aa1bbc -> 同步今日可更新影视资源到网盘
 2025-10-28 14:00:00 [INFO] app.core.scheduler:506 - Scheduled job 6f853106834c42dbb500a627c0aa1bbc dispatched to task_manager
 2025-10-28 14:00:00 [INFO] root:162 - [task dd1d3e973cff47779b4478e6421e47f3] log handler attached for capture
