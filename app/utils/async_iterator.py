@@ -10,6 +10,9 @@ def _is_sequence(obj) -> bool:
 #
 # AsyncCachedIterator: 单独保留并做了健壮处理
 #
+async def _empty_async_cached_iterator():
+    return  AsyncCachedIterator([])
+
 class AsyncCachedIterator(Generic[T]):
     """
     Accepts Sequence[T] (list/tuple) or AsyncIterable[T] (including async generators).

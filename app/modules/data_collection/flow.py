@@ -172,6 +172,26 @@ async def registry_movie_data_sources(douban_id_movie_types: List[Tuple[str, Mov
                     movie_service.create_episodes_info(a)
             )
 
+        # actors
+        if movie and movie.actors:
+            movie_data_source.actors = lazy(movie.actors)
+        else:
+            movie_data_source.actors = lazy(
+                lambda c=douban_metadata_lazy: c.get_actors()
+            )
+        # aliases
+        if movie and movie.aliases:
+            movie_data_source.aliases = lazy(movie.aliases)
+        else:
+            movie_data_source.aliases = douban_metadata_lazy.aka
+
+        # genres
+        if movie and movie.genres:
+            movie_data_source.genres = lazy(movie.genres)
+        else:
+            movie_data_source.genres = douban_metadata_lazy.genres
+
+
         # 补充外部 provider 的字段
         await tmdb_air_date_provider.set_air_date(movie_data_source)
         await ai_copilot_episodes_air_time_provider.set_air_time(movie_data_source)

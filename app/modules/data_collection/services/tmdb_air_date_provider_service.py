@@ -22,7 +22,7 @@ class TMDBAirDateProviderService(IEpisodesAirDateProvider):
         :return:
         """
         # 查找特定季
-
+        logger.debug(f'开始tmdb搜索：tmdb_id:{tmdb_id} season_number:{season_number}')
         tv_season = tmdb.TV_Seasons(tv_id=tmdb_id, season_number=season_number)
         response = tv_season.info(language='zh-CN')
         logger.debug(f'tv_info response={response}')
@@ -74,6 +74,6 @@ async def main():
     await init_db()
     setup_logging()
     tmdb.API_KEY=settings.TMDB_API_KEY
-    await tmdb_air_date_provider._fetch_infos(tmdb_id=253093, season_number=1)
+    await tmdb_air_date_provider._fetch_infos(tmdb_id=261663, season_number=1)
 if __name__ == '__main__':
     asyncio.run(main())

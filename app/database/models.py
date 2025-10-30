@@ -234,6 +234,10 @@ class Movie(Document):
     original_title_season:Optional[str]=Field(default=None,description='原名，比如tmdb中可能只能用韩剧的韩语原名在哪查询到')
     original_title:Optional[str]=Field(default=None,description='原始名的标题，不含季')
     subtitle: Optional[list[str]] = Field(default=None, description='子标题')
+    actors:Optional[List[str]]=Field(default_factory=list,description='演员、配音')
+    aliases:Optional[List[str]]=Field(default_factory=list,description='别名')
+    genres:Optional[List[str]]=Field(default_factory=list,description='影视风格')
+
     pic:Optional[str] = Field(default=None,description='图片地址')
     description: Annotated[str, Filter(ops=["contains"])]= Field(default=None)
     year: Annotated[str, Filter(ops=["eq"])]=Field(default=None)

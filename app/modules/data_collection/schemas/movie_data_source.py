@@ -1,4 +1,5 @@
 from datetime import date
+from typing import List
 
 from pydantic import BaseModel, Field
 
@@ -24,7 +25,15 @@ class MovieDataSourceResult(BaseModel):
     tmdb_infos: Lazy[TMDBInfos] = Field(default_factory=lambda: lazy(None))
     episodes_info: Lazy[list[EpisodesInfo]] = Field(default_factory=lambda: lazy(None))
     pubdate: Lazy[date] = Field(default_factory=lambda: lazy(None))
+
+    actors:Lazy[List[str]]=Field(default_factory=lambda: lazy(None),description='演员、配音')
+    aliases:Lazy[List[str]]=Field(default_factory=lambda: lazy(None),description='别名')
+    genres:Lazy[List[str]]=Field(default_factory=lambda: lazy(None),description='影视风格')
+
+
     movie_info: Lazy[Movie] = Field(default_factory=lambda: lazy(None))
+
+
 
 
 

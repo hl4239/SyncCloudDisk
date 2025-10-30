@@ -144,6 +144,12 @@ class MovieService(IMovieService):
         if latest_episode_number==total_episode_number:
             return f'{latest_episode_number}集全'
         else:return f'更新至{latest_episode_number}集'
+    @staticmethod
+    def is_animation(genres:List[str]):
+        if '动画'in genres:
+            return True
+        return False
+
 
 
     async  def combin_to_movies(self,movie_data_sources:List[MovieDataSourceResult])->List[Movie]:
@@ -175,6 +181,9 @@ class MovieService(IMovieService):
                     create_time=datetime.datetime.now(pytz.timezone("Asia/Shanghai")),
                     update_time=datetime.datetime.now(pytz.timezone("Asia/Shanghai")),
                     pubdate=await movie_data_source.pubdate,
+                    actors=await movie_data_source.actors,
+                    aliases=await movie_data_source.aliases,
+                    genres=await movie_data_source.genres,
                 )
             else:
                 is_update=False
@@ -229,6 +238,18 @@ class MovieService(IMovieService):
                 if not movie.pubdate:
                     movie.pubdate = await movie_data_source.pubdate
                     is_update = True
+
+                if not movie.actors:
+                    movie.actors = await movie_data_source.actors
+                    is_update = True
+                if not movie.aliases:
+                    movie.aliases = await movie_data_source.aliases
+                    is_update = True
+                if not movie.genres:
+                    movie.genres = await movie_data_source.genres
+                    is_update = True
+
+
 
                 orig_epi=movie.episodes_info
 

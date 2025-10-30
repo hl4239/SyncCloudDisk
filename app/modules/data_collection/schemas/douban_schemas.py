@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Dict
 from pydantic import BaseModel, Field, HttpUrl
 from datetime import datetime
 
@@ -51,7 +51,9 @@ class DoubanDetailResponse(BaseModel):
     intro:str
     countries: List[str]
     pubdate:List[str]
-
+    genres:List[str]
+    actors:List[Dict[str, str]]
+    aka:List[str]
 class DoubanDetailLazyResponse(BaseModel):
     id: Lazy[str]=Field(default_factory=lambda: lazy(None))
     title: Lazy[str]=Field(default_factory=lambda: lazy(None))
@@ -64,7 +66,9 @@ class DoubanDetailLazyResponse(BaseModel):
     intro: Lazy[str]=Field(default_factory=lambda: lazy(None))
     countries: Lazy[List[str]]=Field(default_factory=lambda: lazy(None))
     pubdate:  Lazy[List[str]]=Field(default_factory=lambda: lazy(None))
-
+    genres:Lazy[List[str]] =Field(default_factory=lambda: lazy(None))
+    actors:Lazy[List[Dict[str, str]]] =Field(default_factory=lambda: lazy(None))
+    aka: Lazy[List[str]]=Field(default_factory=lambda: lazy(None))
 
     async def get_movie_type(self):
         douban_type=await self.subtype
@@ -111,7 +115,11 @@ class DoubanDetailLazyResponse(BaseModel):
         dt = datetime.strptime(clean_date, "%Y-%m-%d").date()
         return dt
 
-
+    async def get_actors(self):
+        result=[]
+        for i in await self.actors:
+            result.append(i['name'])
+        return result
 
 
 class DoubanSearchItem(BaseModel):

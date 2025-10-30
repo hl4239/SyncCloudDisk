@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 class LinkPaser(ILinkParser):
 
     @classmethod
-    async def _quark_get_dir(cls, pdir_fid: str, quark_client: QuarkParseClient, movie: Movie):
+    async def _quark_get_dir(cls,p_file:ShareFile, pdir_fid: str, quark_client: QuarkParseClient, movie: Movie):
 
         ls_resp = await quark_client.ls_dir(pdir_fid)
         result = []
@@ -38,19 +38,19 @@ class LinkPaser(ILinkParser):
                 result.append(share_file)
             season_number = movie.get_season_number()
             standardized_results = [
-                StandardizedResult(original_name=f.name, season_number=season_number, is_folder=f.is_folder) for
+                StandardizedResult(original_name=f.name, season_number=(await p_file.standardized).season_number, is_folder=f.is_folder) for
                 f in result]
             for f in result:
                 f.standardized = lazy(lambda i=f.name: regex_standardizer.get_standardized_result(target_original=i,
                                                                                                   items=standardized_results))
                 if f.is_folder:
-                    f.children = lazy(lambda i=f.id: cls._quark_get_dir(i, quark_client, movie))
+                    f.children = lazy(lambda i=f.id,ii=f: cls._quark_get_dir(ii,i, quark_client, movie))
 
         logger.debug(f'获取pdir_fid={pdir_fid}目录,result={result}')
         return result
 
     @classmethod
-    async def _baidu_get_dir(cls, pdir_path: str, baidu_client: BaiduParseClient, movie: Movie):
+    async def _baidu_get_dir(cls,p_file:ShareFile, pdir_path: str, baidu_client: BaiduParseClient, movie: Movie):
 
 
         ls_resp = await baidu_client.ls_dir(pdir_path)
@@ -67,7 +67,7 @@ class LinkPaser(ILinkParser):
                                        )
 
                 result.append(share_file)
-            season_number = movie.get_season_number()
+            season_number = (await p_file.standardized).season_number
             standardized_results = [
                 StandardizedResult(original_name=f.name, season_number=season_number, is_folder=f.is_folder) for
                 f in result]
@@ -75,7 +75,7 @@ class LinkPaser(ILinkParser):
                 f.standardized = lazy(lambda i=f.name: regex_standardizer.get_standardized_result(target_original=i,
                                                                                                   items=standardized_results))
                 if f.is_folder:
-                    f.children = lazy(lambda i=f.path: cls._baidu_get_dir(i, baidu_client, movie))
+                    f.children = lazy(lambda i=f.path,k=f: cls._baidu_get_dir(k,i, baidu_client, movie))
 
         logger.debug(f'获取path={pdir_path}目录,result={result}')
         return result
@@ -95,8 +95,14 @@ class LinkPaser(ILinkParser):
                 passcode = parse_result.get('passcode')
                 pdir_fid = parse_result.get('pdir_fid')
                 stoken = parse_result.get('stoken')
-                root = ShareFile(type=FileType.FOLDER, name='根', id=pdir_fid, children=lazy(
-                    lambda i=quark_parse_client, j=pdir_fid: self._quark_get_dir(j, quark_client=i, movie=movie)))
+                root = ShareFile(type=FileType.FOLDER, name='根', id=pdir_fid,standardized=lazy(StandardizedResult(season_number=movie.get_season_number(),)))
+
+                # 再单独赋值 children，让闭包安全引用 root
+                root.children = lazy(
+                    lambda i=quark_parse_client, j=pdir_fid,k=root:
+                    self._quark_get_dir(k, j, quark_client=i, movie=movie)
+                )
+
                 yield QuarkLinkParse(pwd_id=pwd_id, passcode=passcode, stoken=stoken, pdir_fid=pdir_fid, root=root,
                                      link=quark_link)
 
@@ -120,20 +126,53 @@ class LinkPaser(ILinkParser):
                     continue
 
                 root = ShareFile(type=FileType.FOLDER, name='根', id='0', path='/',
-                                 children=lazy(
-                                     [ShareFile(
-                                         type=FileType.FOLDER if i['isdir'] == 1 else FileType.FILE,
-                                         name=i['server_filename'],
-                                         id=str(i['fs_id']),
-                                         path=i['path'],
-                                         children=lazy(None) if i['isdir'] == 0 else lazy(
-                                             lambda i1=i['path'],i2=baidu_parse_client:self._baidu_get_dir(i1,i2,movie=movie)
+                                 standardized=lazy(StandardizedResult(season_number=movie.get_season_number(),))
+                                 )
 
-                                         ),
-                                       standardized= lazy(lambda i1=i['server_filename'],i2=i: regex_standardizer.get_standardized_result(
-                                             target_original=i1,
-                                             items=[StandardizedResult(original_name=i1,season_number=movie.get_season_number(),is_folder=i2['isdir'] != 0)]))
-                                     ) for i in root_files]))
+                children = []
+
+                for i in root_files:
+                    is_folder = i['isdir'] != 0
+                    name = i['server_filename']
+                    path = i['path']
+                    fid = str(i['fs_id'])
+
+                    # 1️⃣ 先创建 ShareFile 基础对象（不带 children/standardized）
+                    child = ShareFile(
+                        type=FileType.FOLDER if is_folder else FileType.FILE,
+                        name=name,
+                        id=fid,
+                        path=path,
+                    )
+
+                    # 2️⃣ 再绑定 children（避免闭包引用错误）
+                    if is_folder:
+                        child.children = lazy(
+                            lambda i1=path, i2=baidu_parse_client,i3=child:
+                            self._baidu_get_dir(i3, i1, i2, movie=movie)
+                        )
+                    else:
+                        child.children = lazy(None)
+
+                    # 3️⃣ 再绑定 standardized（延迟标准化）
+                    child.standardized = lazy(
+                        lambda i1=name, i2=i: regex_standardizer.get_standardized_result(
+                            target_original=i1,
+                            items=[
+                                StandardizedResult(
+                                    original_name=i1,
+                                    season_number=movie.get_season_number(),
+                                    is_folder=is_folder
+                                )
+                            ]
+                        )
+                    )
+
+                    children.append(child)
+
+                # 4️⃣ 最后一次性挂载到 root.children
+                root.children = lazy(children)
+
                 yield BaiduLinkParse(uk=str(uk), share_id=str(share_id), bdstoken=str(bdstoken), sekey=str(sekey), root=root,
                                      link=baidu_link)
 

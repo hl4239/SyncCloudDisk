@@ -5,10 +5,12 @@ import re
 from functools import lru_cache
 from typing import List, Optional, Tuple
 
+from app.core.logging_config import setup_logging
+from app.database.database import init_db
+from app.database.movie_repository import movie_repository
 from app.modules.data_standard.interfaces.standardizer_interface import IStandardizer
 from app.modules.data_standard.schemas import StandardizedResult, ResourceType, QualityInfo
-
-
+from app.utils.async_iterator import AsyncCachedIterator
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +47,7 @@ class RegexStandardizer(IStandardizer):
     _season_folder_patterns: List[str] = [
         r'Season[ _-]?\d{1,2}\b',
         r'第\s*\d{1,2}\s*季',
+        r'[Ss]\d{1,3}'
     ]
 
     _special_episode_patterns: List[str] = [
@@ -164,13 +167,14 @@ class RegexStandardizer(IStandardizer):
                         return item
 
             # 2.2 季文件夹匹配 (仅在未设置时)
-            if item.season_number is None:
-                for sp in compiled["season_folder_patterns"]:
-                    if sp.search(original_name.lower()):
-                        item.resource_type = ResourceType.FOLDER_SEASON
-                        if m := re.search(r'(?:season|s)\s*0*?(\d{1,2})', original_name.lower()):
-                            item.season_number = int(m.group(1))
-                        return item
+            # if item.season_number is None:
+            # 强制根据检测到季号的为准
+            for sp in compiled["season_folder_patterns"]:
+                if sp.search(original_name.lower()):
+                    item.resource_type = ResourceType.FOLDER_SEASON
+                    if m := re.search(r'(?:season|s)\s*0*?(\d{1,2})', original_name.lower()):
+                        item.season_number = int(m.group(1))
+                    return item
 
             # 2.3 其他文件夹类型
             if item.resource_type is None:
@@ -299,7 +303,27 @@ if __name__ == '__main__':
         #   - Show.E01.1080p.mkv        <-- 第二轮被选中，因为它有首选后缀'mkv'且覆盖了剩下的第1集。
         #   - Show.E02-E03.1080p.mp4    <-- 第三轮，mkv文件已无法满足剩下的2,3集需求，算法回退到选择非首选后缀的文件。
     async def demo1():
+
+
         r=StandardizedResult(original_name="01-02",is_folder=True)
         rr= await regex_standardizer.standardize([r])
         print(rr)
-    asyncio.run(demo())
+    async def demo2():
+        from app.modules.link_parse.schemas import PrepareParseLinks
+
+        from app.database.models import CloudShareLink, Movie
+
+        from app.modules.link_parse.services.link_parser import link_parser
+        await init_db()
+        setup_logging()
+        movie=await movie_repository.find_by_douban_id('37211138')
+        r=await link_parser.parse_links(links=[PrepareParseLinks(
+            scrape_baidu_links=lambda :AsyncCachedIterator([]),
+            links=[CloudShareLink(url='https://pan.quark.cn/s/ea48e9e2f72d#/list/share',title='潜能探案组 第二季')],movie=movie)])
+        async for i in  r[0].quark_parses:
+            print(await(await i.root.children)[0].children)
+            for j in await(await i.root.children)[0].children:
+                if j.name=='S01':
+                    for k in await j.children:
+                        print(await k.standardized)
+    asyncio.run(demo2())

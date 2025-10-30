@@ -39,6 +39,7 @@ export interface CloudInfo {
   latest_episode_number: number
   share_link: string | null
   is_risk_share: boolean
+  save_suffixes: string[]
 }
 
 export interface MetadataProvider {

@@ -61,18 +61,27 @@ async def save_new_movies_metadata_to_database(new_movies:List[MetaDataProvider]
     movies=[]
     total=[]
     for new_movie in new_movies:
+        douban_id =None
+        movie_type=None
         r=await movie_repository.find_by_metadata_provider(new_movie.provider,new_movie.title,new_movie.id)
         if not r:
             r=  await Movie.find_one(Movie.title_season==new_movie.title)
         if not r:
             search_r = await search_from_douban(new_movie.title)
             t_tup=(new_movie.title,new_movie.year,new_movie.movie_type)
+            # 优先根据年份 类型 title进行匹配
             for i in search_r:
-
                 s=(i.title,i.year,i.movie_type)
                 if t_tup==s:
                     douban_id=i.douban_id
                     movie_type=i.movie_type
+                    break
+            # 否则选择豆瓣搜索的第一个
+            if search_r:
+                r0=search_r[0]
+                douban_id=r0.douban_id
+                movie_type=r0.movie_type
+
 
         else:
             douban_id=r.douban_id
@@ -87,19 +96,19 @@ async def save_new_movies_metadata_to_database(new_movies:List[MetaDataProvider]
         })
 
     movies_source=await registry_movie_data_sources([(i['douban_id'],i['movie_type'])for i in total])
-    # movies=await combin_to_movies(movies_source)
-    # douban_id_maps={
-    #     i['douban_id']:i['provider'] for i in total
-    # }
-    # for movie in movies:
-    #     _is_find = False
-    #     for p in movie.metadata_providers:
-    #         if p.provider==douban_id_maps[movie.douban_id].provider :
-    #             p=douban_id_maps[movie.douban_id]
-    #             _is_find=True
-    #             break
-    #     if not _is_find :
-    #         movie.metadata_providers.append(douban_id_maps[movie.douban_id])
+    movies=await combin_to_movies(movies_source)
+    douban_id_maps={
+        i['douban_id']:i['provider'] for i in total
+    }
+    for movie in movies:
+        _is_find = False
+        for p in movie.metadata_providers:
+            if p.provider==douban_id_maps[movie.douban_id].provider :
+                p=douban_id_maps[movie.douban_id]
+                _is_find=True
+                break
+        if not _is_find :
+            movie.metadata_providers.append(douban_id_maps[movie.douban_id])
     # await save_to_database(movies)
     return movies
 
@@ -388,6 +397,7 @@ async def f8(params:P8,progress_callback, log_callback):
 
 
 
+
 async def main():
     await init_db()
     setup_logging()
@@ -397,7 +407,7 @@ async def main():
     # await task_manager.task_manager.create_task('豆瓣热门影视采集', HotCollectParams(categories=[MovieCategory.CHINA],
     #                                                                                  count=10).model_dump(),
     #                                             registry.get('豆瓣热门影视采集').fn)
-    r= await flow3(P5(douban_ids=['36645835'],skip_not_latest_episode=False,scrape_count=10),lambda i:...,lambda i:...)
+    r= await flow1(HotCollectParams(count=1),lambda i:...,lambda i:...)
     # r=  await f8(P8(douban_ids=['36645835']),lambda i:...,lambda i:...)
     print(r)
     await asyncio.sleep(60)

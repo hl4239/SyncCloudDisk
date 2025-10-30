@@ -5,7 +5,7 @@ from enum import Enum
 from app.database.models import Movie, CloudType, CloudShareLink
 from app.modules.data_standard.schemas import StandardizedResult
 
-from app.utils.async_iterator import AsyncCachedIterator
+from app.utils.async_iterator import AsyncCachedIterator, _empty_async_cached_iterator
 from app.utils.lazy_load import Lazy, lazy
 
 
@@ -38,10 +38,12 @@ class ShareFile(BaseModel):
         return self.type==FileType.FOLDER
 
 class PrepareParseLinks(BaseModel):
-    scrape_quark_links: Optional[Lazy[AsyncCachedIterator[CloudShareLink]]]=Field(default_factory=lambda: lazy(None),description='从网络抓取的')
-    scrape_baidu_links: Optional[Lazy[AsyncCachedIterator[CloudShareLink]]]=Field(default_factory=lambda: lazy(None),description='从网络抓取的')
+    scrape_quark_links: Optional[Lazy[AsyncCachedIterator[CloudShareLink]]]=Field(default_factory=lambda :_empty_async_cached_iterator(),description='从网络抓取的')
+    scrape_baidu_links: Optional[Lazy[AsyncCachedIterator[CloudShareLink]]]=Field(default_factory=lambda: _empty_async_cached_iterator(),description='从网络抓取的')
     links:Optional[list[CloudShareLink]]=Field(default=[],description='现有的')
     movie:Optional[Movie]=Field(None,description='')
+
+
 
 # --- LinkInspectionResult 模型的定义需要相应调整 ---
 class LinkParse(BaseModel):

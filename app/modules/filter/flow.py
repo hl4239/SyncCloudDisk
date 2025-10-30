@@ -14,14 +14,17 @@ async def title_and_episode_filter_flow(link_parse_results:List[LinkParseResult]
     filter_1_result=await regex_target_link_filter.filter(link_parse_results)
     filter_2_result=await target_episode_filter.filter(filter_1_result)
     filter_3_result=await full_episode_filter_flow(filter_2_result,is_skip_not_latest)
-    return filter_2_result
+    return filter_3_result
 
-async def full_episode_filter_flow(link_parse_results:List[TargetEpisodeFilterResult],is_skip_not_latest:bool=False)->List[TargetEpisodeFilterResult]:
+async def full_episode_filter_flow(link_parse_results:List[TargetEpisodeFilterResult],is_skip_not_latest:bool=False,skip_target_season:bool=True)->List[TargetEpisodeFilterResult]:
     async def f1(target: AsyncCachedIterator[TargetEpisode], m: Movie):
         more_episodes_f = None
         latest_episode_number = m.get_latest_episode_info().episode_number
 
         async for r1 in target:
+            if skip_target_season:
+                season_number=m.get_season_number()
+                r1.share_files=[i for i in r1.share_files if (await i.standardized).season_number==season_number]
             episode_numbers = StandardizedResult.get_unique_episode_numbers([await i.standardized for i in r1.share_files])
             max_share_file_episode_number = max(episode_numbers, default=-1)
 

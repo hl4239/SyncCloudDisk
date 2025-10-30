@@ -2,6 +2,7 @@ import asyncio
 import logging
 from typing import List
 
+from pymongo.common import alias
 
 from app.core.logging_config import setup_logging
 from app.database.models import  MovieCategory,MovieType
@@ -71,7 +72,11 @@ class DoubanMovieBaseProviderService:
                                    countries=lazy_result.countries,
                                    intro=lazy_result.intro,
                                    original_title=lazy_result.original_title,
-                                   pubdate=lazy_result.pubdate,)
+                                   pubdate=lazy_result.pubdate,
+                                   actors=lazy_result.actors,
+                                   aka=lazy_result.aka,
+                                   genres=lazy_result.genres
+                                   )
         return l
 
 
@@ -105,7 +110,8 @@ async def main():
     setup_logging()
     # await
     d=await get_douban_movie_base_provider_service()
-    r= await d.detail('36877196',MovieType.TV)
+    r=  d.get_movie_by_douban_id('37156504',MovieType.TV)
+    print(await r.get_actors())
     # s = await d.search('科斯缇娜酒店')
     # r=  await d.get_movie_by_douban_id(s[0].douban_id,s[0].movie_type   )
     # r0=r[0]
