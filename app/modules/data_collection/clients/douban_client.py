@@ -218,6 +218,7 @@ class DoubanClient:
         async with self.session.request(url=url, params=params, method='GET',headers=headers) as resp:
             try:
                 resp_json = await resp.json()
+                print(resp_json)
                 return DoubanDetailResponse(**resp_json)
             except Exception as e:
                 logger.error(f"爬取数据失败: {e}",exc_info=True)

@@ -3,7 +3,7 @@ import logging
 from pathlib import Path
 from typing import List, Optional
 
-from app.database.models import PanCloud
+from app.database.models import PanCloud, Movie
 from app.modules.link_parse.schemas import ShareFile,FileType, QuarkLinkParse
 from app.modules.storage_operations.clients.quark_cloud_client import get_quark_cloud_client
 from app.modules.storage_operations.interfaces.cloud_disk_operator_interface import ICloudDiskOperator
@@ -13,6 +13,8 @@ from app.utils.lazy_load import lazy
 
 logger=logging.getLogger(__name__)
 class QuarkCloudOperator(ICloudDiskOperator):
+
+
     async def delete_file(self, share_files: List[CloudFile]):
         client = await self._get_client()
         try:
@@ -22,9 +24,13 @@ class QuarkCloudOperator(ICloudDiskOperator):
             logger.warning(e, exc_info=True)
             return False
 
-    async def rename(self, share_file: ShareFile, new_name: str):
+    async def rename(self, share_file: CloudFile, new_name: str):
         client=await self._get_client()
-        return await client.rename(share_file.id, new_name)
+        if await client.rename(share_file.id, new_name):
+            share_file.name=new_name
+            return True
+
+        return False
 
     @async_ttl_cache
     async def  _get_pan_cloud(self):
@@ -80,7 +86,19 @@ class QuarkCloudOperator(ICloudDiskOperator):
             logger.warning(f'未get到{path}:{e}')
             return None
 
-
+    async def movie(self,cloud_files:List[CloudFile],pdir_file:CloudFile=None,pdir_path:Path=None) -> bool:
+        if not cloud_files:
+            logger.info(f'需要移动的文件list为空，直接返回true')
+            return True
+        client=await self._get_client()
+        if pdir_path :
+            pdir_file=await self.ensure_get_dir(path=pdir_path)
+        try:
+            await client.move([i.id for i in cloud_files],pdir_file.id)
+            return True
+        except Exception as e:
+            logger.debug(f'移到文件失败:{e}')
+            return False
 
     async def mkdir(self, path: Path) -> Optional[CloudFile]:
         cloud_api = await self._get_client()
@@ -124,16 +142,28 @@ class QuarkCloudOperator(ICloudDiskOperator):
         return False
     async def create_share_link(self,path:Optional[Path]=None,files: Optional[List[CloudFile]]=None,password:str=None):
         if path:
-            child_files=[await self.get_dir(path)]
+            g=await self.get_dir(path)
+            if g:
+
+                child_files=[g]
+            else:
+                child_files=[]
         else:
             child_files=files
         if not child_files:
             logger.error(f'❌创建分享链接失败，child_files:{child_files}')
+            return None
         fids=[i.id for i in child_files]
         client=await self._get_client()
-        r= await client.create_share_link(fid_list=fids,password=password)
-        if not r:
-            logger.error(f'❌创建分享链接失败:{r}')
+        try:
+
+            r= await client.create_share_link(fid_list=fids,password=password)
+            if not r:
+                logger.error(f'❌创建分享链接失败:{r}')
+                return None
+        except Exception as e:
+            logger.error(f'❌创建分享链接失败:{e}')
+            return None
         logger.info(f'✅创建分享链接：{r}')
         return r
 
@@ -146,7 +176,9 @@ async def main():
     setup_logging()
     quark=QuarkCloudOperator("4295quark")
     # await quark.create_share_link(path=Path('/资源分享/TV/China/2025/芬芳喜事/芬芳喜事'))
-    r= await quark.ls_dir(Path('/资源分享'))
+    r = await quark.recreate_dir(pdir_path=Path('/资源分享/TV/测试'))
+
+    print(r)
     # #
     # # for i in r:
     # #     print(i.name,(await i.standardized).episode_number)

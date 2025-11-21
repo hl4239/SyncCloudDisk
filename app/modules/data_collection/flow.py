@@ -71,7 +71,7 @@ async def registry_movie_data_sources(douban_id_movie_types: List[Tuple[str, Mov
             )
 
         # total_episodes
-        if movie and movie.total_episodes:
+        if movie and movie_service.extract_episode_number( movie.total_episodes):
             movie_data_source.total_episodes = lazy(movie.total_episodes)
         else:
             movie_data_source.total_episodes = lazy(
@@ -163,14 +163,7 @@ async def registry_movie_data_sources(douban_id_movie_types: List[Tuple[str, Mov
                 lambda c=douban_metadata_lazy: c.get_pubdate()
             )
 
-        # episodes_info
-        if movie and movie.episodes_info:
-            movie_data_source.episodes_info = lazy(movie.episodes_info)
-        else:
-            movie_data_source.episodes_info = lazy(
-                lambda a=movie_data_source.total_episodes:
-                    movie_service.create_episodes_info(a)
-            )
+
 
         # actors
         if movie and movie.actors:
@@ -190,7 +183,14 @@ async def registry_movie_data_sources(douban_id_movie_types: List[Tuple[str, Mov
             movie_data_source.genres = lazy(movie.genres)
         else:
             movie_data_source.genres = douban_metadata_lazy.genres
-
+        # episodes_info
+        if movie and movie.episodes_info:
+            movie_data_source.episodes_info = lazy(movie.episodes_info)
+        else:
+            movie_data_source.episodes_info = lazy(
+                lambda a=movie_data_source.total_episodes, b=movie_data_source.aliases:
+                movie_service.create_episodes_info(a, b)
+            )
 
         # 补充外部 provider 的字段
         await tmdb_air_date_provider.set_air_date(movie_data_source)
@@ -210,12 +210,8 @@ async def main():
     setup_logging()
     await init_db()
     tmdbsimple.API_KEY = settings.TMDB_API_KEY
-    tasks=[f1() for i in range(3)]
-    await asyncio.gather(*tasks)
-    while True:
-        await asyncio.sleep(60)
-
-
+    r  =await registry_movie_data_sources([('37220616',MovieType.TV)])
+    print(await r[0].episodes_info)
 
 
 if __name__ == '__main__':

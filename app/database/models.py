@@ -15,7 +15,7 @@ from app.utils.date_to_weekday import weekday_cn
 from app.utils.generic_crud import Filter
 from beanie import Document, Indexed
 
-from app.utils.obfuscate import obfuscate_title_pro
+from app.utils.obfuscate import obfuscate_title_pro, obfuscate_title_kongge
 
 logger = logging.getLogger(__name__)
 
@@ -62,6 +62,7 @@ class MovieCloudInfo(pydantic.BaseModel):
             "torrent", "srt", "ass", "sub", "mp3", "aac", "zip"
         ],
     description='转存时只收录列出的文件格式')
+    risk_detected_count:Optional[int]=Field(default=0,description='风险检测次数')
 
     @model_validator(mode='after')
     def convert_datetimes(self):
@@ -96,6 +97,9 @@ class EpisodesInfo(pydantic.BaseModel):
         if isinstance(value, time):
             # 将 time 对象转换为 ISO 格式字符串
             return value.isoformat()
+        if not value:
+            return None
+
         if isinstance(value, str):
             # 验证字符串格式是否正确
             try:
@@ -280,8 +284,9 @@ class Movie(Document):
 
             print(self.title_season)
             if is_obfuscate:
-                title_season=obfuscate_title_pro(self.title_season, pinyin_ratio=0.3, decompose_ratio=0.3, keep_char_ratio=0.4,
-                                               separator='-')
+                # title_season=obfuscate_title_pro(self.title_season, pinyin_ratio=0.3, decompose_ratio=0.3, keep_char_ratio=0.4,
+                #                                separator='-')
+                title_season=obfuscate_title_kongge(self.title_season,_retry=10)
             else:
                 title_season=self.title_season
         except Exception as e:

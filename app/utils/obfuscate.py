@@ -91,6 +91,34 @@ def obfuscate_title_pro(title: str,
 
     return final_string
 
+
+@staticmethod
+def obfuscate_title_kongge(original_name: str, _retry: int = 0) -> str:
+    while _retry < 10:
+        name_part = original_name.replace(" ", "")
+        # 如果名字太短（少于3个字符），无法插入两个空格
+        if len(name_part) < 3:
+            return name_part
+
+        # 随机选择两个不同的位置插入空格
+        positions = sorted(random.sample(range(1, len(name_part)), 2))
+
+        # 构建新名称
+        new_name = (
+            name_part[:positions[0]] + " " +
+            name_part[positions[0]:positions[1]] + " " +
+            name_part[positions[1]:]
+        )
+
+        # 如果新名字和原始名字不同，则返回
+        if new_name != original_name:
+            return new_name
+
+        _retry += 1
+
+    # 如果重试10次仍未成功（理论上几乎不可能）
+    return original_name
+
 if __name__ == '__main__':
     # --- 使用示例 ---
 

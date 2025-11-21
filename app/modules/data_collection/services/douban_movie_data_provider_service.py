@@ -110,8 +110,8 @@ async def main():
     setup_logging()
     # await
     d=await get_douban_movie_base_provider_service()
-    r=  d.get_movie_by_douban_id('37156504',MovieType.TV)
-    print(await r.get_actors())
+    r=  d.get_movie_by_douban_id('37220616',MovieType.TV)
+    print(await r.episodes_count)
     # s = await d.search('科斯缇娜酒店')
     # r=  await d.get_movie_by_douban_id(s[0].douban_id,s[0].movie_type   )
     # r0=r[0]

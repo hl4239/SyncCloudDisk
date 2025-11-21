@@ -18,6 +18,31 @@ class BaiduCloudOperator(ICloudDiskOperator):
 
 
 
+
+
+    async def movie(self, cloud_files: List[CloudFile], pdir_file: CloudFile=None, pdir_path: Path = None) -> bool:
+        if not cloud_files:
+            logger.info(f'需要移动的文件list为空，直接返回true')
+            return True
+        client=await self._get_client()
+        if not pdir_path:
+            pdir_path=Path(pdir_file.path)
+        try:
+            r=await client.move([
+                {
+                    'path':cloud_file.path,
+                    'dest':pdir_path.as_posix(),
+                    'newname':cloud_file.name
+                }
+                for cloud_file in cloud_files
+            ]
+
+            )
+            return r
+        except Exception as e:
+            logger.error(f'移到文件失败：{e}')
+            return False
+
     async def delete_file(self, share_files: List[CloudFile]):
         client = await self._get_client()
         try:
@@ -38,9 +63,12 @@ class BaiduCloudOperator(ICloudDiskOperator):
             raise Exception(f"PanCloud {self.pancloud_name}连接失败")
         return r
 
-    async def rename(self, share_file: ShareFile, new_name: str):
+    async def rename(self, share_file: CloudFile, new_name: str):
         client = await self._get_client()
-        return await client.rename(share_file.path, new_name)
+        if await client.rename(share_file.path, new_name):
+            share_file.name=new_name
+            return True
+        return False
     @staticmethod
     def get_file_type(isdir):
         if isdir==0:
@@ -107,6 +135,7 @@ class BaiduCloudOperator(ICloudDiskOperator):
 
 
 
+
     async def mkdir(self, path: Path) -> Optional[CloudFile]:
         cloud_api = await self._get_client()
         path_str=path.as_posix()
@@ -148,16 +177,28 @@ class BaiduCloudOperator(ICloudDiskOperator):
 
     async def create_share_link(self,path:Optional[Path]=None,files: Optional[List[CloudFile]]=None,password:str='8u62'):
         if path:
-            child_files=[await self.get_dir(path)]
+            g = await self.get_dir(path)
+            if g:
+
+                child_files = [g]
+            else:
+                child_files = []
         else:
             child_files=files
         if not child_files:
             logger.error(f'❌创建分享链接失败，child_files:{child_files}')
+            return None
         f_paths=[i.path for i in child_files]
         client=await self._get_client()
-        r= await client.share(remotepaths=f_paths,password=password)
-        if not r:
-            logger.error(f'❌创建分享链接失败:{r}')
+        try:
+
+            r= await client.share(remotepaths=f_paths,password=password)
+            if not r:
+                logger.error(f'❌创建分享链接失败:{r}')
+                return None
+
+        except Exception as e:
+            logger.error(f'❌创建分享链接失败:{e}')
             return None
 
         share_link_with_pwd=f'{r['link']}?pwd={password}'
@@ -173,8 +214,13 @@ async def main():
     await init_db()
     setup_logging()
     quark=BaiduCloudOperator("4295baidu")
-    await quark.ls_dir(path=Path('/资源分享'))
+    r=  await quark.ls_dir(path=Path('/资源分享/TV'))
 
+    r1=await quark.get_dir(Path('/资源分享'))
+    for i in r:
+        print(i)
+        if i.name=='测试':
+            await quark.movie([i],r1)
     ...
 if __name__ == '__main__':
     asyncio.run(main())

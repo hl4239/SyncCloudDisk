@@ -183,8 +183,11 @@ class BaiduCloudClient(BaseAioClient):
 
         async with await self.request(method="POST", url=url, params=params, data=payload) as resp:
             data = await resp.json()
+            print(data)
             if data.get("errno") == 0:
+
                 return True
+
             else:
                 raise RuntimeError(f"移动文件失败: {data.get('errmsg', '未知错误')}")
 

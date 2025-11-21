@@ -70,6 +70,8 @@ class ICloudDiskOperator:
 
     async def get_dir(self,path:Path)->Optional[CloudFile]:
         """只返回父目录信息，并标准化，不遍历子节点"""
+        if not path:
+            return None
         file= await self.get_dir_(path)
         if file:
             file.standardized=lazy(lambda :regex_standardizer.get_standardized_result(target_original=file.name,items=[StandardizedResult(original_name=file.name,is_folder=True)]))
@@ -145,14 +147,14 @@ class ICloudDiskOperator:
 
 
     @abstractmethod
-    async def rename(self,share_file:ShareFile,new_name:str):
+    async def rename(self,share_file:CloudFile,new_name:str):
         ...
     @abstractmethod
     async def create_share_link(self, path: Optional[Path] = None, files: Optional[List[CloudFile]] = None,password: str = None):
         ...
 
     @abstractmethod
-    async def delete_file(self,cloud_files:List[CloudFile]):
+    async def delete_file(self,share_files:List[CloudFile]):
         ...
 
 
@@ -167,4 +169,38 @@ class ICloudDiskOperator:
         elif pan_cloud.cloud_type==CloudType.BAIDU:
             operator=BaiduCloudOperator(pancloud_name)
         return operator
+
+    @abstractmethod
+    async def movie(self, cloud_files: List[CloudFile], pdir_file: CloudFile=None,pdir_path:Path=None) -> bool:
+        ...
+
+    async def recreate_dir(self,  pdir_path: Path = None) -> bool:
+            logger.info(f'开始重建目录：{pdir_path}')
+            dir_file = await self.get_dir(pdir_path)
+            if not dir_file:
+                logger.info('云盘无该文件目录，无需重建')
+                return True
+            logger.info(f"正在获取子文件列表...")
+            child_files = await self.ls_dir(pdir_file=dir_file)
+            logger.info(f"获取到子文件数量: {len(child_files) if child_files else 0}")
+
+            temp_path = Path(f"{pdir_path.as_posix()}_t")
+            logger.info(f"正在确保临时目录存在: {temp_path}")
+            temp_dir_file = await self.ensure_get_dir(temp_path)
+
+            logger.info("开始将文件移动至临时目录...")
+            if await self.movie(cloud_files=child_files, pdir_file=temp_dir_file):
+                logger.info("文件移动成功，正在删除原目录索引...")
+                await self.delete_file([dir_file])
+                dir_name = pdir_path.name
+
+                logger.info(f"正在将临时目录重命名还原为: {dir_name}")
+                if await self.rename(temp_dir_file, dir_name):
+                    logger.info(f"重命名成功，目录重建完成: {pdir_path.as_posix()}")
+                else:
+                    logger.warning(f'重命名失败')
+                return True
+            else:
+                logger.error(f'文件移到失败')
+                return False
 

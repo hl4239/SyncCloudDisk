@@ -3,6 +3,7 @@
 import asyncio
 import logging
 from datetime import datetime, timedelta
+from pathlib import Path
 from typing import List
 
 import pytz
@@ -28,10 +29,15 @@ from app.modules.link_scraping.schemes.link import LinkScrapeResult
 from app.modules.new_movie_metadata_collector.services.ren_ren_provider_service import renren_new_movie_provider_service
 from app.modules.publish.services.share_link_publish import share_link_publish_service
 from app.modules.risk_detect.flow import detect_risk_share
-from app.modules.storage_operations.flow import save_to_cloud_flow
+from app.modules.storage_operations.flow import save_to_cloud_flow, recreate_dir
 from app.modules.storage_operations.services.handle_risk_file_service import handle_risk_file_service
 from app.services.movie_service import movie_service
 logger=logging.getLogger(__name__)
+#lock
+#互斥锁： 网盘保存 检测与处理风险 重建目录
+lock1=asyncio.Lock()
+
+
 
 # @task
 async def link_scraping(movies:List[Movie],count:int)->List[LinkScrapeResult]:
@@ -159,39 +165,40 @@ class P1(BaseModel):
 
 @registry.register(name="同步今日可更新影视资源到网盘", params_model=P1)
 async def flow2(params:P1, progress_callback, log_callback):
-    today_movies=await movie_repository.find_movies_with_episode_today()
-    to_save_movies=[]
-    now=datetime.now(pytz.timezone("Asia/Shanghai"))
-    if not params.is_force:
-        for movie in today_movies:
-            today_episodes=movie.get_today_will_update_episodes()
-            max_episode=max(today_episodes,key=lambda episode:episode.episode_number)
-            if max_episode.full_air_datetime<now:
-                to_save_movies.append(movie)
-    else:
-        to_save_movies=today_movies
+    async with lock1:
+        today_movies=await movie_repository.find_movies_with_episode_today()
+        to_save_movies=[]
+        now=datetime.now(pytz.timezone("Asia/Shanghai"))
+        if not params.is_force:
+            for movie in today_movies:
+                today_episodes=movie.get_today_will_update_episodes()
+                max_episode=max(today_episodes,key=lambda episode:episode.episode_number)
+                if max_episode.full_air_datetime<now:
+                    to_save_movies.append(movie)
+        else:
+            to_save_movies=today_movies
 
-    logger.info(f'今日已到更新时间点的movie:{[i.title_season for i in to_save_movies]}')
-    progress_callback(10)
-    not_save_movies = [i for i in to_save_movies if not i.is_tmdb_infos_avaliable()]
+        logger.info(f'今日已到更新时间点的movie:{[i.title_season for i in to_save_movies]}')
+        progress_callback(10)
+        not_save_movies = [i for i in to_save_movies if not i.is_tmdb_infos_avaliable()]
 
-    to_save_movies = [i for i in to_save_movies if i.is_tmdb_infos_avaliable()]
-    logger.warning(f'这些movie由于tmdb_info为空无法同步：{not_save_movies}')
+        to_save_movies = [i for i in to_save_movies if i.is_tmdb_infos_avaliable()]
+        logger.warning(f'这些movie由于tmdb_info为空无法同步：{not_save_movies}')
 
-    progress_callback(20)
-    scrape_result=await link_scraping(to_save_movies,count=params.scrape_count)
-    progress_callback(50)
-
-
-    link_parse_results=await link_parse([PrepareParseLinks(scrape_quark_links=i.quark_links,scrape_baidu_links=i.baidu_links,links=[CloudShareLink(url=j,title=i.movie.title_season)for j in i.movie.share_links],movie=i.movie) for i in scrape_result])
-
-    filter_result=await title_and_episode_filter_flow(link_parse_results,params.skip_not_latest_episode)
+        progress_callback(20)
+        scrape_result=await link_scraping(to_save_movies,count=params.scrape_count)
+        progress_callback(50)
 
 
-    result=await save_to_cloud(filter_result)
-    await save_to_database(result)
-    progress_callback(100)
-    return result
+        link_parse_results=await link_parse([PrepareParseLinks(scrape_quark_links=i.quark_links,scrape_baidu_links=i.baidu_links,links=[CloudShareLink(url=j,title=i.movie.title_season)for j in i.movie.share_links],movie=i.movie) for i in scrape_result])
+
+        filter_result=await title_and_episode_filter_flow(link_parse_results,params.skip_not_latest_episode)
+
+
+        result=await save_to_cloud(filter_result)
+        await save_to_database(result)
+        progress_callback(100)
+        return result
 
 class P5(BaseModel):
     douban_ids:List[str]=Field(default=['312231'],description='豆瓣id')
@@ -199,27 +206,28 @@ class P5(BaseModel):
     skip_not_latest_episode:bool=Field(default=True,description='只爬取含有最新剧集的分享链接')
 @registry.register(name="根据douban_ids同步网盘", params_model=P5)
 async def flow3(params:P5, progress_callback, log_callback):
-    f_movies = await Movie.find(In(Movie.douban_id, params.douban_ids)).to_list()
+    async  with lock1:
+        f_movies = await Movie.find(In(Movie.douban_id, params.douban_ids)).to_list()
 
-    logger.info(f'开始同步{[i.title_season for i in f_movies]}')
-    progress_callback(20)
-    to_save_movies=[i for i in f_movies if i.is_tmdb_infos_avaliable()]
-    not_save_movies=[i for i in f_movies if not i.is_tmdb_infos_avaliable()]
-    logger.warning(f'这些movie由于tmdb_info为空无法同步：{not_save_movies}')
-    progress_callback(30)
-    scrape_result=await link_scraping(to_save_movies,count=params.scrape_count)
-    progress_callback(50)
-
-
-    link_parse_results=await link_parse([PrepareParseLinks(scrape_quark_links=i.quark_links,scrape_baidu_links=i.baidu_links,links=[CloudShareLink(url=j,title=i.movie.title_season)for j in i.movie.share_links],movie=i.movie) for i in scrape_result])
-
-    filter_result=await title_and_episode_filter_flow(link_parse_results,params.skip_not_latest_episode)
+        logger.info(f'开始同步{[i.title_season for i in f_movies]}')
+        progress_callback(20)
+        to_save_movies=[i for i in f_movies if i.is_tmdb_infos_avaliable()]
+        not_save_movies=[i for i in f_movies if not i.is_tmdb_infos_avaliable()]
+        logger.warning(f'这些movie由于tmdb_info为空无法同步：{not_save_movies}')
+        progress_callback(30)
+        scrape_result=await link_scraping(to_save_movies,count=params.scrape_count)
+        progress_callback(50)
 
 
-    result=await save_to_cloud(filter_result)
-    await save_to_database(result)
-    progress_callback(100)
-    return result
+        link_parse_results=await link_parse([PrepareParseLinks(scrape_quark_links=i.quark_links,scrape_baidu_links=i.baidu_links,links=[CloudShareLink(url=j,title=i.movie.title_season)for j in i.movie.share_links],movie=i.movie) for i in scrape_result])
+
+        filter_result=await title_and_episode_filter_flow(link_parse_results,params.skip_not_latest_episode)
+
+
+        result=await save_to_cloud(filter_result)
+        await save_to_database(result)
+        progress_callback(100)
+        return result
 
 
 
@@ -347,51 +355,75 @@ class P8(BaseModel):
     is_detect:bool=Field(default=True,description='检测风险链接')
 @registry.register(name='检测与处理被和谐的分享链接',params_model=P8)
 async def f8(params:P8,progress_callback, log_callback):
-    if not params.douban_ids:
-        air_date1 = datetime.now(pytz.timezone("Asia/Shanghai")).date()
-        air_date2 = (air_date1 - timedelta(days=params.air_days))
-        movies = await movie_repository.find(
-            filters={
-                'pubdate__gte': air_date2,
-                'pubdate__lte': air_date1,
+    async with lock1:
+        if not params.douban_ids:
+            air_date1 = datetime.now(pytz.timezone("Asia/Shanghai")).date()
+            air_date2 = (air_date1 - timedelta(days=params.air_days))
+            movies = await movie_repository.find(
+                filters={
+                    'pubdate__gte': air_date2,
+                    'pubdate__lte': air_date1,
+                }
+            )
+        else:
+
+            movies=await Movie.find(In(Movie.douban_id, params.douban_ids)).to_list()
+        r=None
+        if params.is_detect:
+            r = await    detect_risk_share(movies)
+
+            r_movies=[i.movie for i in r]
+            await save_to_database(r_movies)
+            movies=r_movies
+        h_r=None
+        if params.is_handle:
+            h_r=  await handle_risk_file_service.handle(movies)
+
+            await save_to_database(movies)
+
+        return {
+            'detect_result':{
+                i.movie.title_season: [
+                    j.share_link for j in i.risk_cloud_infos
+                ]
+
+                for i in (r or [])
+
+            },
+            'handle_result':{
+                i.movie.title_season: [
+                    j.share_link for j in i.handle_cloud_infos
+                ]
+
+                for i in (h_r or [])
+
             }
-        )
-    else:
-
-        movies=await Movie.find(In(Movie.douban_id, params.douban_ids)).to_list()
-    r=None
-    if params.is_detect:
-        r = await    detect_risk_share(movies)
-
-        r_movies=[i.movie for i in r]
-        await save_to_database(r_movies)
-        movies=r_movies
-    h_r=None
-    if params.is_handle:
-        h_r=  await handle_risk_file_service.handle(movies)
-
-        await save_to_database(movies)
-
-    return {
-        'detect_result':{
-            i.movie.title_season: [
-                j.share_link for j in i.risk_cloud_infos
-            ]
-
-            for i in (r or [])
-
-        },
-        'handle_result':{
-            i.movie.title_season: [
-                j.share_link for j in i.handle_cloud_infos
-            ]
-
-            for i in (h_r or [])
 
         }
 
-    }
+class RecreateDirDTO(BaseModel):
+    air_days: int = Field(default=30, description='只检测上映时间多少天内的movie')
+    douban_ids: List[str] = Field(default=[], description='如果不为空则忽略air_days')
+    pan_names:List[str]=Field(default=[],description='被重建的网盘')
+@registry.register(name='重建网盘影视目录',params_model=RecreateDirDTO)
+async def recreate_dir_flow(params:RecreateDirDTO,progress_callback, log_callback):
+    async with lock1:
+        if not params.douban_ids:
+            air_date1 = datetime.now(pytz.timezone("Asia/Shanghai")).date()
+            air_date2 = (air_date1 - timedelta(days=params.air_days))
+            movies = await movie_repository.find(
+                filters={
+                    'pubdate__gte': air_date2,
+                    'pubdate__lte': air_date1,
+                }
+            )
+        else:
 
+            movies=await Movie.find(In(Movie.douban_id, params.douban_ids)).to_list()
+        for movie in movies:
+            await recreate_dir(movie,[i for i in movie.cloud_infos if i.pancloud_name in params.pan_names])
+
+        await save_to_database(movies)
 
 
 
@@ -407,7 +439,7 @@ async def main():
     # await task_manager.task_manager.create_task('豆瓣热门影视采集', HotCollectParams(categories=[MovieCategory.CHINA],
     #                                                                                  count=10).model_dump(),
     #                                             registry.get('豆瓣热门影视采集').fn)
-    r= await flow1(HotCollectParams(count=1),lambda i:...,lambda i:...)
+    r= await recreate_dir_flow(RecreateDirDTO(),lambda i:...,lambda i:...)
     # r=  await f8(P8(douban_ids=['36645835']),lambda i:...,lambda i:...)
     print(r)
     await asyncio.sleep(60)

@@ -96,30 +96,23 @@ class MovieService(IMovieService):
 
 
     @classmethod
-    async  def create_episodes_info(cls,total_episodes:Lazy[str],episodes_range:Optional[Tuple[int,int]] =None)->List[EpisodesInfo]:
+    async  def create_episodes_info(cls,total_episodes:Lazy[str] ,aliases:Lazy[ List[str]])->List[EpisodesInfo]:
         """
         支持total为str或者int
-        :param episodes_range:
+        :param aliases:
         :param total_episodes:
         :return:
         """
         start=None
         end=None
         episodes_infos=[]
-        if not episodes_range:
-            total_episodes  =await total_episodes
-            if not total_episodes:
-                return []
-            if isinstance(total_episodes,str):
-                total_episodes =cls.extract_episode_number(total_episodes)
-            start=1
-            end=total_episodes+1
-        else:
-            start=episodes_range[0]
-            end=episodes_range[1]
-        for i in range(start,end):
+        print('开始创建episodes_info',await total_episodes,await aliases)
+        episodes_range=cls.get_episode_range(await total_episodes,await aliases)
+
+        for i in range(episodes_range[0],episodes_range[1]+1):
             episodes_info=EpisodesInfo(episode_number=i,)
             episodes_infos.append(episodes_info)
+        print(episodes_infos)
         return episodes_infos
 
 
@@ -159,8 +152,8 @@ class MovieService(IMovieService):
             return True
         return False
 
-    @staticmethod
-    def is_continuation(aliases: List[str]) -> Tuple[bool, Optional[Tuple[int, int]]]:
+    @classmethod
+    def is_continuation(cls,aliases: List[str]) -> Tuple[bool, Optional[Tuple[int, int]]]:
         """
         从别名中匹配 “第xx集-第xx集” 或类似格式，判断是否为续集。
         返回：
@@ -192,6 +185,12 @@ class MovieService(IMovieService):
                         continue
         return False, None
 
+    @classmethod
+    def get_episode_range(cls,total_episodes,aliases):
+        r1,range=cls.is_continuation(aliases)
+        if r1:
+            return range
+        return 1,cls.extract_episode_number(total_episodes)
 
 
     async  def combin_to_movies(self,movie_data_sources:List[MovieDataSourceResult])->List[Movie]:
@@ -235,7 +234,7 @@ class MovieService(IMovieService):
                 if not movie.season :
                     movie.season = await movie_data_source.season
                     is_update = True
-                if not movie.total_episodes :
+                if not self.extract_episode_number(movie.total_episodes) :
                     movie.total_episodes = await movie_data_source.total_episodes  
                     is_update = True
                 if not movie.description:

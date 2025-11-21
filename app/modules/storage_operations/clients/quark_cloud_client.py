@@ -115,6 +115,7 @@ class QuarkCloudClient(BaseAioClient):
                     break
                 if len(file_list) >= resp_json["metadata"]["_total"]:
                     break
+        print(file_list)
         return file_list
 
     async def download(self, fids):
@@ -446,7 +447,7 @@ class QuarkCloudClient(BaseAioClient):
                         return True
                 raise RuntimeError(f'移动文件发生错误{task_result}')
             except Exception as e:
-                raise f"{str(e)  }{await resp.text()}"
+                raise Exception(f"{str(e)  }{await resp.text()}")
 
 
 @async_ttl_cache(key_fields=['name'])

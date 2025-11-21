@@ -48,6 +48,7 @@ async def detect_risk_share(movies:List[Movie])->List[RiskDetectResult]:
         ]
         for i in invalid_cloud_infos:
             i.is_risk_share = True
+            i.risk_detected_count+=1
         result_risks.append(RiskDetectResult(movie=r.movie, risk_cloud_infos=invalid_cloud_infos))
     return result_risks
 async def main():

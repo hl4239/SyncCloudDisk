@@ -62,13 +62,21 @@ class ISaveEpisodesToCloud(ABC):
                 return
 
     @classmethod
-    async def pancloud_episode_filter(cls,pdir_file:CloudFile):
+    async def pancloud_episode_filter(cls,pdir_file:CloudFile,operator:ICloudDiskOperator):
         result=[]
         if child:= await pdir_file.children:
             for i in child:
                 st=await i.standardized
-                if st.resource_type==ResourceType.FILE_EPISODE or st.resource_type==ResourceType.FILE_RANGE:
+                if st.is_folder==False and(st.resource_type==ResourceType.FILE_EPISODE or st.resource_type==ResourceType.FILE_RANGE) :
                     result.append(i)
+                if st.is_folder and (ResourceType.FOLDER_RANGE in st.folder_resource_type()) :
+                    c1=await operator.ls_dir(st)
+                    for i1 in c1:
+                        st1=await i1.standardized
+                        if st1.is_folder == False and (
+                                st1.resource_type == ResourceType.FILE_EPISODE or st1.resource_type == ResourceType.FILE_RANGE):
+                            result.append(i1)
+
         return result
 
     async def save(self,target_episode_files:List[TargetEpisodeFilterResult])->List[Movie]:

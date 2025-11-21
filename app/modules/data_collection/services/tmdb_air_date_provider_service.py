@@ -35,7 +35,6 @@ class TMDBAirDateProviderService(IEpisodesAirDateProvider):
                 )
                 for episodes_info in episodes_infos
             ]
-            logger.debug(f'episodes_infos={episodes_info_results}')
             return episodes_info_results
 
 
